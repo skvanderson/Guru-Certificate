@@ -73,12 +73,12 @@ let timerInterval;
             respostasSelecionadas = Array.from(ulAlternativas.querySelectorAll('input[type="radio"]:checked'));
         
         if (questao.multipla && !questao.respondida && respostasSelecionadas.length != 2) {
-            exibirModal("Atenção", "Selecione duas questões", "alerta")
+            exibirModal("Atenção", "Selecione duas alternativas!", "alerta")
             return
         }
 
         if (!questao.multipla && !questao.respondida && respostasSelecionadas.length < 1) {
-            exibirModal("Atenção", "Selecione uma questão!", "alerta")
+            exibirModal("Atenção", "Selecione uma alternativa!", "alerta")
             return
         }
 

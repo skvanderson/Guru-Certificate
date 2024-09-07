@@ -18,7 +18,6 @@
 .text-content h1 {
   font-size: 70px;
   margin: 60px;
-  padding-left: 50px;
   text-align: center;
   font-family: "Ubuntu Sans", sans-serif;
   font-weight: 700;
@@ -47,6 +46,10 @@
   
   .imagem-one {
     width: 70vw;
+  }
+
+  .text-content h1 {
+    font-size: 50px;
   }
   
 }
