@@ -92,7 +92,7 @@
 
 
 
-/* Media queries para telas pequenas */
+/* Media queries para Tablets */
 @media (max-width: 768px) {
   nav ul {
     display: none; /* Oculta o menu de navegação padrão em telas pequenas */
@@ -115,3 +115,25 @@
   }
 }
 
+/* Media queries para Tablets */
+@media (max-width: 430px) {
+  nav ul {
+    display: none; /* Oculta o menu de navegação padrão em telas pequenas */
+  }
+
+  .menu-toggle {
+    display: block; /* Exibe o botão do menu hamburger em telas pequenas */
+  }
+
+  .mobile-menu {
+    display: none; /* Oculta o menu mobile por padrão */
+  }
+
+  .mobile-menu.active {
+    display: block; /* Exibe o menu mobile quando a classe 'active' é adicionada */
+  }
+
+  .content {
+    flex-direction: column;
+  }
+}
