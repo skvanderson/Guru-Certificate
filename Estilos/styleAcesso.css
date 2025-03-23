@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap");
 
 body {
   background-image: url(/img/imagens/FUNDO\ LARANJA.jpg);
@@ -9,7 +9,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   min-height: 100vh; /* Define a altura mínima da página como 100% da viewport */
   display: flex;
   flex-direction: column;
@@ -21,11 +21,11 @@ header nav {
   align-items: center;
   background-color: black;
   padding: 10px 20px;
-  height: 70px; 
+  height: 70px;
 }
 
 header .logo {
-  max-height: 150px; 
+  max-height: 150px;
 }
 
 nav ul {
@@ -38,13 +38,14 @@ nav ul {
   font-size: 18px;
 }
 
-nav ul li a{
+nav ul li a {
   color: white;
   text-decoration: none;
   transition: color 0.5s, border-bottom 0.5s;
 }
 
-nav ul li a:hover, .links a:hover{
+nav ul li a:hover,
+.links a:hover {
   color: orange;
   border-bottom: 2px solid orangered;
 }
@@ -61,7 +62,7 @@ nav ul li a:hover, .links a:hover{
   border-radius: 5px;
 }
 
-.login-btn:hover{
+.login-btn:hover {
   background-color: darkblue;
   transform: scale(1.1);
 }
@@ -78,14 +79,15 @@ main {
   justify-content: space-between;
 }
 
-.container{
+.container {
   background-color: #fff;
   padding: 100px;
   border-radius: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .text-content h1 {
-  margin-top: -80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,9 +96,10 @@ main {
   font-weight: 800;
   font-style: italic;
   color: #000000;
+  margin: 0;
 }
 
-.text-content h2{
+.text-content h2 {
   font-family: "Caveat", cursive;
 }
 
@@ -107,7 +110,8 @@ main {
   border-radius: 20px;
   border: none;
   font-size: 20px;
-  padding: 20px 150px;
+  height: 48px;
+  width: 100%;
 }
 
 .text-content button {
@@ -128,21 +132,20 @@ main {
   transform: scale(1.1);
 }
 
-.links{
-  margin-top: 10px;
-  margin-bottom: -60px;
+.links {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 16px 0;
 }
 
-.links a{
-  color: #000000;
+.links a {
   text-decoration: none;
-  transition: color 0.5s, border-bottom 0.5s;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-#cadastro{
-  margin-left: 300px;
+  font-size: 16px;
+  color: #000000;
+  font-weight: 800;
 }
 
 footer {
@@ -153,12 +156,12 @@ footer {
   align-items: center;
   padding: 20px;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 footer .logo {
-  height: 300px; 
-  width: auto; 
+  height: 300px;
+  width: auto;
 }
 
 .footer-text {
@@ -169,24 +172,88 @@ footer .logo {
   margin: 5px 0;
 }
 
-.footer .canto-inferior-direito{
+.footer .canto-inferior-direito {
   align-items: center;
   display: flex;
   flex-direction: column;
 }
 
-.canto-inferior-direito .certificacoes{
+.canto-inferior-direito .certificacoes {
   padding-top: 20px;
 }
 
 .social-media {
   display: flex;
-  gap: 20px; 
+  gap: 20px;
 }
 
 .social-media img {
-  height: 40px; 
-  width: auto; 
+  height: 40px;
+  width: auto;
   margin-left: 10px;
 }
 
+/* Media queries para Celulares */
+@media (max-width: 430px) {
+
+  .login-btn{
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px 0;
+  }
+  .text-content {
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .links a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #000000;
+    font-weight: 800;
+  }
+
+  .text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px 0;
+  }
+
+  .text-content h2 {
+    margin: 0;
+    padding: 8px 0;
+  }
+
+  .text-content button {
+    margin: 0;
+    padding: 16px 0;
+  }
+
+  nav ul {
+    display: none; /* Oculta o menu de navegação padrão em telas pequenas */
+  }
+
+  .menu-toggle {
+    display: block; /* Exibe o botão do menu hamburger em telas pequenas */
+  }
+
+  .mobile-menu {
+    display: none; /* Oculta o menu mobile por padrão */
+  }
+
+  .mobile-menu.active {
+    display: block; /* Exibe o menu mobile quando a classe 'active' é adicionada */
+  }
+
+  .content {
+    flex-direction: column;
+  }
+}
