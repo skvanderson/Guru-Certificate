@@ -1,35 +1,10 @@
-body {
-  background-image: url(/img/imagens/FUNDO\ LARANJA.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-header {
-  margin-bottom: 10vh;
-}
-
 header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: black;
-  padding: 10px 20px;
-  height: 70px;
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-}
-
-header .logo {
-  max-height: 100px;
+  padding: 20px 20px;
+  height: 15vh;
 }
 
 .menu-button {
@@ -38,7 +13,7 @@ header .logo {
   margin-left: 4vw;
   margin-right: 4vw;
 }
-.menu-button img{
+.menu-button img {
   width: 30px;
   cursor: pointer;
 }
@@ -73,8 +48,7 @@ nav ul li a:hover {
   transition: background-color 0.3s, transform 0.3s;
   font-size: 20px;
   font-weight: bold;
-  border-radius: 5px;
-  margin-right: 50px;
+  border-radius: 8px;
 }
 
 .login-btn:hover {
@@ -89,7 +63,7 @@ main {
 
 .mobile-menu {
   display: none; /* Oculta o menu mobile por padrão */
-  background-color: #FF6300; /* Cor de fundo do menu */
+  background-color: #ff6300; /* Cor de fundo do menu */
   width: 70vw; /* Um pouco mais largo */
   margin-left: 10vw; /* Centraliza o menu */
   padding: 15px;
@@ -125,26 +99,16 @@ main {
 }
 
 /* Media queries para telas pequenas */
-@media (max-width: 768px) {
-  .menu-button {
-    display: block;
+@media (max-width: 430px) {
+
+  header{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
   }
 
-  .menu {
-    display: none; /* Oculta o menu de navegação padrão em telas pequenas */
+  header nav {
+    padding: 10px;
   }
 
-  .menu-toggle {
-    display: block; /* Exibe o botão do menu hamburger em telas pequenas */
-  }
-
-  .mobile-menu.active {
-    display: block; /* Exibe o menu mobile quando a classe 'active' é adicionada */
-  }
-}
-
-@media (min-width: 769px) {
-  .mobile-menu {
-    opacity: 0; /* Oculta o menu mobile em telas maiores que 768px */
-  }
 }
