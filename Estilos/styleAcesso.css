@@ -18,61 +18,6 @@ body {
   flex-direction: column;
 }
 
-<<<<<<< HEAD
-=======
-/* header nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: black;
-  padding: 10px 20px;
-  height: 70px;
-}
-
-header .logo {
-  max-height: 150px;
-} */
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 100px;
-  margin: 0;
-  padding: 0;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  transition: color 0.5s, border-bottom 0.5s;
-}
-
-nav ul li a:hover,
-.links a:hover {
-  color: orange;
-  border-bottom: 2px solid orangered;
-}
-
-.login-btn {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 5px;
-}
-
-.login-btn:hover {
-  background-color: darkblue;
-  transform: scale(1.1);
-}
-
->>>>>>> linha_do_tempo_paralela
 main {
   flex: 1; /* Ocupa todo o espaço restante */
   padding: 50px;
@@ -88,11 +33,7 @@ main {
 
 .container {
   background-color: #fff;
-<<<<<<< HEAD
   padding: 50px;
-=======
-  padding: 100px;
->>>>>>> linha_do_tempo_paralela
   border-radius: 8px;
   width: 100%;
   max-width: 600px;
@@ -160,7 +101,6 @@ main {
   font-weight: 800;
 }
 
-<<<<<<< HEAD
 /* Media queries para Tablets */
 @media (max-width: 768px) {
   .content {
@@ -194,21 +134,13 @@ main {
   .input-login {
     width: 100%;
   }
-=======
-/* Media queries para Celulares */
-@media (max-width: 768px) {
->>>>>>> linha_do_tempo_paralela
 }
 
 /* Media queries para Celulares */
 @media (max-width: 430px) {
   body {
     height: 100%;
-<<<<<<< HEAD
     background-size: cover;
-=======
-    background-size: cover; 
->>>>>>> linha_do_tempo_paralela
     background-position: center center;
     background-attachment: fixed;
     display: flex;

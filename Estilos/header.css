@@ -1,46 +1,32 @@
-body {
-  background-image: url(/img/imagens/FUNDO\ LARANJA.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 header {
-  margin-bottom: 10vh;
+  width: 100%;
+  height: 80px;
+  background-color: black;
+  position: relative;
 }
 
 header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: black;
-  padding: 10px 20px;
-  height: 70px;
-  position: fixed;
-  width: 100%;
-  z-index: 10;
+  padding: 10px 20px; /* Reduzi o padding vertical */
+  width: 100%; /* Alterado para 100% */
+  /*max-width: calc(100% - 360px);  Adicionado max-width */
+  margin: 0 auto; /* Centraliza o nav */
+  box-sizing: border-box;
+  height: 100%; /* Ocupa toda altura do header */
 }
 
-header .logo {
-  max-height: 100px;
+.logo-link {
+  display: inline-block;
+  line-height: 0;
+  flex: 0 0 auto; /* Não cresce nem encolhe */
 }
 
-.menu-button {
-  display: none;
-  margin-top: 4vw;
-  margin-left: 4vw;
-  margin-right: 4vw;
-}
-.menu-button img{
-  width: 30px;
-  cursor: pointer;
+.logo {
+  max-height: 60px; /* Altura máxima baseada no header */
+  width: auto; /* Mantém proporção */
+  object-fit: contain;
 }
 
 .menu-nav {
@@ -73,8 +59,8 @@ nav ul li a:hover {
   transition: background-color 0.3s, transform 0.3s;
   font-size: 20px;
   font-weight: bold;
-  border-radius: 5px;
-  margin-right: 50px;
+  border-radius: 8px;
+  flex: 0 0 auto; /* Não cresce nem encolhe */
 }
 
 .login-btn:hover {
@@ -119,27 +105,114 @@ nav ul li a:hover {
   border-bottom: none; /* Remove a borda do último item */
 }
 
-/* Media queries para telas pequenas */
-@media (max-width: 768px) {
-  .menu-button {
-    display: block;
+@media (max-width: 975px){
+  header{
+    height: 100%;
   }
 
-  .menu {
-    display: none; /* Oculta o menu de navegação padrão em telas pequenas */
+  header nav{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 12px;
+    align-items: center; /* Isso centraliza os itens horizontalmente */
   }
 
-  .menu-toggle {
-    display: block; /* Exibe o botão do menu hamburger em telas pequenas */
-  }
-
-  .mobile-menu.active {
-    display: block; /* Exibe o menu mobile quando a classe 'active' é adicionada */
+  .menu-nav{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    font-size: 14px;
   }
 }
 
-@media (min-width: 769px) {
-  .mobile-menu {
-    opacity: 0; /* Oculta o menu mobile em telas maiores que 768px */
+@media (max-width: 768px) {
+  header {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  header nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Isso centraliza os itens horizontalmente */
+    gap: 12px;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .logo {
+    width: auto;
+    max-height: 80px;
+    object-fit: contain; /* Isso ajuda no alinhamento central se necessário */
+  }
+
+  .menu-nav {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: space-around;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .menu-nav li {
+    text-align: center;
+  }
+
+  .menu-nav a {
+    white-space: nowrap; /* Garante que o texto não quebre */
+    padding: 4px 6px; /* Espaçamento interno reduzido */
+  }
+
+  header nav a:first-child {
+    /* Seleciona o primeiro link (que contém a logo) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+  }
+
+  .login-btn {
+    white-space: nowrap; /* Evita quebra no texto do botão */
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .login-btn:hover {
+    background-color: darkblue;
+    transform: scale(1.1);
+  }
+}
+
+/* Media queries para telas pequenas */
+@media (max-width: 430px) {
+  header {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  header nav {
+    padding: 10px;
+  }
+
+  .logo {
+    width: 50%;
+    height: 50%;
+    margin: 0 auto;
+    object-fit: contain; /* Isso ajuda no alinhamento central se necessário */
+  }
+
+  .menu-nav {
+    display: none;
   }
 }
