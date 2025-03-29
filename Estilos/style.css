@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
+@import url("footer.css");
+@import url("header.css");
+
+
 
 .content {
   display: flex;
@@ -40,6 +44,21 @@
 
 /* Media queries para telas pequenas */
 @media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+  
+  .imagem-one {
+    width: 70vw;
+  }
+
+  .text-content h1 {
+    font-size: 50px;
+  }
+  
+}
+
+@media (max-width: 430px) {
   .content {
     flex-direction: column;
   }

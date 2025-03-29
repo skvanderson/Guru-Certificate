@@ -12,36 +12,13 @@ footer {
   gap: 20px;
   align-items: center;
   padding: 20px;
+  width: 100vw;
+  box-sizing: border-box;
+  position: relative;
 }
 
-/* Logo */
-footer .logo {
-  grid-area: logo;
-  align-self: center;
-}
-
-/* Conteúdo central (texto + redes sociais) */
-.footer-content {
-  grid-area: content;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-}
-
-.footer-text {
-  margin-bottom: 0; /* Removido o margin-bottom redundante */
-}
-
-.footer-text p {
-  text-align: center;
-  margin: 5px 0;
-}
-
-/* Redes Sociais */
-.social-media {
-  display: flex;
-  gap: 10px;
+.footer-logo img{
+  max-width: 12vw;
 }
 
 .social-media img {
@@ -50,80 +27,27 @@ footer .logo {
   margin-left: 10px;
 }
 
-/* Certificações */
-.certificacoes {
-  grid-area: certifications;
-  align-self: center;
-  padding-top: 20px; /* Mantido do original */
+.certificacoes img {
+  max-width: 20vw;
 }
 
-/* Copyright */
-.copyright {
-  grid-area: copyright;
-  text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
-}
-
-/* Media Queries para Tablets (até 768px) */
 @media (max-width: 768px) {
-  footer .logo {
-    width: 50%;
-    height: 50%;
-    margin: 0 auto;
-    object-fit: contain;
-  }
-
-  .footer {
-    background: #000;
-    width: 100%;
-    height: 100%;
-    display: flex;
+  footer {
     flex-direction: column;
     gap: 16px;
     box-sizing: border-box;
   }
 
-  .footer-text {
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
-    text-align: center;
+  .footer-logo img{
+    max-width: 30vw;
   }
 
-  .copyright {
-    width: 100%;
-    font-size: 10px;
-  }
-
-  .certificacoes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .social-media img {
+    max-width: 9vw;
   }
 
   .certificacoes img {
-    width: 75%;
-  }
-}
-
-/* Media Queries para Celulares (até 430px) */
-@media (max-width: 430px) {
-  .logo {
-    width: 50%;
-    height: 50%;
-    object-fit: contain;
-  }
-
-  .footer {
-    background: #000;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    box-sizing: border-box;
+    max-width: 50vw;
   }
 
   .footer-text {
