@@ -1,70 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("footer.css");
+@import url("header.css");
 
 body {
+  height: 100vh; /* Garante que o body ocupe toda a altura da viewport */
   background-image: url(/img/imagens/FUNDO\ LARANJA.jpg);
-  background-size: cover;
+  background-size: cover; /* Faz a imagem cobrir toda a tela */
   background-repeat: no-repeat;
   background-position: center center;
+  background-attachment: fixed;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  min-height: 100vh; /* Define a altura mínima da página como 100% da viewport */
   display: flex;
   flex-direction: column;
-}
-
-header nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: black;
-  padding: 10px 20px;
-  height: 70px;
-}
-
-header .logo {
-  max-height: 150px;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 100px;
-  margin: 0;
-  padding: 0;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  transition: color 0.5s, border-bottom 0.5s;
-}
-
-nav ul li a:hover,
-.links a:hover {
-  color: orange;
-  border-bottom: 2px solid orangered;
-}
-
-.login-btn {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 5px;
-}
-
-.login-btn:hover {
-  background-color: darkblue;
-  transform: scale(1.1);
 }
 
 main {
@@ -77,13 +28,15 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  margin: auto;
 }
 
 .container {
   background-color: #fff;
-  padding: 100px;
-  border-radius: 20px;
+  padding: 50px;
+  border-radius: 8px;
   width: 100%;
+  max-width: 600px;
   box-sizing: border-box;
 }
 
@@ -91,23 +44,23 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 60px;
-  font-family: "Ubuntu Sans", sans-serif;
-  font-weight: 800;
-  font-style: italic;
+  font-size: 48px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
   color: #000000;
   margin: 0;
 }
 
 .text-content h2 {
-  font-family: "Caveat", cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .text-content input {
   display: flex;
   justify-content: left;
   background-color: rgb(213, 213, 213);
-  border-radius: 20px;
+  border-radius: 8px;
   border: none;
   font-size: 20px;
   height: 48px;
@@ -123,7 +76,7 @@ main {
   transition: background-color 0.3s, transform 0.3s;
   font-size: 20px;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 8px;
   margin: 40px 225px;
 }
 
@@ -148,61 +101,65 @@ main {
   font-weight: 800;
 }
 
-footer {
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
+/* Media queries para Tablets */
+@media (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
 
-footer .logo {
-  height: 300px;
-  width: auto;
-}
+  .container {
+    padding: 50px;
+  }
 
-.footer-text {
-  text-align: center;
-}
+  .text-content button {
+    width: 50%;
+    margin: 40px auto;
+  }
 
-.footer-text p {
-  margin: 5px 0;
-}
+  .links {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+  }
 
-.footer .canto-inferior-direito {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-}
+  .text-content input {
+    box-sizing: border-box;
+  }
 
-.canto-inferior-direito .certificacoes {
-  padding-top: 20px;
-}
+  .text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+  }
 
-.social-media {
-  display: flex;
-  gap: 20px;
-}
-
-.social-media img {
-  height: 40px;
-  width: auto;
-  margin-left: 10px;
+  .input-login {
+    width: 100%;
+  }
 }
 
 /* Media queries para Celulares */
 @media (max-width: 430px) {
+  body {
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-  .login-btn{
+  .login-btn {
     font-size: 14px;
+  }
+
+  .content {
+    width: 100%;
   }
 
   .container {
     padding: 24px;
     height: 100%;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     gap: 16px 0;
@@ -214,11 +171,15 @@ footer .logo {
     box-sizing: border-box;
   }
 
+  .text-content input {
+    border-radius: 8px;
+  }
+
   .links a {
     text-decoration: none;
     font-size: 16px;
     color: #000000;
-    font-weight: 800;
+    font-weight: 400;
   }
 
   .text-content {

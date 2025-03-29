@@ -1,46 +1,148 @@
+/* Estilos Gerais do Rodapé */
+/* Estilos base do footer */
 footer {
   background-color: black;
   color: white;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "logo content certifications"
+    "copyright copyright copyright";
+  gap: 20px;
   align-items: center;
   padding: 20px;
-  width: 100vw;
-  box-sizing: border-box;
-  position: relative;
 }
 
-.footer-logo img{
-  max-width: 12vw;
+/* Logo */
+footer .logo {
+  grid-area: logo;
+  align-self: center;
+}
+
+/* Conteúdo central (texto + redes sociais) */
+.footer-content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.footer-text {
+  margin-bottom: 0; /* Removido o margin-bottom redundante */
+}
+
+.footer-text p {
+  text-align: center;
+  margin: 5px 0;
+}
+
+/* Redes Sociais */
+.social-media {
+  display: flex;
+  gap: 10px;
 }
 
 .social-media img {
-  max-width: 4vw;
+  height: 40px;
+  width: auto;
+  margin-left: 10px;
 }
 
-.certificacoes img {
-  max-width: 20vw;
+/* Certificações */
+.certificacoes {
+  grid-area: certifications;
+  align-self: center;
+  padding-top: 20px; /* Mantido do original */
 }
 
+/* Copyright */
+.copyright {
+  grid-area: copyright;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+/* Media Queries para Tablets (até 768px) */
 @media (max-width: 768px) {
-  footer {
+  footer .logo {
+    width: 50%;
+    height: 50%;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .footer {
+    background: #000;
+    width: 100%;
+    height: 100%;
+    display: flex;
     flex-direction: column;
-  }
-
-  .footer-logo img{
-    max-width: 30vw;
-  }
-
-  .social-media img {
-    max-width: 9vw;
-  }
-
-  .certificacoes img {
-    max-width: 50vw;
+    gap: 16px;
+    box-sizing: border-box;
   }
 
   .footer-text {
-    font-size: 15px;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
     text-align: center;
+  }
+
+  .copyright {
+    width: 100%;
+    font-size: 10px;
+  }
+
+  .certificacoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .certificacoes img {
+    width: 75%;
+  }
+}
+
+/* Media Queries para Celulares (até 430px) */
+@media (max-width: 430px) {
+  .logo {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+  }
+
+  .footer {
+    background: #000;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+  }
+
+  .footer-text {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+  }
+
+  .copyright {
+    font-size: 10px;
+  }
+
+  .certificacoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .certificacoes img {
+    width: 75%;
   }
 }
