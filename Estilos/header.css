@@ -15,6 +15,7 @@ header nav {
   margin: 0 auto; /* Centraliza o nav */
   box-sizing: border-box;
   height: 100%; /* Ocupa toda altura do header */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .logo-link {
@@ -74,7 +75,7 @@ nav ul li a:hover {
   width: 70vw; /* Um pouco mais largo */
   margin-left: 10vw; /* Centraliza o menu */
   padding: 15px;
-  font-family: "Ubuntu Sans", sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   border: 2px solid #000000; /* Borda preta para combinar com a navbar */
   border-radius: 8px; /* Bordas arredondadas */
 }
