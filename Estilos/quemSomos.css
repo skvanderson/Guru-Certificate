@@ -1,11 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap");
+
+@import url("footer.css");
+@import url("header.css");
+
+body {
+  height: 100vh; /* Garante que o body ocupe toda a altura da viewport */
+  background-image: url(/img/imagens/FUNDO\ LARANJA.jpg);
+  background-size: cover; /* Faz a imagem cobrir toda a tela */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
 
 .content {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
+  padding: 16px;
 }
 
 .text-content {
@@ -13,12 +32,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 16px;
 }
 
 .text-content h1 {
   font-size: 70px;
   text-align: center;
-  font-family: "Ubuntu Sans", sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-style: italic;
   color: #fff;
@@ -26,13 +46,13 @@
 
 .text-content p {
   font-size: 26px;
-  font-family: "Caveat", cursive;
-  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
   color: #fff;
 }
 
 .imagem-one {
-  width: 56%;
+  width: 50%;
   height: auto;
   position: relative;
   z-index: 1;
@@ -40,16 +60,22 @@
 }
 
 .team {
-  padding: 50px 0;
+  padding: 16px 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.7); /* Adaptação para combinar com o estilo geral */
+  border-bottom: 1px solid #fff;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Adaptação para combinar com o estilo geral */
 }
 
 .team h2 {
   margin-bottom: 20px;
   color: #fff; /* Harmonizando com o esquema de cores */
   font-size: 40px;
-  font-family: "Ubuntu Sans", sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
 }
 
@@ -60,7 +86,7 @@
 }
 
 .team-member {
-  margin: 15px;
+  padding: 16px;
   text-align: center;
   transition: transform 0.3s ease-in-out;
 }
@@ -80,17 +106,59 @@
   margin-top: 10px;
   color: #fff; /* Harmonizando com o esquema de cores */
   font-size: 20px;
-  font-family: "Caveat", cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .team-member .link-icon {
   margin-left: 10px;
-  width: 20px;
-  height: 20px;
+  width: 24px; /* Tamanho ajustável */
+  height: 24px;
+  vertical-align: middle;
   object-fit: cover;
 }
 
+@media (max-width: 975px) {
+  .content {
+    display: grid;
+    grid-template-areas: "imagem" "conteudo";
+    justify-items: center;
+  }
 
+  .imagem-one {
+    grid-area: imagem;
+    max-width: 200px;
+  }
+
+  .text-content {
+    grid-area: conteudo;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .team {
+    padding: 8px 0;
+  }
+
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .team-member .link-icon {
+    width: 24px; /* Tamanho ajustável */
+    height: 24px;
+    vertical-align: middle;
+  }
+
+  .team-member p {
+    display: flex;
+    align-items: center; /* Alinha verticalmente (caso o ícone tenha altura diferente) */
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 8px; /* Adiciona um espaçamento entre o nome e o ícone */
+  }
+}
 
 /* Media queries para Tablets */
 @media (max-width: 768px) {
