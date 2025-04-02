@@ -8,8 +8,8 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #FFF176; /* Amarelo suave */
-    color: #424242; /* Cinza escuro para o texto */
+    background-color: #f5f5f5;
+    color: #333;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
@@ -19,10 +19,10 @@ body {
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    background-color: #FFF; /* Fundo branco */
+    background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Header styles */
@@ -42,42 +42,28 @@ body {
 .translate-btn {
     padding: 10px 20px;
     border: none;
-    border-radius: 20px;
+    border-radius: 4px;
+    background-color: #2196F3;
+    color: white;
     cursor: pointer;
     font-weight: bold;
     min-width: 100px;
     transition: all 0.3s ease;
-    text-align: center;
 }
 
-.back-btn {
-    background-color: #E0E0E0;
-    color: #424242;
-}
-
-.translate-btn {
-    background-color: #2196F3;
-    color: #FFFFFF;
-}
-
-.back-btn:hover {
-    background-color: #BDBDBD;
-    transform: translateY(-2px);
-}
-
+.back-btn:hover,
 .translate-btn:hover {
     background-color: #1976D2;
     transform: translateY(-2px);
 }
 
 .question-counter {
-    font-size: 1.2em;
     font-weight: bold;
-    color: #4CAF50;
+    color: #666;
     padding: 8px 16px;
     background-color: #fff;
-    border: 2px solid #4CAF50;
     border-radius: 20px;
+    border: 2px solid #2196F3;
 }
 
 /* Question container */
@@ -90,23 +76,22 @@ body {
 }
 
 .questao-titulo {
-    color: #FFB74D; /* Laranja */
+    color: #444;
     margin-bottom: 15px;
-    font-size: 1.8em;
-    text-align: center;
+    font-size: 1.5em;
 }
 
 .descricao {
-    font-size: 1.4em;
+    font-size: 1.1em;
     margin-bottom: 15px;
-    color: #424242;
+    color: #666;
 }
 
 .pergunta {
     font-size: 1.2em;
     margin-bottom: 20px;
     font-weight: bold;
-    color: #424242;
+    color: #333;
 }
 
 /* Alternatives */
@@ -123,14 +108,16 @@ body {
     display: flex;
     align-items: center;
     padding: 15px;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #f5f5f5;
+    margin-bottom: 10px;
+    cursor: pointer;
     transition: all 0.3s ease;
-    border: none;
+    background-color: #fff;
 }
 
 .alternativas-content li:hover {
-    background-color: #e0e0e0;
+    background-color: #f8f8f8;
     transform: translateX(5px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -166,19 +153,19 @@ body {
 /* Button container */
 .button-container {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin: 20px 0;
+    justify-content: space-between;
+    margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid #ddd;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
+    border-radius: 6px;
+    background-color: #2196F3;
     color: white;
     cursor: pointer;
     font-weight: bold;
@@ -187,7 +174,7 @@ body {
 }
 
 .btn:hover {
-    background-color: #45a049;
+    background-color: #1976D2;
     transform: translateY(-2px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -199,42 +186,16 @@ body {
     box-shadow: none;
 }
 
-#btnFinalizar {
-    background-color: #FF4500;
-}
-
-#btnFinalizar:hover {
-    background-color: #E63900;
-}
-
-/* Estilização do botão Fechar */
-#btnFecharModal {
-    background-color: #4CAF50; /* Verde padrão */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#btnFecharModal:hover {
-    background-color: #45a049; /* Um verde mais escuro no hover */
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
 /* Timer */
 .timer {
     text-align: center;
     margin-top: 20px;
     font-weight: bold;
-    color: #FF4500;
+    color: #666;
     padding: 15px;
-    background-color: #F0F0F0;
-    border: 2px solid #FF4500;
+    background-color: #f8f8f8;
     border-radius: 8px;
+    border: 2px solid #2196F3;
 }
 
 /* Modal */
@@ -250,7 +211,7 @@ body {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: white;
     margin: 15% auto;
     padding: 30px;
     width: 90%;
@@ -283,10 +244,128 @@ body {
     color: #f44336;
 }
 
-.aprovado {
-    color: #4CAF50;
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 95%;
+        padding: 15px;
+    }
 }
 
-.reprovado {
-    color: #FF4500;
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .back-btn,
+    .translate-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .question-counter {
+        margin: 10px 0;
+    }
+
+    .questaoContainer {
+        padding: 15px;
+    }
+
+    .questao-titulo {
+        font-size: 1.3em;
+    }
+
+    .descricao {
+        font-size: 1em;
+    }
+
+    .pergunta {
+        font-size: 1.1em;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 20% auto;
+        padding: 20px;
+    }
 }
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .header-container {
+        padding: 8px;
+    }
+
+    .back-btn,
+    .translate-btn {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    .question-counter {
+        font-size: 0.9em;
+        padding: 6px 12px;
+    }
+
+    .questao-titulo {
+        font-size: 1.2em;
+    }
+
+    .descricao,
+    .pergunta {
+        font-size: 0.9em;
+    }
+
+    .alternativas-content li {
+        padding: 10px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .timer {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .close {
+        font-size: 24px;
+        right: 15px;
+        top: 10px;
+    }
+}
+
+
+

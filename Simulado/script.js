@@ -1,206 +1,95 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM carregado');
-    
-    // Inicializa as variáveis
     let indiceAtual = 0;
     let acertos = 0;
-    let tempoTotal = 1800; // 30 minutos em segundos
+    const tempoTotal = 90 * 60 * 1000;
     let tempoRestante = tempoTotal;
     let timerInterval;
     let currentLanguage = 'pt-BR';
     let tempoExpirado = false;
-
-    // Obtém os elementos do DOM
+    
     var titulo = document.getElementById("questao-titulo");
     var descricao = document.getElementById("descricao");
     var pergunta = document.getElementById("pergunta");
     var ulAlternativas = document.getElementById("alternativas-content");
     const statusQuestao = document.getElementById('status');
     const questionCounter = document.getElementById('question-counter');
-    const btnVoltar = document.getElementById('btnVoltar');
     const btnTranslate = document.getElementById('btnTranslate');
-    const timerElement = document.getElementById('timer');
-
-    console.log('Elementos do DOM obtidos:', {
-        titulo: !!titulo,
-        descricao: !!descricao,
-        pergunta: !!pergunta,
-        ulAlternativas: !!ulAlternativas,
-        statusQuestao: !!statusQuestao,
-        questionCounter: !!questionCounter,
-        btnVoltar: !!btnVoltar,
-        btnTranslate: !!btnTranslate,
-        timerElement: !!timerElement
+    const btnVoltar = document.getElementById('btnVoltar');
+    
+    // Add event listener for back button
+    btnVoltar.addEventListener('click', function() {
+        window.location.href = '../main/simulados.html';
     });
-
-    // Translation dictionary
-    const translations = {
-        'pt-BR': {
-            'btnVoltar': 'Voltar',
-            'btnAnterior': 'Anterior',
-            'btnProxima': 'Próxima',
-            'btnFinalizar': 'Finalizar',
-            'btnFecharModal': 'Fechar',
-            'tempoRestante': 'Tempo restante: ',
-            'acertou': 'Acertou Míseravi!',
-            'errou': 'Que Pena, Tente outra vez',
-            'resultadoFinal': 'Resultado Final',
-            'tempoEsgotado': 'Tempo Esgotado!\nVocê acertou ',
-            'questoes': ' questões (',
-            'deAcertos': '% de acertos).\nStatus: ',
-            'aprovado': 'Aprovado',
-            'reprovado': 'Reprovado',
-            'acertouQuestoes': 'Você acertou ',
-            'de': ' de ',
-            'perguntas': ' perguntas.\n(',
-            'atencao': 'Atenção',
-            'selecioneUma': 'Selecione uma questão!',
-            'selecioneDuas': 'Selecione duas questões',
-            'resposta': 'Resposta'
-        },
-        'en': {
-            'btnVoltar': 'Back',
-            'btnAnterior': 'Previous',
-            'btnProxima': 'Next',
-            'btnFinalizar': 'Finish',
-            'btnFecharModal': 'Close',
-            'tempoRestante': 'Time remaining: ',
-            'acertou': 'You got it right!',
-            'errou': 'Sorry, try again',
-            'resultadoFinal': 'Final Result',
-            'tempoEsgotado': 'Time\'s up!\nYou got ',
-            'questoes': ' questions right (',
-            'deAcertos': '% correct).\nStatus: ',
-            'aprovado': 'Approved',
-            'reprovado': 'Failed',
-            'acertouQuestoes': 'You got ',
-            'de': ' out of ',
-            'perguntas': ' questions right.\n(',
-            'atencao': 'Attention',
-            'selecioneUma': 'Please select one question!',
-            'selecioneDuas': 'Please select two questions',
-            'resposta': 'Answer'
-        }
-    };
-
+    
     function updateQuestionCounter() {
         questionCounter.textContent = `${indiceAtual + 1}/${questoes.length}`;
-    }
-
-    function updateButtonTexts() {
-        document.getElementById('btnVoltar').textContent = translations[currentLanguage]['btnVoltar'];
-        document.getElementById('btnAnterior').textContent = translations[currentLanguage]['btnAnterior'];
-        document.getElementById('btnProxima').textContent = translations[currentLanguage]['btnProxima'];
-        document.getElementById('btnFinalizar').textContent = translations[currentLanguage]['btnFinalizar'];
-        document.getElementById('btnFecharModal').textContent = translations[currentLanguage]['btnFecharModal'];
-        document.getElementById('timer').textContent = translations[currentLanguage]['tempoRestante'] + formatTime(tempoRestante);
     }
 
     function toggleLanguage() {
         currentLanguage = currentLanguage === 'pt-BR' ? 'en' : 'pt-BR';
         btnTranslate.textContent = currentLanguage === 'pt-BR' ? 'EN' : 'PT';
         carregarQuestao();
-        updateButtonTexts();
     }
 
-    // Add event listener for back button
-    btnVoltar.addEventListener('click', function() {
-        window.location.href = '/main/simulados.html';
-    });
-
-    // Add event listener for translation button
-    btnTranslate.addEventListener('click', toggleLanguage);
-
     function carregarQuestao() {
-        console.log('Carregando questão:', indiceAtual);
+        let questao = questoes[indiceAtual];
         
-        const questao = questoes[indiceAtual];
-        if (!questao) {
-            console.error('Erro: questão não encontrada para índice', indiceAtual);
-            return;
-        }
-
         // Update question counter
         updateQuestionCounter();
-
+        
         // Set content based on current language
-        titulo.innerText = questao.titulo[currentLanguage] || questao.titulo['pt-BR'];
-        descricao.innerText = questao.descricao[currentLanguage] || questao.descricao['pt-BR'];
-        pergunta.innerText = questao.pergunta[currentLanguage] || questao.pergunta['pt-BR'];
-
-        // Limpa as alternativas anteriores
+        titulo.innerText = questao.titulo[currentLanguage];
+        descricao.innerText = questao.descricao[currentLanguage];
+        pergunta.innerText = questao.pergunta[currentLanguage];
+        
+        // Clear previous alternatives
         ulAlternativas.innerHTML = "";
         statusQuestao.innerText = "";
-
-        // Adiciona o status da questão se já foi respondida
-        if (questao.respondida) {
-            if (questao.correta) {
-                statusQuestao.innerText = translations[currentLanguage]['acertou'];
-                statusQuestao.classList.add('correta');
-                statusQuestao.classList.remove('incorreta');
-            } else {
-                statusQuestao.innerText = translations[currentLanguage]['errou'];
-                statusQuestao.classList.remove('correta');
-                statusQuestao.classList.add('incorreta');
-            }
+        
+        if (questao.respondida && questao.correta) {
+            statusQuestao.innerText = currentLanguage === 'pt-BR' ? 'Acertou Míseravi!' : 'You got it right!';
+            statusQuestao.classList.add('correta');
+            statusQuestao.classList.remove('incorreta');
+        } else if (questao.respondida && !questao.correta) {
+            statusQuestao.innerText = currentLanguage === 'pt-BR' ? 'Que Pena, Tente outra vez' : 'Sorry, try again';
+            statusQuestao.classList.remove('correta');
+            statusQuestao.classList.add('incorreta');
         }
-
-        // Cria as alternativas
-        console.log('Criando alternativas para a questão:', questao.alternativas);
-        questao.alternativas.forEach((alt, index) => {
+        
+        questao.alternativas.forEach(qst => {
             var li = document.createElement("li");
             var input = document.createElement("input");
             var h4 = document.createElement("h4");
-            
             input.type = questao.multipla ? "checkbox" : "radio";
             input.name = `q${indiceAtual + 1}`;
-            input.value = alt.titulo[currentLanguage] || alt.titulo['pt-BR'];
-            h4.innerText = alt.titulo[currentLanguage] || alt.titulo['pt-BR'];
+            input.value = qst.titulo[currentLanguage];
+            h4.innerText = qst.titulo[currentLanguage];
             
-            // Se a questão foi respondida, desabilita as alternativas
-            input.disabled = questao.respondida;
-
-            // Se a questão foi respondida, marca a resposta selecionada
-            if (questao.respondida && questao.respostasSelecionadas) {
-                if (questao.multipla) {
-                    if (questao.respostasSelecionadas.includes(alt.titulo[currentLanguage] || alt.titulo['pt-BR'])) {
-                        input.checked = true;
-                    }
-                } else {
-                    if (questao.respostasSelecionadas[0] === alt.titulo[currentLanguage] || alt.titulo['pt-BR']) {
-                        input.checked = true;
-                    }
+            input.disabled = questao.respondida ? true : false;
+            
+            if (questao.respondida) {
+                if (questao.multipla && questao.respostasSelecionadas.includes(qst.titulo[currentLanguage])) {
+                    input.checked = true;
+                } else if (!questao.multipla && questao.respostasSelecionadas[0] === qst.titulo[currentLanguage]) {
+                    input.checked = true;
                 }
             }
-
+            
             li.style.display = "flex";
             h4.style.marginLeft = "10px";
-
+            
             li.appendChild(input);
             li.appendChild(h4);
             ulAlternativas.appendChild(li);
         });
-
-        // Atualiza os textos dos botões
-        updateButtonTexts();
-
-        // Atualiza o status da questão
-        if (questao.respondida) {
-            statusQuestao.textContent = questao.correta ? translations[currentLanguage]['acertou'] : translations[currentLanguage]['errou'];
-            statusQuestao.className = 'question-status ' + (questao.correta ? 'correct' : 'incorrect');
-        } else {
-            statusQuestao.textContent = '';
-            statusQuestao.className = 'question-status';
-        }
-
-        // Atualiza os botões de navegação
-        document.getElementById('btnAnterior').disabled = indiceAtual === 0;
-        document.getElementById('btnProxima').textContent = indiceAtual === questoes.length - 1 ? translations[currentLanguage]['btnFinalizar'] : translations[currentLanguage]['btnProxima'];
     }
 
+    // Add event listener for translation button
+    btnTranslate.addEventListener('click', toggleLanguage);
+
     document.getElementById("btnProxima").addEventListener("click", () => {
-        let questao = questoes[indiceAtual];
-        let respostasSelecionadas;
+        let questao = questoes[indiceAtual]
+        let respostasSelecionadas 
 
         // Valida se o número de respostas selecionadas está correto
         if(questao.multipla)
@@ -209,16 +98,16 @@ document.addEventListener('DOMContentLoaded', function() {
             respostasSelecionadas = Array.from(ulAlternativas.querySelectorAll('input[type="radio"]:checked'));
         
         if (questao.multipla && !questao.respondida && respostasSelecionadas.length != 2) {
-            exibirModal(translations[currentLanguage]['atencao'], translations[currentLanguage]['selecioneDuas'], "alerta");
-            return;
+            exibirModal("Atenção", "Selecione duas questões", "alerta")
+            return
         }
 
         if (!questao.multipla && !questao.respondida && respostasSelecionadas.length < 1) {
-            exibirModal(translations[currentLanguage]['atencao'], translations[currentLanguage]['selecioneUma'], "alerta");
-            return;
+            exibirModal("Atenção", "Selecione uma questão!", "alerta")
+            return
         }
 
-        verificarQuestao(questao, respostasSelecionadas);
+        verificarQuestao(questao, respostasSelecionadas)
         
         if (indiceAtual + 1 >= questoes.length) {
             finalizarSimulado();
@@ -226,15 +115,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         indiceAtual++;
-        carregarQuestao();
-    });
+        carregarQuestao()
+    })
 
     document.getElementById("btnAnterior").addEventListener("click", () => {
         if (indiceAtual > 0) {
             indiceAtual--;
-            carregarQuestao();
+            carregarQuestao()
         }
-    });
+    })
 
     document.getElementById('btnFinalizar').addEventListener('click', finalizarSimulado);
 
@@ -242,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filtra as alternativas corretas
         let alternativasCorretas = questao.alternativas.filter(alt => alt.correta);
         
-        // Extrai os títulos das alternativas corretas
-        let titulosCorretos = alternativasCorretas.map(alt => alt.titulo[currentLanguage] || alt.titulo['pt-BR']);
+        // Extrai os títulos das alternativas corretas no idioma atual
+        let titulosCorretos = alternativasCorretas.map(alt => alt.titulo[currentLanguage]);
     
         // Verifica se as respostas selecionadas estão entre as corretas
         let respostasValidas = respostasSelecionadas.every(resp => 
@@ -261,49 +150,43 @@ document.addEventListener('DOMContentLoaded', function() {
         if (todasCorretas)
             acertos++;
             
-        exibirModal(translations[currentLanguage]['resposta'], todasCorretas ? translations[currentLanguage]['acertou'] : translations[currentLanguage]['errou'], todasCorretas ? "correta" : "incorreta");
+        exibirModal("Resposta", todasCorretas ? "Acertou Míseravi!" : "Que Pena, Tente outra vez", todasCorretas ? "correta" : "incorreta")            
         questoes[indiceAtual].respondida = true;
     }
 
     function finalizarSimulado() {
+        // Calcular a porcentagem de acertos
         const porcentagemAcertos = (acertos / questoes.length) * 100;
-        const statusFinal = porcentagemAcertos >= 70 ? translations[currentLanguage]['aprovado'] : translations[currentLanguage]['reprovado'];
-        
+    
+        // Determinar se o usuário está aprovado ou reprovado
+        const statusFinal = porcentagemAcertos >= 70 ? 'Aprovado' : 'Reprovado';
+    
+        // Criar mensagem baseada no motivo da finalização
         let mensagemFinal;
         if (tempoExpirado) {
-            mensagemFinal = translations[currentLanguage]['tempoEsgotado'] + 
-                          acertos + 
-                          translations[currentLanguage]['questoes'] + 
-                          porcentagemAcertos.toFixed(2) + 
-                          translations[currentLanguage]['deAcertos'] + 
-                          statusFinal;
+            mensagemFinal = `Tempo Esgotado!\nVocê acertou ${acertos} questões (${porcentagemAcertos.toFixed(2)}% de acertos).\nStatus: ${statusFinal}`;
         } else {
-            mensagemFinal = translations[currentLanguage]['acertouQuestoes'] + 
-                          acertos + 
-                          translations[currentLanguage]['de'] + 
-                          questoes.length + 
-                          translations[currentLanguage]['perguntas'] + 
-                          porcentagemAcertos.toFixed(2) + 
-                          translations[currentLanguage]['deAcertos'] + 
-                          statusFinal;
+            mensagemFinal = `Você acertou ${acertos} de ${questoes.length} perguntas.\n(${porcentagemAcertos.toFixed(2)}% de acertos).\nStatus: ${statusFinal}`;
         }
 
+        // Desabilitar todos os botões
         document.getElementById('btnAnterior').disabled = true;
         document.getElementById('btnProxima').disabled = true;
         document.getElementById('btnFinalizar').disabled = true;
         document.getElementById('btnTranslate').disabled = true;
 
-        exibirModal(translations[currentLanguage]['resultadoFinal'], mensagemFinal, statusFinal === translations[currentLanguage]['aprovado'] ? "aprovado" : "reprovado", true);
+        // Exibir o modal com o resultado
+        exibirModal("Resultado Final", mensagemFinal, statusFinal === "Aprovado" ? "aprovado" : "reprovado", true);
     }
-            
+
     function exibirModal(titulo, mensagem, classeEstilo, recarregar = false) {
         // Setar o titulo
         const modalTitulo = document.getElementById('modal-titulo');
-        modalTitulo.textContent = titulo;
+        modalTitulo.textContent = titulo ;
 
         // Setar a mensagem
         const mensagemModal = document.getElementById('modal-mensagem');
-        mensagemModal.textContent = mensagem;
+        mensagemModal.textContent = mensagem ;
 
         if (classeEstilo != "")
             mensagemModal.classList.add(classeEstilo);
@@ -316,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('btnFecharModal').addEventListener('click', function() {
             modal.style.display = 'none';
             if (classeEstilo != "")
-                mensagemModal.classList.remove(classeEstilo);
+                mensagemModal.classList.remove(classeEstilo)
 
             if(recarregar)
                 window.location.reload();
@@ -326,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.modal .close').addEventListener('click', function() {
             modal.style.display = 'none';
             if (classeEstilo != "")
-                mensagemModal.classList.remove(classeEstilo);
+                mensagemModal.classList.remove(classeEstilo)
         });
     
         // Fechar o modal ao clicar fora da área do modal
@@ -334,25 +217,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.target === modal) {
                 modal.style.display = 'none';
                 if (classeEstilo != "")
-                    mensagemModal.classList.remove(classeEstilo);
+                    mensagemModal.classList.remove()
             }
         });
     }
 
-    function formatTime(ms) {
-        const minutos = Math.floor(ms / 60);
-        const segundos = ms % 60;
-        return `${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
-    }
-
     function atualizarTimer() {
+        const minutos = Math.floor(tempoRestante / (1000 * 60));
+        const segundos = Math.floor((tempoRestante % (1000 * 60)) / 1000);
+        document.getElementById('timer').textContent = `Tempo restante: ${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+
         if (tempoRestante <= 0) {
             clearInterval(timerInterval);
             tempoExpirado = true;
-            document.getElementById('btnFinalizar').click(); // Simula um clique no botão Finalizar
+            finalizarSimulado();
         } else {
-            tempoRestante--;
-            document.getElementById('timer').textContent = translations[currentLanguage]['tempoRestante'] + formatTime(tempoRestante);
+            tempoRestante -= 1000;
         }
     }
 
@@ -360,17 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timerInterval = setInterval(atualizarTimer, 1000);
     }
 
-    // Verifica se as questões foram carregadas
-    if (typeof questoes === 'undefined' || !questoes || questoes.length === 0) {
-        console.error('Questões não foram carregadas corretamente');
-        return;
-    }
-
-    console.log('Questões carregadas:', questoes.length);
-    
-    // Carrega a primeira questão
-    carregarQuestao();
-    
-    // Inicia o timer
     iniciarTimer();
+    window.onload = carregarQuestao;
+    
 });
