@@ -20,6 +20,44 @@ body {
     box-sizing: border-box;
 }
 
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+.question-counter {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4CAF50;
+    padding: 8px 15px;
+    background-color: #fff;
+    border: 2px solid #4CAF50;
+    border-radius: 20px;
+}
+
+.translate-btn {
+    font-size: 1em;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: #2196F3;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 60px;
+    text-align: center;
+}
+
+.translate-btn:hover {
+    background-color: #1976D2;
+}
+
 h1 {
     text-align: center;
     color: #FFB74D; /* Laranja */
@@ -222,6 +260,20 @@ button:hover {
         padding: 15px;
     }
 
+    .header-container {
+        padding: 8px;
+    }
+
+    .question-counter {
+        font-size: 1.1em;
+        padding: 6px 12px;
+    }
+
+    .translate-btn {
+        padding: 6px 12px;
+        min-width: 50px;
+    }
+
     h1 {
         font-size: 1.5em;
     }
@@ -257,6 +309,20 @@ button:hover {
 
     .container {
         padding: 10px;
+    }
+
+    .header-container {
+        padding: 5px;
+    }
+
+    .question-counter {
+        font-size: 1em;
+        padding: 5px 10px;
+    }
+
+    .translate-btn {
+        padding: 5px 10px;
+        min-width: 45px;
     }
 
     h1 {
