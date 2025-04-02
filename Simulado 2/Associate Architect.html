@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Questionário AWS</title>
     <link rel="stylesheet" href="styles.css" />
     <style></style>
@@ -31,10 +31,11 @@
         </div>
       </div>
 
-
-      <button id="btnAnterior">Anterior</button>
-      <button id="btnProxima">Próxima</button>
-      <button id="btnFinalizar">Finalizar</button>
+      <div class="button-container">
+        <button id="btnAnterior">Anterior</button>
+        <button id="btnProxima">Próxima</button>
+        <button id="btnFinalizar">Finalizar</button>
+      </div>
 
       <div id="resultadoFinal" style="display: none">
         <p id="percentualAcerto"></p>
@@ -42,7 +43,7 @@
       </div>
       <div id="timer">Tempo restante: 01:30:00</div>
     </div>
-    <script src="/Simulado 2/Questoes.js"></script>
-    <script src="/Simulado 2/script.js"></script>
+    <script src="Questoes.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
