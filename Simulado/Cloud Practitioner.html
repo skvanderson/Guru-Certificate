@@ -2,23 +2,28 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Questionário AWS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Questionário AWS Cloud Practitioner</title>
     <link rel="stylesheet" href="styles.css" />
-    <style></style>
   </head>
   <body>
     <div class="container">
+      <div class="header-container">
+        <button id="btnVoltar" class="back-btn">Voltar</button>
+        <div id="question-counter" class="question-counter">1/65</div>
+        <button id="btnTranslate" class="translate-btn">EN</button>
+      </div>
+
       <div class="questaoContainer" id="questaoContainer">
-        <ol id="questao-content" class="questao-content">
-          <li id="questao">
-            <h1 id="questao-titulo"></h1>
-            <h2 id="descricao"></h2>
-            <h3 id="pergunta"></h3>
-            <ul id="alternativas-content"></ul>
-          </li>
-          <h4 class="status" id="status"></h4>
-        </ol>
+        <div id="questao-content" class="questao-content">
+          <div id="questao" class="questao">
+            <h2 id="questao-titulo" class="questao-titulo"></h2>
+            <div id="descricao" class="descricao"></div>
+            <div id="pergunta" class="pergunta"></div>
+            <ul id="alternativas-content" class="alternativas-content"></ul>
+          </div>
+          <div id="status" class="status"></div>
+        </div>
       </div>
 
       <!-- Modal -->
@@ -27,20 +32,22 @@
           <span class="close">&times;</span>
           <h2 id="modal-titulo"></h2>
           <h3 id="modal-mensagem"></h3>
-          <button id="btnFecharModal">Fechar</button>
+          <button id="btnFecharModal" class="btn-fechar">Fechar</button>
         </div>
       </div>
 
+      <div class="button-container">
+        <button id="btnAnterior" class="btn">Anterior</button>
+        <button id="btnProxima" class="btn">Próxima</button>
+        <button id="btnFinalizar" class="btn">Finalizar</button>
+      </div>
 
-      <button id="btnAnterior">Anterior</button>
-      <button id="btnProxima">Próxima</button>
-      <button id="btnFinalizar">Finalizar</button>
-
-      <div id="resultadoFinal" style="display: none">
+      <div id="resultadoFinal" class="resultado-final" style="display: none">
         <p id="percentualAcerto"></p>
         <p id="mensagemFinal"></p>
       </div>
-      <div id="timer">Tempo restante: 01:30:00</div>
+      
+      <div id="timer" class="timer">Tempo restante: 01:30:00</div>
     </div>
     <script src="Questoes.js"></script>
     <script src="script.js"></script>

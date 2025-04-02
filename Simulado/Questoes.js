@@ -1,191 +1,531 @@
-const questoes =
-   [
+const questoes = [
     {
-        titulo: "Pergunta 01",
-        descricao: "Qual serviço da AWS oferece suporte a uma arquitetura híbrida que oferece aos usuários a capacidade de estender a infraestrutura da AWS, os serviços da AWS, as APIs e as ferramentas para data centers, ambientes de co-localização ou instalações locais?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 01",
+            "en": "Question 01"
+        },
+        descricao: {
+            "pt-BR": "Qual serviço da AWS oferece suporte a uma arquitetura híbrida que oferece aos usuários a capacidade de estender a infraestrutura da AWS, os serviços da AWS, as APIs e as ferramentas para data centers, ambientes de co-localização ou instalações locais?",
+            "en": "Which AWS service supports a hybrid architecture that enables users to extend the AWS infrastructure, AWS services, APIs, and tools to data centers, colocation environments, or on-premises installations?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "AWS Fargate", correta: false},
-            {titulo: "Zonas locais da AWS", correta: false},
-            {titulo: "Postos avançados da AWS", correta: true},
-            {titulo: "AWS Snowmobile", correta: false},
+            {
+                titulo: {
+                    "pt-BR": "AWS Fargate",
+                    "en": "AWS Fargate"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Zonas locais da AWS",
+                    "en": "AWS Local Zones"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Postos avançados da AWS",
+                    "en": "AWS Outposts"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS Snowmobile",
+                    "en": "AWS Snowmobile"
+                },
+                correta: false
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 02",
-        descricao: "Qual é o objetivo de ter um gateway de internet dentro de uma VPC?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 02",
+            "en": "Question 02"
+        },
+        descricao: {
+            "pt-BR": "Qual é o objetivo de ter um gateway de internet dentro de uma VPC?",
+            "en": "What is the purpose of having an internet gateway inside a VPC?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Para impor restrições de largura de banda ao tráfego da Internet", correta: false},
-            {titulo: "Para balancear a carga do tráfego da Internet em instâncias do Amazon EC2", correta: false},
-            {titulo: "AWS Snowmobile", correta: false},
-            {titulo: "Para permitir a comunicação entre a VPC e a internet", correta: true},
+            {
+                titulo: {
+                    "pt-BR": "Para impor restrições de largura de banda ao tráfego da Internet",
+                    "en": "To impose bandwidth restrictions on internet traffic"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Para balancear a carga do tráfego da Internet em instâncias do Amazon EC2",
+                    "en": "To load balance internet traffic across Amazon EC2 instances"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS Snowmobile",
+                    "en": "AWS Snowmobile"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Para permitir a comunicação entre a VPC e a internet",
+                    "en": "To enable communication between the VPC and the internet"
+                },
+                correta: true
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 03",
-        descricao: "Uma empresa farmacêutica opera sua infraestrutura em uma única região da AWS. A empresa tem milhares de VPCs em várias contas da AWS que deseja interconectar. Qual serviço ou recurso da AWS a empresa deve usar para ajudar a simplificar o gerenciamento e reduzir os custos operacionais? ",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 03",
+            "en": "Question 03"
+        },
+        descricao: {
+            "pt-BR": "Uma empresa farmacêutica opera sua infraestrutura em uma única região da AWS. A empresa tem milhares de VPCs em várias contas da AWS que deseja interconectar. Qual serviço ou recurso da AWS a empresa deve usar para ajudar a simplificar o gerenciamento e reduzir os custos operacionais? ",
+            "en": "A pharmaceutical company operates its infrastructure in a single AWS region. The company has thousands of VPCs across multiple AWS accounts that it wants to interconnect. Which AWS service or feature should the company use to help simplify management and reduce operational costs?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "VPC endpoint", correta: false},
-            {titulo: "Emparelhamento de VPC", correta: false},
-            {titulo: "AWS Direct Connect", correta: false},
-            {titulo: "AWS Transit Gateway", correta: true},
+            {
+                titulo: {
+                    "pt-BR": "VPC endpoint",
+                    "en": "VPC endpoint"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Emparelhamento de VPC",
+                    "en": "VPC peering"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS Direct Connect",
+                    "en": "AWS Direct Connect"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS Transit Gateway",
+                    "en": "AWS Transit Gateway"
+                },
+                correta: true
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 04",
-        descricao: "Qual opção de recuperação de desastres é a MENOS cara?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 04",
+            "en": "Question 04"
+        },
+        descricao: {
+            "pt-BR": "Qual opção de recuperação de desastres é a MENOS cara?",
+            "en": "Which disaster recovery option is the LEAST expensive?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Multisite", correta: false},
-            {titulo: "Luz piloto", correta: false},
-            {titulo: "Backup e restauração", correta: true},
-            {titulo: "Espera quente", correta: false},
-            
+            {
+                titulo: {
+                    "pt-BR": "Multisite",
+                    "en": "Multisite"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Luz piloto",
+                    "en": "Warm standby"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Backup e restauração",
+                    "en": "Backup and restore"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "Espera quente",
+                    "en": "Hot standby"
+                },
+                correta: false
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 05",
-        descricao: "De acordo com o modelo de responsabilidade compartilhada da AWS, qual responsabilidade um cliente tem ao usar o Amazon RDS para hospedar um bancode dados?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 05",
+            "en": "Question 05"
+        },
+        descricao: {
+            "pt-BR": "De acordo com o modelo de responsabilidade compartilhada da AWS, qual responsabilidade um cliente tem ao usar o Amazon RDS para hospedar um bancode dados?",
+            "en": "According to the AWS shared responsibility model, what responsibility does a customer have when using Amazon RDS to host a database?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Gerenciar conexões com o banco de dados", correta: false},
-            {titulo: "Aplicar patches de banco de dados secundários", correta: true},
-            {titulo: "Projetar estratégias de criptografia em repouso", correta: false},
-            {titulo: "Instalar o Microsoft SQL Server", correta: false},
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "Gerenciar conexões com o banco de dados",
+                    "en": "Manage database connections"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Aplicar patches de banco de dados secundários",
+                    "en": "Apply secondary database patches"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "Projetar estratégias de criptografia em repouso",
+                    "en": "Design at-rest encryption strategies"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Instalar o Microsoft SQL Server",
+                    "en": "Install Microsoft SQL Server"
+                },
+                correta: false
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 06",
-        descricao: "Qual tipo de armazenamento da AWS é efêmero e é excluído quando uma instância do Amazon EC2 é interrompida ou encerrada?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 06",
+            "en": "Question 06"
+        },
+        descricao: {
+            "pt-BR": "Qual tipo de armazenamento da AWS é efêmero e é excluído quando uma instância do Amazon EC2 é interrompida ou encerrada?",
+            "en": "Which type of AWS storage is ephemeral and is deleted when an Amazon EC2 instance is stopped or terminated?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Amazon S3", correta: false},
-            {titulo: "Armazenamento de instâncias do Amazon EC2", correta: true},
-            {titulo: "Sistema de arquivos elástico da Amazon (Amazon EFS)", correta: false},
-            {titulo: "Loja de blocos elásticos da Amazon (Amazon EBS)", correta: false},
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "Amazon S3",
+                    "en": "Amazon S3"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Armazenamento de instâncias do Amazon EC2",
+                    "en": "Amazon EC2 instance store"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "Sistema de arquivos elástico da Amazon (Amazon EFS)",
+                    "en": "Amazon Elastic File System (Amazon EFS)"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Loja de blocos elásticos da Amazon (Amazon EBS)",
+                    "en": "Amazon Elastic Block Store (Amazon EBS)"
+                },
+                correta: false
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 07",
-        descricao: "Uma empresa deseja usar a Nuvem AWS para fornecer acesso seguro a aplicativos de desktop que estão sendo executados em um ambiente totalmente gerenciado. Qual serviço da AWS a empresa deve usar para atender a esse requisito?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 07",
+            "en": "Question 07"
+        },
+        descricao: {
+            "pt-BR": "Uma empresa deseja usar a Nuvem AWS para fornecer acesso seguro a aplicativos de desktop que estão sendo executados em um ambiente totalmente gerenciado. Qual serviço da AWS a empresa deve usar para atender a esse requisito?",
+            "en": "A company wants to use the AWS Cloud to securely provide access to desktop applications that are running in a fully managed environment. Which AWS service should the company use to meet this requirement?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Escudo AWS(AWS Shield)", correta: false},
-            {titulo: "Amazon AppStream2.0  ", correta: true},
-            {titulo: "Amazon S3", correta: false},
-            {titulo: "Sincronização de aplicativo da AWS", correta: false},
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "Escudo AWS(AWS Shield)",
+                    "en": "AWS Shield"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Amazon AppStream2.0  ",
+                    "en": "Amazon AppStream 2.0"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "Amazon S3",
+                    "en": "Amazon S3"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Sincronização de aplicativo da AWS",
+                    "en": "AWS AppSync"
+                },
+                correta: false
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 08",
-        descricao: "Usar o AWS Config para registrar, auditar e avaliar alterações nos recursos da AWS para permitir a rastreabilidade é um exemplo de qual pilar do AWS Well-Architected Framework?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 08",
+            "en": "Question 08"
+        },
+        descricao: {
+            "pt-BR": "Usar o AWS Config para registrar, auditar e avaliar alterações nos recursos da AWS para permitir a rastreabilidade é um exemplo de qual pilar do AWS Well-Architected Framework?",
+            "en": "Using AWS Config to record, audit, and evaluate changes to AWS resources to enable traceability is an example of which pillar of the AWS Well-Architected Framework?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Excelência operacional", correta: false},
-            {titulo: "Otimização de custos", correta: false},
-            {titulo: "Eficiência de desempenho", correta: false},
-            {titulo: "Segurança", correta: true},
-            
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "Excelência operacional",
+                    "en": "Operational excellence"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Otimização de custos",
+                    "en": "Cost optimization"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Eficiência de desempenho",
+                    "en": "Performance efficiency"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Segurança",
+                    "en": "Security"
+                },
+                correta: true
+            }
         ]
     },
 
     {
-        titulo: "Pergunta 09",
-        descricao: "Uma empresa está operando várias fábricas onde constrói produtos. A empresa precisa da capacidade de processar dados, armazenar dados e executar aplicativos com interdependências de sistema local que exigem baixa latência. Qual serviço da AWS a empresa deve usar para atender a esses requisitos?",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 09",
+            "en": "Question 09"
+        },
+        descricao: {
+            "pt-BR": "Uma empresa está operando várias fábricas onde constrói produtos. A empresa precisa da capacidade de processar dados, armazenar dados e executar aplicativos com interdependências de sistema local que exigem baixa latência. Qual serviço da AWS a empresa deve usar para atender a esses requisitos?",
+            "en": "A company is operating multiple factories where it builds products. The company needs the capability to process data, store data, and run applications with local system interdependencies that require low latency. Which AWS service should the company use to meet these requirements?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "AWS Lambda", correta: false},
-            {titulo: "Postos avançados da AWS", correta: true},
-            {titulo: "AWS Snowball Edge", correta: false},
-            {titulo: "AWS IoT Greengrass", correta: false},
-            
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "AWS Lambda",
+                    "en": "AWS Lambda"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Postos avançados da AWS",
+                    "en": "AWS Outposts"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS Snowball Edge",
+                    "en": "AWS Snowball Edge"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "AWS IoT Greengrass",
+                    "en": "AWS IoT Greengrass"
+                },
+                correta: false
+            }
         ]
     },
 
-    
     {
-        titulo: "Pergunta 10",
-        descricao: "Qual das opções a seguir é uma característica do usuário raiz da conta da AWS??",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 10",
+            "en": "Question 10"
+        },
+        descricao: {
+            "pt-BR": "Qual das opções a seguir é uma característica do usuário raiz da conta da AWS?",
+            "en": "Which of the following is a characteristic of the AWS account root user?"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "O usuário root é o único que pode acessar o Console de Gerenciamento da AWS.", correta: false},
-            {titulo: "O usuário raiz é a primeira identidade de login disponível quando uma conta da AWS é criada.", correta: true},
-            {titulo: "O usuário root tem uma senha que não pode ser alterada.", correta: false},
-            {titulo: "O usuário root é o único usuário que pode ser configurado com autenticação multifator(MFA).", correta: false},
-            
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "O usuário root é o único que pode acessar o Console de Gerenciamento da AWS.",
+                    "en": "The root user is the only one who can access the AWS Management Console."
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "O usuário raiz é a primeira identidade de login disponível quando uma conta da AWS é criada.",
+                    "en": "The root user is the first login identity available when an AWS account is created."
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "O usuário root tem uma senha que não pode ser alterada.",
+                    "en": "The root user has a password that cannot be changed."
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "O usuário root é o único usuário que pode ser configurado com autenticação multifator(MFA).",
+                    "en": "The root user is the only user that can be configured with multi-factor authentication (MFA)."
+                },
+                correta: false
+            }
         ]
     },
-
 
     {
-        titulo: "Pergunta 11",
-        descricao: "Que tipo de banco de dados é o Amazon DynamoDB",
-        pergunta: "",
+        titulo: {
+            "pt-BR": "Pergunta 11",
+            "en": "Question 11"
+        },
+        descricao: {
+            "pt-BR": "Que tipo de banco de dados é o Amazon DynamoDB",
+            "en": "What type of database is Amazon DynamoDB"
+        },
+        pergunta: {
+            "pt-BR": "",
+            "en": ""
+        },
         multipla: false,
         respondida: false,
         correta: false,
         alternativas: [
-            {titulo: "Gráfico", correta: false},
-            {titulo: "Valor-chave", correta: true},
-            {titulo: "Relacional", correta: false},
-            {titulo: "Na memória", correta: false},
-            
-            
-            
+            {
+                titulo: {
+                    "pt-BR": "Gráfico",
+                    "en": "Graph"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Valor-chave",
+                    "en": "Key-value"
+                },
+                correta: true
+            },
+            {
+                titulo: {
+                    "pt-BR": "Relacional",
+                    "en": "Relational"
+                },
+                correta: false
+            },
+            {
+                titulo: {
+                    "pt-BR": "Na memória",
+                    "en": "In-memory"
+                },
+                correta: false
+            }
         ]
     },
-
 
     {
         titulo: "Pergunta 12",
@@ -705,23 +1045,6 @@ const questoes =
             {titulo: "Amazon Simple Email Service (Amazon SES)", correta: false},
             {titulo: "Amazon Simple Queue Service (Amazon SQS)", correta: true},
             {titulo: "Lote da AWS", correta: false},
-            
-
-        ]
-    },
-
-    {
-        titulo: "Pergunta 43",
-        descricao: "Uma empresa precisa estabelecer uma conexão entre duas VPCs. As VPCs estão localizadas em duas regiões diferentes da AWS. A empresa quer usar a infraestrutura existente das VPCs para essa conexão. Qual serviço ou recurso da AWS pode ser usado para estabelecer essa conexão?",
-        pergunta: "",
-        multipla: false,
-        respondida: false,
-        correta: false,
-        alternativas: [
-            {titulo: "VPC endpoints", correta: false},
-            {titulo: "AWS Client VPN", correta: false},
-            {titulo: "VPC peering", correta: true},
-            {titulo: "AWS Direct Connect", correta: false},
             
 
         ]

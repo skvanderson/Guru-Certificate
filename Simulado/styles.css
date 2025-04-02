@@ -1,224 +1,292 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-    background-color: #FFF176; /* Amarelo suave */
-    color: #424242; /* Cinza escuro para o texto */
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    background-color: #FFF176; /* Amarelo suave */
+    color: #424242; /* Cinza escuro para o texto */
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 800px;
-    margin: auto;
-    padding: 100px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
     background-color: #FFF; /* Fundo branco */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px;
     border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
-h1 {
+/* Header styles */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.back-btn,
+.translate-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 100px;
+    transition: all 0.3s ease;
     text-align: center;
+}
+
+.back-btn {
+    background-color: #E0E0E0;
+    color: #424242;
+}
+
+.translate-btn {
+    background-color: #2196F3;
+    color: #FFFFFF;
+}
+
+.back-btn:hover {
+    background-color: #BDBDBD;
+    transform: translateY(-2px);
+}
+
+.translate-btn:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
+}
+
+.question-counter {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4CAF50;
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 2px solid #4CAF50;
+    border-radius: 20px;
+}
+
+/* Question container */
+.questaoContainer {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.questao-titulo {
     color: #FFB74D; /* Laranja */
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.descricao {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    color: #424242;
+}
+
+.pergunta {
+    font-size: 1.2em;
     margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 25px;
-    margin-bottom: 20px;
-}
-
-h3 {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-ol {
-    list-style-type: none;
-    counter-reset: question-counter;
-    padding: 0;
-}
-
-li {
-    counter-increment: question-counter;
-    margin-bottom: 20px;
-    border-bottom: #E0E0E0; /* Linha cinza clara entre perguntas */
-    padding-bottom: 10px;
-}
-
-li:last-child {
-    border-bottom: none; /* Remover a linha na última pergunta */
-}
-
-li:before {
     font-weight: bold;
+    color: #424242;
 }
 
-ul {
-    list-style-type: none;
+/* Alternatives */
+.alternativas-content {
+    list-style: none;
+    margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-ul li {
-    margin-bottom: 10px;
+.alternativas-content li {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+    border: none;
 }
 
-ul li:before {
-    content: "";
+.alternativas-content li:hover {
+    background-color: #e0e0e0;
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-ul li:not(:last-child):after {
-    content: " ";
+.alternativas-content input[type="radio"],
+.alternativas-content input[type="checkbox"] {
+    margin-right: 15px;
+    transform: scale(1.2);
 }
 
-ul li:last-child:after {
-    content: "";
-}
-
-.answer {
-    margin-top: 15px;
+/* Status */
+.status {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
     font-weight: bold;
+    transition: all 0.3s ease;
 }
 
-.answer.correta {
-    color: #388E3C; /* Verde para respostas corretas */
+.status.correta {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
 }
 
-.answer.incorreta {
-    color: #D32F2F; /* Vermelho para respostas incorretas */
+.status.incorreta {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
 }
 
-.correta {
-    color: green;
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
 }
 
-.incorreta {
-    color: red;
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 120px;
 }
 
-.aprovado {
-    color: green;
+.btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.reprovado {
-    color: red;
-}
-
-.alerta {
-    color: rgb(255, 153, 0);
-}
-
-#timer {
-    font-size: 1.5em;       /* Aumenta o tamanho da fonte */
-    font-weight: bold;      /* Deixa o texto em negrito */
-    color: #FF4500;         /* Define a cor do texto (laranja avermelhado) */
-    text-align: center;     /* Centraliza o texto no div */
-    padding: 10px;          /* Adiciona um espaçamento interno */
-    background-color: #F0F0F0; /* Define uma cor de fundo suave */
-    border: 2px solid #FF4500; /* Adiciona uma borda com a mesma cor do texto */
-    border-radius: 8px;     /* Arredonda os cantos do div */
-    margin-bottom: 20px;    /* Adiciona um espaço abaixo do timer */
-}
-
-button {
-    font-size: 1.2em;            /* Aumenta o tamanho da fonte */
-    font-weight: bold;           /* Deixa o texto em negrito */
-    color: #FFFFFF;              /* Cor do texto branco */
-    background-color: #4CAF50;   /* Cor de fundo verde */
-    border: none;                /* Remove borda padrão */
-    border-radius: 5px;          /* Arredonda os cantos dos botões */
-    padding: 10px 20px;          /* Adiciona espaçamento interno */
-    cursor: pointer;             /* Altera o cursor para 'pointer' */
-    margin: 5px;                 /* Adiciona espaço entre os botões */
-    transition: background-color 0.3s ease; /* Adiciona uma transição suave para mudanças de cor */
-}
-
-button:hover {
-    background-color: #45a049;   /* Cor de fundo ao passar o mouse */
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 #btnFinalizar {
-    background-color: #FF4500;   /* Cor de fundo laranja avermelhado para o botão 'Finalizar' */
+    background-color: #FF4500;
 }
 
 #btnFinalizar:hover {
-    background-color: #E63900;   /* Cor de fundo ao passar o mouse no botão 'Finalizar' */
+    background-color: #E63900;
 }
 
-#resultadoFinal {
-    text-align: center;          /* Centraliza o texto */
-    margin-top: 20px;            /* Adiciona um espaço acima da div */
-    font-size: 1.3em;            /* Aumenta o tamanho da fonte */
-    color: #333;                 /* Define a cor do texto */
+/* Estilização do botão Fechar */
+#btnFecharModal {
+    background-color: #4CAF50; /* Verde padrão */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-#mensagemFinal.aprovado {
-    color: #4CAF50;              /* Verde para mensagem de aprovação */
+#btnFecharModal:hover {
+    background-color: #45a049; /* Um verde mais escuro no hover */
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#mensagemFinal.reprovado {
-    color: #FF4500;              /* Laranja avermelhado para mensagem de reprovação */
+/* Timer */
+.timer {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #FF4500;
+    padding: 15px;
+    background-color: #F0F0F0;
+    border: 2px solid #FF4500;
+    border-radius: 8px;
 }
 
-.pergunta-desabilitada input {
-    pointer-events: none; /* Desabilita a interação com os inputs */
-    opacity: 0.5; /* Diminui a opacidade para indicar que está desabilitado */
-}
-
-/* Estilos do modal */
+/* Modal */
 .modal {
-    display: none; /* Ocultar o modal por padrão */
+    display: none;
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0); /* Cor de fundo preta */
-    background-color: rgba(0,0,0,0.4); /* Fundo transparente */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    text-align: center;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .close {
-    color: #aaa;
-    float: right;
+    position: absolute;
+    right: 20px;
+    top: 15px;
     font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
 }
 
-button {
-    background-color: #4CAF50; /* Verde */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
+.close:hover {
+    color: #333;
 }
 
-button:hover {
-    background-color: #45a049; /* Verde mais escuro */
+/* Utility classes */
+.correta {
+    color: #4CAF50;
 }
 
+.incorreta {
+    color: #f44336;
+}
 
+.aprovado {
+    color: #4CAF50;
+}
+
+.reprovado {
+    color: #FF4500;
+}
