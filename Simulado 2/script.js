@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusQuestao = document.getElementById('status');
     const questionCounter = document.getElementById('question-counter');
     const btnTranslate = document.getElementById('btnTranslate');
+    const btnVoltar = document.getElementById('btnVoltar');
+    
+    // Add event listener for back button
+    btnVoltar.addEventListener('click', function() {
+        window.location.href = '../main/simulados.html';
+    });
     
     function updateQuestionCounter() {
         questionCounter.textContent = `${indiceAtual + 1}/${questoes.length}`;
@@ -103,19 +109,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         verificarQuestao(questao, respostasSelecionadas)
         
-        if (indiceAtual + 1>= questoes.length ) {
+        if (indiceAtual + 1 >= questoes.length) {
             finalizarSimulado();
             return;
         }
 
         indiceAtual++;
-
         carregarQuestao()
     })
 
     document.getElementById("btnAnterior").addEventListener("click", () => {
-        indiceAtual--;
-        carregarQuestao()
+        if (indiceAtual > 0) {
+            indiceAtual--;
+            carregarQuestao()
+        }
     })
 
     document.getElementById('btnFinalizar').addEventListener('click', finalizarSimulado);
@@ -124,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filtra as alternativas corretas
         let alternativasCorretas = questao.alternativas.filter(alt => alt.correta);
         
-        // Extrai os títulos das alternativas corretas
-        let titulosCorretos = alternativasCorretas.map(alt => alt.titulo);
+        // Extrai os títulos das alternativas corretas no idioma atual
+        let titulosCorretos = alternativasCorretas.map(alt => alt.titulo[currentLanguage]);
     
         // Verifica se as respostas selecionadas estão entre as corretas
         let respostasValidas = respostasSelecionadas.every(resp => 
@@ -134,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Verifica se o número de respostas é o correto
         let todasCorretas = respostasSelecionadas.length === titulosCorretos.length && respostasValidas;
-
         
         // Armazena as respostas selecionadas
         questao.respostasSelecionadas = respostasSelecionadas.map(resp => resp.value);

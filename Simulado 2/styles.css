@@ -30,6 +30,24 @@ body {
     border-radius: 8px;
 }
 
+.back-btn {
+    font-size: 1em;
+    font-weight: bold;
+    color: #424242;
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 80px;
+    text-align: center;
+}
+
+.back-btn:hover {
+    background-color: #BDBDBD;
+}
+
 .question-counter {
     font-size: 1.2em;
     font-weight: bold;
@@ -257,48 +275,51 @@ button:hover {
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 10px;
     }
-
+    
     .header-container {
-        padding: 8px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
     }
-
+    
     .question-counter {
-        font-size: 1.1em;
-        padding: 6px 12px;
+        margin: 10px 0;
     }
-
+    
     .translate-btn {
-        padding: 6px 12px;
-        min-width: 50px;
+        width: 100%;
     }
-
+    
+    .back-btn {
+        width: 100%;
+    }
+    
     h1 {
         font-size: 1.5em;
     }
-
+    
     h2 {
         font-size: 1.2em;
     }
-
+    
     h3 {
-        font-size: 1.1em;
+        font-size: 1em;
     }
-
+    
     button {
-        padding: 10px 15px;
-        font-size: 0.9em;
-        min-width: 100px;
+        width: 100%;
+        margin-bottom: 10px;
     }
-
+    
     .modal-content {
-        width: 95%;
-        margin: 20% auto;
+        width: 90%;
+        padding: 15px;
     }
-
+    
     ul li {
-        padding: 8px;
+        padding: 10px;
     }
 }
 
@@ -306,38 +327,41 @@ button:hover {
     body {
         padding: 5px;
     }
-
+    
     .container {
         padding: 10px;
     }
-
+    
     .header-container {
-        padding: 5px;
+        padding: 8px;
     }
-
+    
     .question-counter {
         font-size: 1em;
-        padding: 5px 10px;
+        padding: 6px 12px;
     }
-
+    
     .translate-btn {
-        padding: 5px 10px;
-        min-width: 45px;
+        font-size: 0.9em;
+        padding: 6px 12px;
     }
-
+    
+    .back-btn {
+        font-size: 0.9em;
+        padding: 6px 12px;
+    }
+    
     h1 {
         font-size: 1.3em;
     }
-
+    
     button {
-        padding: 8px 12px;
-        font-size: 0.85em;
-        min-width: 90px;
+        font-size: 0.9em;
+        padding: 8px 15px;
     }
-
+    
     #timer {
-        font-size: 1em;
-        padding: 8px;
+        font-size: 0.9em;
     }
 }
 
