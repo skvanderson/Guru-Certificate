@@ -280,7 +280,7 @@ const DeveloperAssociate = () => {
 
       return () => clearInterval(timer);
     }
-  }, [timeLeft, isFinished]);
+  }, [timeLeft, isFinished]); // finishExam removido da dependência
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);

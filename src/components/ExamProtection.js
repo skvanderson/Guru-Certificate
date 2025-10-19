@@ -109,10 +109,6 @@ const ExamProtection = ({ children }) => {
       }
     };
 
-    // Proteção contra captura de tela
-    const preventScreenshot = () => {
-      triggerWarning();
-    };
 
     // Detectar tentativas de captura
     const detectCapture = () => {

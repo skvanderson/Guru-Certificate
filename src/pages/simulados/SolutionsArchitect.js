@@ -356,7 +356,7 @@ const SolutionsArchitect = () => {
     } else if (timeLeft === 0 && !isFinished) {
       finishExam();
     }
-  }, [timeLeft, isFinished, finishExam]);
+  }, [timeLeft, isFinished]); // Removido finishExam da dependência
 
   const closeModal = () => {
     setShowModal(false);

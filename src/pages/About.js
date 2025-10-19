@@ -33,18 +33,6 @@ const Header = styled.div`
   }
 `;
 
-const ImageSection = styled.div`
-  text-align: center;
-  margin-bottom: var(--spacing-12);
-  
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-  }
-`;
-
 const TeamSection = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -92,29 +80,6 @@ const TeamCard = styled.div`
   }
 `;
 
-const MissionSection = styled.div`
-  background-color: var(--aws-white);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-8);
-  margin-bottom: var(--spacing-12);
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  
-  h2 {
-    color: var(--aws-blue);
-    font-size: var(--font-size-3xl);
-    font-weight: 700;
-    margin-bottom: var(--spacing-6);
-  }
-  
-  p {
-    font-size: var(--font-size-lg);
-    color: var(--aws-gray-600);
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-`;
 
 const About = () => {
   return (
