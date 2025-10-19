@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { solutionsArchitectQuestions } from '../../data/solutionsArchitectQuestions';
@@ -332,7 +332,7 @@ const SolutionsArchitect = () => {
     }
   };
 
-  const finishExam = () => {
+  const finishExam = useCallback(() => {
     const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
     const totalQuestions = solutionsArchitectQuestions.length;
     const percentage = (correctAnswers / totalQuestions) * 100;
@@ -346,7 +346,7 @@ const SolutionsArchitect = () => {
     });
     setIsFinished(true);
     setShowModal(true);
-  };
+  }, [answeredQuestions]);
 
   // Timer effect
   useEffect(() => {
@@ -356,7 +356,7 @@ const SolutionsArchitect = () => {
     } else if (timeLeft === 0 && !isFinished) {
       finishExam();
     }
-  }, [timeLeft, isFinished]); // Removido finishExam da dependência
+  }, [timeLeft, isFinished, finishExam]);
 
   const closeModal = () => {
     setShowModal(false);

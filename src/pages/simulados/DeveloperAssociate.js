@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { developerAssociateQuestions } from '../../data/developerAssociateQuestions';
@@ -280,7 +280,7 @@ const DeveloperAssociate = () => {
 
       return () => clearInterval(timer);
     }
-  }, [timeLeft, isFinished]); // finishExam removido da dependência
+  }, [timeLeft, isFinished, finishExam]);
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -342,7 +342,7 @@ const DeveloperAssociate = () => {
     }
   };
 
-  const finishExam = () => {
+  const finishExam = useCallback(() => {
     const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
     const totalQuestions = developerAssociateQuestions.length;
     const percentage = Math.round((correctAnswers / totalQuestions) * 100);
@@ -355,7 +355,7 @@ const DeveloperAssociate = () => {
       passed
     });
     setIsFinished(true);
-  };
+  }, [answeredQuestions]);
 
   const closeModal = () => {
     setShowModal(false);
