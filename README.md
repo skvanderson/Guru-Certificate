@@ -1,63 +1,159 @@
-# Guru Certificate - Preparação para Certificações AWS
+# Guru Certificate - Plataforma de Simulados AWS
 
-Bem-vindo ao **Guru Certificate**, um site projetado para auxiliar na preparação das certificações **AWS Cloud Practitioner** e **AWS Associate Architect**. Este projeto foi desenvolvido com o objetivo de fornecer um ambiente intuitivo e eficaz para os candidatos que desejam conquistar suas certificações AWS.
+Uma plataforma moderna e responsiva para simulados de certificações AWS, desenvolvida com React e seguindo o design system da AWS.
 
-## 🔗 Acesse o site
-Você pode acessar o repositório público no GitHub [clicando aqui](https://github.com/skvanderson/Guru-Certificate.git).
+## 🚀 Características
 
-## 🚀 Funcionalidades
-
-- **Conteúdo Estruturado**: Materiais e tópicos organizados de forma a guiar o candidato através de todos os assuntos exigidos para as certificações AWS.
-- **Interface Intuitiva**: Uma interface simples e direta, facilitando a navegação e o uso do site.
-- **Foco em Certificações Específicas**:
-  - AWS Cloud Practitioner
-  - AWS Associate Architect
-- **Dicas e Recursos**: Inclui dicas valiosas para maximizar o estudo, além de links para recursos complementares e documentações oficiais da AWS.
+- **Design Moderno**: Interface baseada no design system da AWS com cores oficiais
+- **Totalmente Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
+- **Simulados Interativos**: Questões baseadas nos exames oficiais AWS
+- **Suporte Multilíngue**: Português e Inglês
+- **Timer Integrado**: Controle de tempo para simular condições reais de exame
+- **Feedback Imediato**: Respostas corretas/incorretas com explicações
+- **Navegação Intuitiva**: Interface limpa e fácil de usar
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **HTML5**: Estruturação do conteúdo de forma semântica e responsiva.
-- **CSS3**: Estilização personalizada com foco na usabilidade e design moderno.
-- **JavaScript**: Funcionalidades interativas para melhorar a experiência do usuário.
+- **React 18**: Framework JavaScript moderno
+- **React Router**: Navegação entre páginas
+- **Styled Components**: CSS-in-JS para estilização
+- **AWS Design System**: Cores e componentes baseados no padrão AWS
+- **Responsive Design**: Mobile-first approach
 
-## 📝 Estrutura do Projeto
+## 📱 Páginas Disponíveis
 
-- `index.html`: Página inicial com introdução e links para os conteúdos principais.
-- `styles/`: Diretório que contém todos os arquivos CSS utilizados para o design do site.
-- `scripts/`: Diretório contendo os arquivos JavaScript que fornecem interatividade ao site.
-- `assets/`: Imagens, ícones e outros recursos visuais usados no site.
+- **Home**: Página inicial com apresentação da plataforma
+- **Quem Somos**: Informações sobre a equipe e missão
+- **Simulados**: Lista de simulados disponíveis
+- **Guia de Cloud**: Conceitos fundamentais de cloud computing
+- **Materiais**: Recursos de estudo para download
+- **Simulados Interativos**: Cloud Practitioner e Solutions Architect
 
-## 📚 Conteúdo Preparatório
+## 🎯 Simulados Disponíveis
 
-### AWS Cloud Practitioner
+### AWS Cloud Practitioner (CLF-02)
+- 65 questões baseadas no exame oficial
+- Tempo limite: 90 minutos
+- Nível: Iniciante
+- Suporte a português e inglês
 
-Este módulo cobre os conceitos básicos da AWS e os principais serviços necessários para obter a certificação AWS Cloud Practitioner, incluindo:
+### AWS Solutions Architect Associate (SAA)
+- 65 questões baseadas no exame oficial
+- Tempo limite: 130 minutos
+- Nível: Intermediário
+- Foco em arquitetura de soluções
 
-- Fundamentos de Cloud Computing
-- Serviços Essenciais da AWS
-  - EC2, S3, RDS, etc.
-- Ferramentas de Gerenciamento e Monitoramento
-- Segurança e Conformidade na Nuvem
+## 🚀 Como Executar
 
-### AWS Associate Architect
+### Pré-requisitos
+- Node.js 16+ instalado
+- npm ou yarn
 
-Este módulo prepara você para o exame AWS Solutions Architect - Associate, com foco em:
+### Instalação
+```bash
+# Clone o repositório
+git clone <url-do-repositorio>
+cd Guru-Certificate
 
-- Projeto de Arquiteturas Resilientes e Escaláveis
-- Redes e Segurança Avançada na AWS
-- Gerenciamento de Identidades e Acessos (IAM)
-- Monitoramento e Otimização de Custo
+# Instale as dependências
+npm install
 
-## 📦 Como Contribuir
+# Execute o projeto
+npm start
+```
 
-1. Faça um fork do repositório.
-2. Crie um branch para sua feature (`git checkout -b feature/nova-feature`).
-3. Adicione suas modificações (`git add .`).
-4. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`).
-5. Faça push para o branch (`git push origin feature/nova-feature`).
-6. Abra um Pull Request.
+O projeto estará disponível em `http://localhost:3000`
 
+### Build para Produção
+```bash
+npm run build
+```
 
-Este projeto foi o TCC referente ao curso Programador Web promovido pela Proz, com o intuito de ajudar outros profissionais a se certificarem na AWS.
+## 🎨 Design System AWS
 
-Qualquer dúvida estou a disposição.
+O projeto utiliza as cores oficiais da AWS:
+- **AWS Orange**: #FF9900
+- **AWS Blue**: #232F3E
+- **AWS Green**: #00A651
+- **AWS Red**: #D13212
+
+## 📱 Responsividade
+
+- **Desktop**: Layout completo com sidebar e navegação horizontal
+- **Tablet**: Layout adaptado com navegação otimizada
+- **Mobile**: Menu hambúrguer e layout vertical
+
+## 🔧 Estrutura do Projeto
+
+```
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── Header.js       # Cabeçalho da aplicação
+│   └── Footer.js       # Rodapé da aplicação
+├── pages/              # Páginas da aplicação
+│   ├── Home.js         # Página inicial
+│   ├── About.js        # Quem somos
+│   ├── Simulados.js    # Lista de simulados
+│   ├── CloudGuide.js   # Guia de cloud
+│   ├── Materials.js    # Materiais de estudo
+│   └── simulados/      # Páginas dos simulados
+│       ├── CloudPractitioner.js
+│       └── SolutionsArchitect.js
+├── data/               # Dados da aplicação
+│   └── questoes.js     # Banco de questões
+├── App.js              # Componente principal
+├── index.js            # Ponto de entrada
+└── index.css           # Estilos globais
+```
+
+## 🎯 Funcionalidades dos Simulados
+
+- **Navegação entre questões**: Anterior/Próxima
+- **Timer em tempo real**: Contagem regressiva
+- **Seleção de idioma**: Português/Inglês
+- **Feedback visual**: Cores para respostas corretas/incorretas
+- **Resultado final**: Percentual de acertos e status
+- **Validação**: Impede avanço sem resposta
+
+## 🔒 Segurança
+
+- Sanitização de dados
+- Proteção contra XSS
+- HTTPS em produção
+
+## 📈 Performance
+
+- Lazy loading de componentes
+- Otimização de imagens
+- Minificação de CSS/JS
+- Cache de recursos estáticos
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 👥 Equipe
+
+- **Ivonaldo** - Fundador & CEO
+- **Liz** - CTO
+- **Wesley** - Lead Developer
+- **Taynar** - UX/UI Designer
+- **Ivonildo** - Content Specialist
+
+## 📞 Contato
+
+- Website: [Guru Certificate](https://gurucertificate.com)
+- Email: contato@gurucertificate.com
+- LinkedIn: [Guru Certificate](https://linkedin.com/company/guru-certificate)
+
+---
+
+**Guru Certificate** - Desbrave o conhecimento. Transforme o futuro.
