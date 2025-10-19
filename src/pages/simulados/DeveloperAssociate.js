@@ -266,6 +266,21 @@ const DeveloperAssociate = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [results, setResults] = useState(null);
 
+  const finishExam = useCallback(() => {
+    const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
+    const totalQuestions = developerAssociateQuestions.length;
+    const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+    const passed = percentage >= 70;
+
+    setResults({
+      correct: correctAnswers,
+      total: totalQuestions,
+      percentage,
+      passed
+    });
+    setIsFinished(true);
+  }, [answeredQuestions]);
+
   useEffect(() => {
     if (timeLeft > 0 && !isFinished) {
       const timer = setInterval(() => {
@@ -341,21 +356,6 @@ const DeveloperAssociate = () => {
       setCurrentQuestion(prev => prev - 1);
     }
   };
-
-  const finishExam = useCallback(() => {
-    const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
-    const totalQuestions = developerAssociateQuestions.length;
-    const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-    const passed = percentage >= 70;
-
-    setResults({
-      correct: correctAnswers,
-      total: totalQuestions,
-      percentage,
-      passed
-    });
-    setIsFinished(true);
-  }, [answeredQuestions]);
 
   const closeModal = () => {
     setShowModal(false);
