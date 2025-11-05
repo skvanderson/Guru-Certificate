@@ -164,12 +164,6 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 - **Elizângela Rosa da Silva Costa** - QA & Business Analyst
 - **Jefferson Bezerra** - Technology & Innovation Specialist
 
-## 📞 Contato
-
-- Website: [Guru Certificate](https://gurucertificate.com)
-- Email: contato@gurucertificate.com
-- LinkedIn: [Guru Certificate](https://linkedin.com/company/guru-certificate)
-
 ---
 
 **Guru Certificate** - Desbrave o conhecimento. Transforme o futuro.
