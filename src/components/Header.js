@@ -27,10 +27,16 @@ const Nav = styled.nav`
 const Logo = styled(Link)`
   display: flex;
   align-items: center;
+  gap: var(--spacing-3);
   text-decoration: none;
   color: var(--aws-white);
   font-size: var(--font-size-xl);
   font-weight: 700;
+  
+  img {
+    height: 40px;
+    width: auto;
+  }
 `;
 
 const NavMenu = styled.ul`
@@ -157,7 +163,7 @@ const Header = () => {
     <HeaderContainer>
       <Nav>
         <Logo to="/">
-          Guru Certificate
+          <img src="/assets/images/logos/logo.icon.png" alt="Guru Certificate" />
         </Logo>
         
         <NavMenu>

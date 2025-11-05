@@ -12,94 +12,53 @@ const FooterContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-4);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto auto;
-  grid-template-areas:
-    "logo content social"
-    "copyright copyright copyright";
-  gap: var(--spacing-8);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: var(--spacing-8);
   
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "logo"
-      "content"
-      "social"
-      "copyright";
-    text-align: center;
     gap: var(--spacing-6);
   }
 `;
 
 const Logo = styled.div`
-  grid-area: logo;
-  
   img {
     height: 60px;
     width: auto;
   }
-  
-  @media (max-width: 768px) {
-    justify-self: center;
-  }
 `;
 
 const Content = styled.div`
-  grid-area: content;
   text-align: center;
+  max-width: 800px;
   
   p {
-    margin-bottom: var(--spacing-2);
-    line-height: 1.6;
+    margin-bottom: var(--spacing-3);
+    line-height: 1.8;
+    font-size: var(--font-size-lg);
   }
   
-  @media (max-width: 768px) {
-    text-align: center;
+  .slogan {
+    font-weight: 700;
+    font-size: var(--font-size-xl);
+    color: var(--aws-orange);
+    margin-bottom: var(--spacing-4);
+  }
+  
+  .quote {
+    font-style: italic;
+    color: var(--aws-gray-200);
+    font-size: var(--font-size-base);
   }
 `;
-
-const SocialMedia = styled.div`
-  grid-area: social;
-  display: flex;
-  gap: var(--spacing-4);
-  justify-content: center;
-  
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--aws-blue-light);
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      background-color: var(--aws-orange);
-      transform: translateY(-2px);
-    }
-    
-    img {
-      width: 24px;
-      height: 24px;
-      filter: brightness(0) invert(1);
-    }
-  }
-  
-  @media (max-width: 768px) {
-    justify-self: center;
-  }
-`;
-
 
 const Copyright = styled.div`
-  grid-area: copyright;
   text-align: center;
   padding-top: var(--spacing-6);
   border-top: 1px solid var(--aws-blue-light);
   margin-top: var(--spacing-6);
+  width: 100%;
   font-size: var(--font-size-sm);
   color: var(--aws-gray-300);
 `;
@@ -113,15 +72,12 @@ const Footer = () => {
       </Logo>
         
         <Content>
-          <p>Desbrave o conhecimento. Transforme o futuro</p>
-          <p>"Continue estudando e alcance sua certificação AWS! Sucesso nos estudos!"</p>
+          <p className="slogan">Elevando Carreiras na Nuvem</p>
+          <p className="quote">
+            "O sucesso não é um destino, é uma jornada. Cada simulado que você completa, 
+            cada conceito que você domina, é um passo em direção à sua certificação AWS."
+          </p>
         </Content>
-        
-        <SocialMedia>
-          <a href="https://www.linkedin.com/company/guru-certificate" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <img src="/assets/images/icons/linkedin.svg" alt="LinkedIn" />
-          </a>
-        </SocialMedia>
         
         
         <Copyright>

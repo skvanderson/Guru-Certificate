@@ -234,7 +234,9 @@ const Cursos = () => {
           </p>
         </InfoSection>
 
-        <NavigationButtons backPath="/" />
+        <div style={{ marginTop: 'var(--spacing-12)' }}>
+          <NavigationButtons backPath="/" />
+        </div>
       </Content>
     </CursosContainer>
   );

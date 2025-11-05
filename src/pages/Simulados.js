@@ -66,17 +66,17 @@ const CardHeader = styled.div`
   align-items: center;
   margin-bottom: var(--spacing-6);
   
-  .icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-dark));
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .badge {
+    width: 80px;
+    height: auto;
     margin-right: var(--spacing-4);
-    font-size: var(--font-size-2xl);
-    color: var(--aws-white);
+    flex-shrink: 0;
+    
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
   }
   
   h3 {
@@ -153,18 +153,6 @@ const Difficulty = styled.span`
   font-weight: 500;
 `;
 
-const ImageSection = styled.div`
-  text-align: center;
-  margin-top: var(--spacing-12);
-  
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-  }
-`;
-
 const Simulados = () => {
   return (
     <SimuladosContainer>
@@ -182,7 +170,9 @@ const Simulados = () => {
         <SimuladosGrid>
           <SimuladoCard>
             <CardHeader>
-              <div className="icon">☁️</div>
+              <div className="badge">
+                <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
+              </div>
               <h3>Cloud Practitioner CLF-02</h3>
             </CardHeader>
             <CardContent>
@@ -191,8 +181,8 @@ const Simulados = () => {
                 que desejam entender os fundamentos da nuvem AWS.
               </p>
               <ul className="features">
-                <li>65 questões baseadas no exame oficial</li>
-                <li>Tempo limite de 90 minutos</li>
+                <li>20 questões baseadas no exame oficial</li>
+                <li>Tempo limite de 40 minutos</li>
                 <li>Explicações detalhadas das respostas</li>
                 <li>Suporte a português e inglês</li>
               </ul>
@@ -207,7 +197,9 @@ const Simulados = () => {
           
           <SimuladoCard>
             <CardHeader>
-              <div className="icon">🏗️</div>
+              <div className="badge">
+                <img src="/assets/images/badges/aws-certified-solutions-architect-associate.png" alt="AWS Solutions Architect Associate Badge" />
+              </div>
               <h3>Solutions Architect - SSA</h3>
             </CardHeader>
             <CardContent>
@@ -216,8 +208,8 @@ const Simulados = () => {
                 focado em arquitetura de soluções escaláveis e seguras.
               </p>
               <ul className="features">
-                <li>65 questões baseadas no exame oficial</li>
-                <li>Tempo limite de 130 minutos</li>
+                <li>20 questões baseadas no exame oficial</li>
+                <li>Tempo limite de 40 minutos</li>
                 <li>Cenários práticos de arquitetura</li>
                 <li>Análise de custos e performance</li>
               </ul>
@@ -232,7 +224,9 @@ const Simulados = () => {
           
           <SimuladoCard>
             <CardHeader>
-              <div className="icon">💻</div>
+              <div className="badge">
+                <img src="/assets/images/badges/aws-certified-developer-associate.png" alt="AWS Developer Associate Badge" />
+              </div>
               <h3>Developer Associate - DVA</h3>
             </CardHeader>
             <CardContent>
@@ -241,8 +235,8 @@ const Simulados = () => {
                 focado em desenvolvimento de aplicações serverless e CI/CD.
               </p>
               <ul className="features">
-                <li>65 questões baseadas no exame oficial</li>
-                <li>Tempo limite de 90 minutos</li>
+                <li>20 questões baseadas no exame oficial</li>
+                <li>Tempo limite de 40 minutos</li>
                 <li>Cenários complexos de desenvolvimento</li>
                 <li>Foco em Lambda, API Gateway e DevOps</li>
               </ul>
@@ -255,13 +249,6 @@ const Simulados = () => {
             </CardFooter>
           </SimuladoCard>
         </SimuladosGrid>
-        
-        <ImageSection>
-          <img 
-            src="/assets/images/illustrations/exam-illustration.svg" 
-            alt="AWS Exam Simulation" 
-          />
-        </ImageSection>
       </Content>
     </SimuladosContainer>
   );

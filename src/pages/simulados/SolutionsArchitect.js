@@ -179,6 +179,28 @@ const StatusMessage = styled.div`
   }
 `;
 
+const ExplanationBox = styled.div`
+  padding: var(--spacing-5);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-4);
+  background-color: var(--aws-white);
+  border-left: 4px solid var(--aws-blue);
+  box-shadow: var(--shadow-md);
+  
+  h4 {
+    color: var(--aws-blue);
+    margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+  }
+  
+  p {
+    color: var(--aws-gray-700);
+    line-height: 1.6;
+    margin: 0;
+  }
+`;
+
 
 const Button = styled.button`
   padding: var(--spacing-3) var(--spacing-6);
@@ -264,7 +286,7 @@ const SolutionsArchitect = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [answeredQuestions, setAnsweredQuestions] = useState({});
   const [lockedQuestions, setLockedQuestions] = useState({}); // Questões bloqueadas após seleção
-  const [timeLeft, setTimeLeft] = useState(7800); // 130 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(2400); // 40 minutes in seconds (20 questions × 2 minutes)
   const [language, setLanguage] = useState('pt-BR');
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({});
@@ -286,6 +308,13 @@ const SolutionsArchitect = () => {
     setSelectedAnswers(prev => ({
       ...prev,
       [questionIndex]: answerIndex
+    }));
+    
+    // Verifica se a resposta está correta imediatamente
+    const isCorrect = checkAnswer(questionIndex, answerIndex);
+    setAnsweredQuestions(prev => ({
+      ...prev,
+      [questionIndex]: isCorrect
     }));
     
     // Bloqueia a questão imediatamente após seleção
@@ -404,8 +433,10 @@ const SolutionsArchitect = () => {
   }
 
   const currentQ = solutionsArchitectQuestions[currentQuestion];
-  const isAnswered = answeredQuestions[currentQuestion];
+  const isAnswered = selectedAnswers[currentQuestion] !== undefined;
+  const isCorrect = answeredQuestions[currentQuestion];
   const isLocked = lockedQuestions[currentQuestion];
+  const correctAnswerIndex = currentQ.alternatives.findIndex(alt => alt.correct);
 
   return (
     <ExamProtection>
@@ -444,7 +475,7 @@ const SolutionsArchitect = () => {
                 key={index}
                 className={`
                   ${selectedAnswers[currentQuestion] === index ? 'selected' : ''}
-                  ${isAnswered ? (alt.correct ? 'correct' : selectedAnswers[currentQuestion] === index ? 'incorrect' : '') : ''}
+                  ${isAnswered ? (alt.correct ? 'correct' : (selectedAnswers[currentQuestion] === index ? 'incorrect' : '')) : ''}
                   ${isLocked ? 'disabled' : ''}
                 `}
                 onClick={() => !isLocked && handleAnswerSelect(currentQuestion, index)}
@@ -464,9 +495,36 @@ const SolutionsArchitect = () => {
           </AlternativesList>
 
           {isAnswered && (
-            <StatusMessage className={answeredQuestions[currentQuestion] ? 'correct' : 'incorrect'}>
-              {answeredQuestions[currentQuestion] ? '✓ Correto!' : '✗ Incorreto'}
-            </StatusMessage>
+            <>
+              <StatusMessage className={isCorrect ? 'correct' : 'incorrect'}>
+                {isCorrect ? '✓ Correto!' : '✗ Incorreto'}
+              </StatusMessage>
+              {(() => {
+                const selectedAlternative = currentQ.alternatives[selectedAnswers[currentQuestion]];
+                const alternativeExplanation = selectedAlternative?.explanation;
+                const generalExplanation = currentQ.explanation;
+                
+                // Prioriza a explicação da alternativa selecionada, senão usa a explicação geral
+                const explanation = alternativeExplanation || generalExplanation;
+                
+                if (!explanation) return null;
+                
+                return (
+                  <ExplanationBox>
+                    <h4>📚 Explicação:</h4>
+                    {!isCorrect && (
+                      <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
+                        {language === 'pt-BR' 
+                          ? `A resposta correta é: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
+                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['en']}"`
+                        }
+                      </p>
+                    )}
+                    <p>{explanation[language] || explanation['pt-BR'] || explanation}</p>
+                  </ExplanationBox>
+                );
+              })()}
+            </>
           )}
         </QuestionCard>
 

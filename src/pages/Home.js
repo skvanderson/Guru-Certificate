@@ -26,23 +26,38 @@ const Content = styled.div`
 `;
 
 const TextContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
   h1 {
     font-size: var(--font-size-4xl);
     font-weight: 700;
     color: var(--aws-blue);
-    margin-bottom: var(--spacing-6);
+    margin: 0 0 var(--spacing-6) 0;
     line-height: 1.2;
+    width: 100%;
     
     @media (max-width: 768px) {
       font-size: var(--font-size-3xl);
+      text-align: center;
     }
   }
   
   p {
     font-size: var(--font-size-lg);
     color: var(--aws-gray-600);
-    margin-bottom: var(--spacing-8);
+    margin: 0 0 var(--spacing-8) 0;
     line-height: 1.6;
+    width: 100%;
+    
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    align-items: center;
   }
 `;
 
@@ -50,6 +65,8 @@ const CTAButtons = styled.div`
   display: flex;
   gap: var(--spacing-4);
   flex-wrap: wrap;
+  width: 100%;
+  margin: 0;
   
   @media (max-width: 768px) {
     justify-content: center;
