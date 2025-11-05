@@ -9,7 +9,7 @@ Uma plataforma moderna e responsiva para simulados de certificações AWS, desen
 - **Simulados Interativos**: Questões baseadas nos exames oficiais AWS
 - **Suporte Multilíngue**: Português e Inglês
 - **Timer Integrado**: Controle de tempo para simular condições reais de exame
-- **Feedback Imediato**: Respostas corretas/incorretas com explicações
+- **Feedback Personalizado**: Explicações detalhadas para cada alternativa selecionada
 - **Navegação Intuitiva**: Interface limpa e fácil de usar
 
 ## 🛠️ Tecnologias Utilizadas
@@ -32,16 +32,25 @@ Uma plataforma moderna e responsiva para simulados de certificações AWS, desen
 ## 🎯 Simulados Disponíveis
 
 ### AWS Cloud Practitioner (CLF-02)
-- 65 questões baseadas no exame oficial
-- Tempo limite: 90 minutos
+- 20 questões baseadas no exame oficial
+- Tempo limite: 40 minutos (2 minutos por questão)
 - Nível: Iniciante
 - Suporte a português e inglês
+- Feedback personalizado para cada alternativa
 
 ### AWS Solutions Architect Associate (SAA)
-- 65 questões baseadas no exame oficial
-- Tempo limite: 130 minutos
+- 20 questões baseadas no exame oficial
+- Tempo limite: 40 minutos (2 minutos por questão)
 - Nível: Intermediário
-- Foco em arquitetura de soluções
+- Foco em arquitetura de soluções escaláveis e seguras
+- Feedback personalizado para cada alternativa
+
+### AWS Developer Associate (DVA)
+- 20 questões baseadas no exame oficial
+- Tempo limite: 40 minutos (2 minutos por questão)
+- Nível: Intermediário
+- Foco em desenvolvimento serverless e CI/CD
+- Feedback personalizado para cada alternativa
 
 ## 🚀 Como Executar
 
@@ -98,9 +107,12 @@ src/
 │   ├── Materials.js    # Materiais de estudo
 │   └── simulados/      # Páginas dos simulados
 │       ├── CloudPractitioner.js
-│       └── SolutionsArchitect.js
+│       ├── SolutionsArchitect.js
+│       └── DeveloperAssociate.js
 ├── data/               # Dados da aplicação
-│   └── questoes.js     # Banco de questões
+│   ├── cloudPractitionerQuestions.js
+│   ├── developerAssociateQuestions.js
+│   └── solutionsArchitectQuestions.js
 ├── App.js              # Componente principal
 ├── index.js            # Ponto de entrada
 └── index.css           # Estilos globais
@@ -109,11 +121,13 @@ src/
 ## 🎯 Funcionalidades dos Simulados
 
 - **Navegação entre questões**: Anterior/Próxima
-- **Timer em tempo real**: Contagem regressiva
+- **Timer em tempo real**: Contagem regressiva (40 minutos)
 - **Seleção de idioma**: Português/Inglês
+- **Feedback personalizado**: Explicações detalhadas para cada alternativa selecionada
 - **Feedback visual**: Cores para respostas corretas/incorretas
 - **Resultado final**: Percentual de acertos e status
 - **Validação**: Impede avanço sem resposta
+- **Proteção contra cola**: Prevenção de seleção de texto, atalhos e dev tools
 
 ## 🔒 Segurança
 
@@ -142,11 +156,13 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ## 👥 Equipe
 
-- **Ivonaldo** - Fundador & CEO
-- **Liz** - CTO
-- **Wesley** - Lead Developer
-- **Taynar** - UX/UI Designer
-- **Ivonildo** - Content Specialist
+- **Sharlles Anderson** - DevOps & Cloud Specialist
+- **Pedro Paulo** - Full Stack Developer
+- **Ivonaldo Micheluti Dias** - Infrastructure & Cloud Expert
+- **Wesley Cavalcante** - Developer
+- **Taynar Simões** - UX/UI Designer
+- **Elizângela Rosa da Silva Costa** - QA & Business Analyst
+- **Jefferson Bezerra** - Technology & Innovation Specialist
 
 ## 📞 Contato
 
