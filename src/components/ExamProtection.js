@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 
 const ProtectionOverlay = styled.div`
@@ -79,8 +79,22 @@ const Countdown = styled.div`
 const ExamProtection = ({ children }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(5);
+  const isWarningActiveRef = useRef(false);
 
   useEffect(() => {
+    // Verificar se é dispositivo móvel
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Variáveis para controle de avisos
+    let warningTimer = null;
+    let lastWarningTime = 0;
+    const WARNING_COOLDOWN = 3000; // 3 segundos entre avisos
+    
+    // Armazenar tamanho inicial da janela
+    let initialWidth = window.innerWidth;
+    let initialHeight = window.innerHeight;
+    let resizeTimer = null;
+
     // Proteção contra seleção de texto
     const preventTextSelection = (e) => {
       e.preventDefault();
@@ -123,16 +137,58 @@ const ExamProtection = ({ children }) => {
         }
       };
 
-      // Detectar mudanças no tamanho da janela
+      // Detectar mudanças no tamanho da janela (apenas mudanças significativas)
       const handleResize = () => {
-        triggerWarning();
+        // No mobile, ignorar pequenas mudanças de tamanho (barra de navegação, etc)
+        if (isMobile) {
+          // Limpar timer anterior
+          if (resizeTimer) {
+            clearTimeout(resizeTimer);
+          }
+          
+          // Aguardar um pouco antes de verificar (debounce)
+          resizeTimer = setTimeout(() => {
+            const currentWidth = window.innerWidth;
+            const currentHeight = window.innerHeight;
+            
+            // Só disparar se houver uma mudança significativa (mais de 50px)
+            const widthDiff = Math.abs(currentWidth - initialWidth);
+            const heightDiff = Math.abs(currentHeight - initialHeight);
+            
+            if (widthDiff > 50 || heightDiff > 50) {
+              initialWidth = currentWidth;
+              initialHeight = currentHeight;
+              triggerWarning();
+            }
+          }, 500);
+        } else {
+          // No desktop, verificar mudanças significativas
+          if (resizeTimer) {
+            clearTimeout(resizeTimer);
+          }
+          
+          resizeTimer = setTimeout(() => {
+            const currentWidth = window.innerWidth;
+            const currentHeight = window.innerHeight;
+            
+            const widthDiff = Math.abs(currentWidth - initialWidth);
+            const heightDiff = Math.abs(currentHeight - initialHeight);
+            
+            // No desktop, threshold menor (30px) mas ainda significativo
+            if (widthDiff > 30 || heightDiff > 30) {
+              initialWidth = currentWidth;
+              initialHeight = currentHeight;
+              triggerWarning();
+            }
+          }, 300);
+        }
       };
 
       // Detectar tentativas de abrir DevTools
       let devtools = { open: false, orientation: null };
       const threshold = 160;
       
-      setInterval(() => {
+      const devtoolsInterval = setInterval(() => {
         if (window.outerHeight - window.innerHeight > threshold || 
             window.outerWidth - window.innerWidth > threshold) {
           if (!devtools.open) {
@@ -150,19 +206,41 @@ const ExamProtection = ({ children }) => {
       return () => {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         window.removeEventListener('resize', handleResize);
+        if (resizeTimer) clearTimeout(resizeTimer);
+        clearInterval(devtoolsInterval);
       };
     };
 
-    // Função para mostrar aviso
+    // Função para mostrar aviso (com cooldown para evitar spam)
     const triggerWarning = () => {
+      const now = Date.now();
+      
+      // Evitar múltiplos avisos em sequência
+      if (now - lastWarningTime < WARNING_COOLDOWN) {
+        return;
+      }
+      
+      // Se já está mostrando aviso, não mostrar outro
+      if (isWarningActiveRef.current) {
+        return;
+      }
+      
+      lastWarningTime = now;
+      isWarningActiveRef.current = true;
       setShowWarning(true);
       setCountdown(5);
       
+      // Limpar timer anterior se existir
+      if (warningTimer) {
+        clearInterval(warningTimer);
+      }
+      
       // Countdown
-      const timer = setInterval(() => {
+      warningTimer = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
-            clearInterval(timer);
+            clearInterval(warningTimer);
+            isWarningActiveRef.current = false;
             setShowWarning(false);
             return 5;
           }
