@@ -154,9 +154,8 @@ src/
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 👥 Equipe
+## 👥 Contribuintes
 
-- **Sharlles Anderson** - DevOps & Cloud Specialist
 - **Pedro Paulo** - Full Stack Developer
 - **Ivonaldo Micheluti Dias** - Infrastructure & Cloud Expert
 - **Wesley Cavalcante** - Developer

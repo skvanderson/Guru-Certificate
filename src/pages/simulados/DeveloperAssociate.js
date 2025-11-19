@@ -497,7 +497,7 @@ const DeveloperAssociate = () => {
             <>
               <StatusMessage className={isCorrect ? 'correct' : 'incorrect'}>
                 {isCorrect ? '✓ Correto!' : '✗ Incorreto'}
-              </StatusMessage>
+            </StatusMessage>
               {(() => {
                 const selectedAlternative = currentQ.alternatives[selectedAnswers[currentQuestion]];
                 const alternativeExplanation = selectedAlternative?.explanation;
