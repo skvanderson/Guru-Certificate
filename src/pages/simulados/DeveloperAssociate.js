@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { developerAssociateQuestions } from '../../data/developerAssociateQuestions';
 import ExamProtection from '../../components/ExamProtection';
+import { getCurrentUser, saveExamResult } from '../../services/userService';
 
 const SimuladoContainer = styled.div`
   min-height: calc(100vh - 160px);
@@ -294,12 +295,45 @@ const DeveloperAssociate = () => {
     const percentage = Math.round((correctAnswers / totalQuestions) * 100);
     const passed = percentage >= 70;
 
-    setResults({
+    // Identificar questões erradas e seus tópicos
+    const wrongQuestionIds = [];
+    const topics = new Set();
+    
+    Object.keys(answeredQuestions).forEach(questionIndex => {
+      if (!answeredQuestions[questionIndex]) {
+        const questionId = developerAssociateQuestions[parseInt(questionIndex)].id;
+        wrongQuestionIds.push(questionId);
+        
+        // Extrair tópico do título
+        const question = developerAssociateQuestions[parseInt(questionIndex)];
+        if (question && question.title && question.title['pt-BR']) {
+          const topic = question.title['pt-BR'].split(' - ')[0] || question.title['pt-BR'];
+          topics.add(topic);
+        }
+      }
+    });
+
+    const result = {
       correct: correctAnswers,
       total: totalQuestions,
       percentage,
-      passed
-    });
+      passed,
+      wrongQuestions: wrongQuestionIds,
+      topics: Array.from(topics)
+    };
+
+    setResults(result);
+    
+    // Salvar resultado se usuário estiver logado
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      try {
+        saveExamResult(currentUser.id, 'developer-associate', result);
+      } catch (error) {
+        console.error('Erro ao salvar resultado:', error);
+      }
+    }
+    
     setIsFinished(true);
   }, [answeredQuestions]);
 

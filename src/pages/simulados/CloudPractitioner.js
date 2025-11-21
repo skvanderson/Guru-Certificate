@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { cloudPractitionerQuestions } from '../../data/cloudPractitionerQuestions';
 import ExamProtection from '../../components/ExamProtection';
+import { getCurrentUser, saveExamResult } from '../../services/userService';
 
 const SimuladoContainer = styled.div`
   min-height: calc(100vh - 160px);
@@ -367,12 +368,46 @@ const CloudPractitioner = () => {
     const percentage = (correctAnswers / totalQuestions) * 100;
     const passed = percentage >= 70;
 
-    setResults({
+    // Identificar questões erradas e seus tópicos
+    const wrongQuestionIds = [];
+    const topics = new Set();
+    
+    Object.keys(answeredQuestions).forEach(questionIndex => {
+      if (!answeredQuestions[questionIndex]) {
+        const questionId = cloudPractitionerQuestions[parseInt(questionIndex)].id;
+        wrongQuestionIds.push(questionId);
+        
+        // Extrair tópico do título
+        const question = cloudPractitionerQuestions[parseInt(questionIndex)];
+        if (question && question.title && question.title['pt-BR']) {
+          // Pegar a primeira parte do título antes do hífen como tópico
+          const topic = question.title['pt-BR'].split(' - ')[0] || question.title['pt-BR'];
+          topics.add(topic);
+        }
+      }
+    });
+
+    const result = {
       correct: correctAnswers,
       total: totalQuestions,
       percentage: percentage.toFixed(1),
-      passed: passed
-    });
+      passed: passed,
+      wrongQuestions: wrongQuestionIds,
+      topics: Array.from(topics)
+    };
+
+    setResults(result);
+    
+    // Salvar resultado se usuário estiver logado
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      try {
+        saveExamResult(currentUser.id, 'cloud-practitioner', result);
+      } catch (error) {
+        console.error('Erro ao salvar resultado:', error);
+      }
+    }
+    
     setIsFinished(true);
     setShowModal(true);
   }, [answeredQuestions]);

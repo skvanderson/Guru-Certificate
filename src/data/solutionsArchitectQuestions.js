@@ -6,8 +6,8 @@ export const solutionsArchitectQuestions = [
       "en": "Microservices Architecture - Advanced Patterns"
     },
     description: {
-      "pt-BR": "Uma empresa está migrando uma aplicação monolítica para microserviços. A aplicação atual tem 50+ serviços que precisam se comunicar de forma assíncrona. Durante picos de tráfego, alguns serviços falham e causam cascata de falhas. Qual padrão arquitetural AWS resolve melhor este problema?",
-      "en": "A company is migrating a monolithic application to microservices. The current application has 50+ services that need to communicate asynchronously. During traffic peaks, some services fail and cause cascade failures. Which AWS architectural pattern best solves this problem?"
+      "pt-BR": "Uma empresa financeira está migrando uma aplicação monolítica crítica para uma arquitetura de microserviços distribuída. A aplicação possui 50+ microserviços que se comunicam via mensageria assíncrona, processando 500.000 transações por minuto. Durante picos de tráfego (Black Friday, eventos sazonais), alguns serviços downstream apresentam latência elevada ou falhas intermitentes, causando cascata de timeouts e falhas em serviços upstream. A arquitetura atual usa SQS Standard Queues com retry exponencial, mas ainda sofre com propagação de falhas. Qual padrão arquitetural AWS resolve melhor este problema considerando throughput alto, baixa latência e resiliência?",
+      "en": "A financial company is migrating a critical monolithic application to a distributed microservices architecture. The application has 50+ microservices communicating via asynchronous messaging, processing 500,000 transactions per minute. During traffic peaks (Black Friday, seasonal events), some downstream services experience high latency or intermittent failures, causing cascading timeouts and failures in upstream services. The current architecture uses SQS Standard Queues with exponential retry, but still suffers from failure propagation. Which AWS architectural pattern best solves this problem considering high throughput, low latency, and resilience?"
     },
     question: {
       "pt-BR": "",
@@ -30,35 +30,35 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Usar apenas API Gateway para roteamento",
-          "en": "Use only API Gateway for routing"
+          "pt-BR": "Implementar Circuit Breaker com AWS Lambda, SQS FIFO Queues e Dead Letter Queues",
+          "en": "Implement Circuit Breaker with AWS Lambda, SQS FIFO Queues and Dead Letter Queues"
         },
         correct: false,
         explanation: {
-          "pt-BR": "API Gateway faz roteamento de requisições HTTP, mas não previne cascata de falhas nem gerencia comunicação assíncrona entre 50+ serviços. Quando um serviço falha, API Gateway apenas retorna erro, mas não interrompe chamadas para evitar propagação de falhas. Circuit Breaker é necessário para prevenir cascata.",
-          "en": "API Gateway routes HTTP requests, but doesn't prevent cascade failures or manage asynchronous communication between 50+ services. When a service fails, API Gateway just returns error, but doesn't interrupt calls to prevent failure propagation. Circuit Breaker is needed to prevent cascade."
+          "pt-BR": "SQS FIFO Queues garantem ordem de mensagens, mas têm throughput limitado (3.000 mensagens/segundo por fila) e latência mais alta que Standard Queues. Para processar 500.000 transações/minuto (8.333/segundo), FIFO Queues não escalam adequadamente. Além disso, FIFO Queues são mais caras e não são necessárias quando a ordem não é crítica. Standard Queues com Circuit Breaker e DLQ oferecem melhor throughput e latência para este caso.",
+          "en": "SQS FIFO Queues guarantee message order, but have limited throughput (3,000 messages/second per queue) and higher latency than Standard Queues. To process 500,000 transactions/minute (8,333/second), FIFO Queues don't scale adequately. Additionally, FIFO Queues are more expensive and not necessary when order isn't critical. Standard Queues with Circuit Breaker and DLQ offer better throughput and latency for this case."
         }
       },
       {
         title: {
-          "pt-BR": "Implementar apenas retry automático em todas as chamadas",
-          "en": "Implement only automatic retry in all calls"
+          "pt-BR": "Implementar Circuit Breaker com AWS Lambda, SQS Standard Queues com retry exponencial e SNS para notificações",
+          "en": "Implement Circuit Breaker with AWS Lambda, SQS Standard Queues with exponential retry and SNS for notifications"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Retry automático sozinho pode piorar a situação: se um serviço está falhando, retries repetidos aumentam a carga sobre o serviço já sobrecarregado, acelerando a cascata de falhas. É necessário Circuit Breaker para interromper chamadas quando um serviço está falhando, não apenas fazer mais tentativas.",
-          "en": "Automatic retry alone can worsen the situation: if a service is failing, repeated retries increase load on the already overloaded service, accelerating cascade failures. Circuit Breaker is needed to interrupt calls when a service is failing, not just make more attempts."
+          "pt-BR": "Esta solução usa SQS Standard Queues (escalável) e Circuit Breaker (previne cascata), mas falta Dead Letter Queues para capturar mensagens que falharam após múltiplas tentativas. SNS para notificações não resolve o problema de cascata de falhas nem oferece análise de mensagens falhadas. DLQ é essencial para identificar padrões de falha e reprocessar mensagens críticas. Sem DLQ, mensagens que falharam são perdidas ou ficam em loop infinito.",
+          "en": "This solution uses SQS Standard Queues (scalable) and Circuit Breaker (prevents cascade), but lacks Dead Letter Queues to capture messages that failed after multiple attempts. SNS for notifications doesn't solve cascade failure problem nor offers analysis of failed messages. DLQ is essential to identify failure patterns and reprocess critical messages. Without DLQ, failed messages are lost or stuck in infinite loop."
         }
       },
       {
         title: {
-          "pt-BR": "Usar apenas Application Load Balancer com health checks",
-          "en": "Use only Application Load Balancer with health checks"
+          "pt-BR": "Implementar Circuit Breaker com AWS Lambda, SQS Standard Queues, Dead Letter Queues e Step Functions para orquestração",
+          "en": "Implement Circuit Breaker with AWS Lambda, SQS Standard Queues, Dead Letter Queues and Step Functions for orchestration"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Application Load Balancer com health checks ajuda a remover instâncias não saudáveis, mas não resolve comunicação assíncrona entre serviços nem previne cascata de falhas. Para 50+ serviços que se comunicam de forma assíncrona, é necessário Circuit Breaker e Dead Letter Queues para gerenciar falhas.",
-          "en": "Application Load Balancer with health checks helps remove unhealthy instances, but doesn't solve asynchronous communication between services or prevent cascade failures. For 50+ services that communicate asynchronously, Circuit Breaker and Dead Letter Queues are needed to manage failures."
+          "pt-BR": "Esta solução inclui Circuit Breaker, SQS Standard Queues e DLQ (componentes corretos), mas adiciona Step Functions desnecessariamente. Step Functions é para orquestração de workflows complexos, não para prevenir cascata de falhas em comunicação assíncrona entre microserviços. Para comunicação assíncrona de alta throughput (500.000 transações/minuto), Step Functions adiciona latência e custo desnecessários. A solução correta é Circuit Breaker + SQS Standard + DLQ, sem Step Functions.",
+          "en": "This solution includes Circuit Breaker, SQS Standard Queues and DLQ (correct components), but unnecessarily adds Step Functions. Step Functions is for orchestrating complex workflows, not for preventing cascade failures in asynchronous communication between microservices. For high-throughput asynchronous communication (500,000 transactions/minute), Step Functions adds unnecessary latency and cost. The correct solution is Circuit Breaker + SQS Standard + DLQ, without Step Functions."
         }
       }
     ],
@@ -74,8 +74,8 @@ export const solutionsArchitectQuestions = [
       "en": "Multi-Regional Architecture - Disaster Recovery"
     },
     description: {
-      "pt-BR": "Uma aplicação crítica de pagamentos processa 1 milhão de transações por dia e precisa de RTO de 15 minutos e RPO de 5 minutos. A aplicação usa RDS MySQL, S3, e Lambda. Qual estratégia de disaster recovery atende melhor estes requisitos?",
-      "en": "A critical payment application processes 1 million transactions per day and needs RTO of 15 minutes and RPO of 5 minutes. The application uses RDS MySQL, S3, and Lambda. Which disaster recovery strategy best meets these requirements?"
+      "pt-BR": "Uma aplicação crítica de pagamentos processa 1 milhão de transações por dia com picos de 50.000 transações/hora durante eventos. A aplicação armazena dados transacionais em RDS MySQL Multi-AZ, arquivos de configuração e logs em S3, e processa eventos via Lambda functions. A empresa precisa garantir RTO de 15 minutos e RPO de 5 minutos mesmo em caso de falha de região inteira. A aplicação deve manter consistência transacional e não pode perder dados financeiros. Considerando que algumas transações são críticas e precisam de replicação síncrona, enquanto outras podem tolerar replicação assíncrona, qual estratégia de disaster recovery atende melhor estes requisitos?",
+      "en": "A critical payment application processes 1 million transactions per day with peaks of 50,000 transactions/hour during events. The application stores transactional data in RDS MySQL Multi-AZ, configuration files and logs in S3, and processes events via Lambda functions. The company needs to guarantee RTO of 15 minutes and RPO of 5 minutes even in case of entire region failure. The application must maintain transactional consistency and cannot lose financial data. Considering that some transactions are critical and need synchronous replication, while others can tolerate asynchronous replication, which disaster recovery strategy best meets these requirements?"
     },
     question: {
       "pt-BR": "",
@@ -87,13 +87,13 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "RDS Multi-AZ com backup diário e S3 Cross-Region Replication",
-          "en": "RDS Multi-AZ with daily backup and S3 Cross-Region Replication"
+          "pt-BR": "RDS Multi-AZ com Continuous Backups, S3 Cross-Region Replication e Lambda deployment em múltiplas regiões com Route 53 failover",
+          "en": "RDS Multi-AZ with Continuous Backups, S3 Cross-Region Replication and Lambda deployment in multiple regions with Route 53 failover"
         },
         correct: false,
         explanation: {
-          "pt-BR": "RDS Multi-AZ apenas em uma região não atende RTO de 15 minutos nem RPO de 5 minutos se a região inteira falhar. Backup diário tem RPO muito alto (até 24 horas). Para uma aplicação crítica de pagamentos que precisa de RTO de 15 minutos e RPO de 5 minutos, é necessário replicação cross-region com failover automático.",
-          "en": "RDS Multi-AZ only in one region doesn't meet 15-minute RTO or 5-minute RPO if the entire region fails. Daily backup has very high RPO (up to 24 hours). For a critical payment application that needs 15-minute RTO and 5-minute RPO, cross-region replication with automatic failover is needed."
+          "pt-BR": "RDS Multi-AZ com Continuous Backups oferece RPO baixo (até 5 minutos) e RTO rápido dentro da mesma região, mas se a região inteira falhar, não há failover automático para outra região. Route 53 pode fazer failover de DNS, mas RDS Multi-AZ não replica automaticamente para outra região - você precisaria restaurar de backup cross-region, o que leva muito mais que 15 minutos. Para RTO de 15 minutos em caso de falha regional, é necessário RDS Cross-Region Read Replica com failover automático, não apenas Multi-AZ.",
+          "en": "RDS Multi-AZ with Continuous Backups offers low RPO (up to 5 minutes) and fast RTO within the same region, but if the entire region fails, there's no automatic failover to another region. Route 53 can do DNS failover, but RDS Multi-AZ doesn't automatically replicate to another region - you would need to restore from cross-region backup, which takes much more than 15 minutes. For 15-minute RTO in case of regional failure, RDS Cross-Region Read Replica with automatic failover is needed, not just Multi-AZ."
         }
       },
       {
@@ -109,24 +109,24 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas backup manual diário em S3",
-          "en": "Only daily manual backup to S3"
+          "pt-BR": "RDS Cross-Region Read Replica com failover manual, S3 CRR, e Lambda deployment em múltiplas regiões",
+          "en": "RDS Cross-Region Read Replica with manual failover, S3 CRR, and Lambda deployment in multiple regions"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Backup manual diário tem RPO muito alto (até 24 horas de perda de dados) e RTO muito alto (horas para restaurar e configurar). Para uma aplicação crítica de pagamentos que precisa de RTO de 15 minutos e RPO de 5 minutos, backup manual é completamente inadequado. É necessário replicação contínua e failover automático.",
-          "en": "Daily manual backup has very high RPO (up to 24 hours of data loss) and very high RTO (hours to restore and configure). For a critical payment application that needs 15-minute RTO and 5-minute RPO, manual backup is completely inadequate. Continuous replication and automatic failover are needed."
+          "pt-BR": "RDS Cross-Region Read Replica replica dados assincronamente (RPO de ~5 minutos), mas failover manual não atende RTO de 15 minutos: requer intervenção humana, configuração manual de DNS, promoção manual da réplica, e verificação de integridade, o que pode levar 30-60 minutos. Para RTO de 15 minutos, failover automático é essencial. Além disso, Read Replica é apenas para leitura - para escrita após failover, é necessário promover manualmente, o que adiciona latência.",
+          "en": "RDS Cross-Region Read Replica replicates data asynchronously (RPO of ~5 minutes), but manual failover doesn't meet 15-minute RTO: requires human intervention, manual DNS configuration, manual replica promotion, and integrity verification, which can take 30-60 minutes. For 15-minute RTO, automatic failover is essential. Additionally, Read Replica is read-only - for writes after failover, manual promotion is needed, which adds latency."
         }
       },
       {
         title: {
-          "pt-BR": "RDS Single-AZ com snapshot manual",
-          "en": "RDS Single-AZ with manual snapshot"
+          "pt-BR": "RDS Cross-Region Automated Backups com restauração automática, S3 CRR, Lambda em múltiplas regiões e Route 53 health checks",
+          "en": "RDS Cross-Region Automated Backups with automatic restoration, S3 CRR, Lambda in multiple regions and Route 53 health checks"
         },
         correct: false,
         explanation: {
-          "pt-BR": "RDS Single-AZ não tem redundância, e snapshot manual tem RPO muito alto e RTO muito alto (horas). Para uma aplicação crítica que processa 1 milhão de transações por dia e precisa de RTO de 15 minutos e RPO de 5 minutos, é necessário replicação cross-region com failover automático, não snapshots manuais.",
-          "en": "RDS Single-AZ has no redundancy, and manual snapshot has very high RPO and RTO (hours). For a critical application that processes 1 million transactions per day and needs 15-minute RTO and 5-minute RPO, cross-region replication with automatic failover is needed, not manual snapshots."
+          "pt-BR": "RDS Cross-Region Automated Backups replica backups para outra região, mas restauração automática de backup não atende RTO de 15 minutos: restaurar um backup de RDS leva 15-30 minutos dependendo do tamanho do banco, mais tempo para configurar instâncias e promover. Para 1 milhão de transações/dia, o banco pode ter vários GB, tornando a restauração muito lenta. Cross-Region Read Replica com failover automático é muito mais rápido (promoção em segundos) que restaurar de backup.",
+          "en": "RDS Cross-Region Automated Backups replicates backups to another region, but automatic backup restoration doesn't meet 15-minute RTO: restoring an RDS backup takes 15-30 minutes depending on database size, plus time to configure instances and promote. For 1 million transactions/day, the database may have several GB, making restoration very slow. Cross-Region Read Replica with automatic failover is much faster (promotion in seconds) than restoring from backup."
         }
       }
     ],
@@ -142,8 +142,8 @@ export const solutionsArchitectQuestions = [
       "en": "Performance and Optimization - Advanced Caching"
     },
     description: {
-      "pt-BR": "Uma aplicação de streaming de vídeo tem 10 milhões de usuários ativos. O conteúdo é distribuído globalmente, mas 80% do tráfego vem de 3 regiões específicas. Os vídeos têm tamanhos variados (1MB a 2GB) e são acessados de forma imprevisível. Qual estratégia de cache é mais eficiente?",
-      "en": "A video streaming application has 10 million active users. Content is distributed globally, but 80% of traffic comes from 3 specific regions. Videos have varying sizes (1MB to 2GB) and are accessed unpredictably. Which caching strategy is most efficient?"
+      "pt-BR": "Uma plataforma de streaming de vídeo tem 10 milhões de usuários ativos simultâneos, servindo 500TB de conteúdo diariamente. O conteúdo inclui vídeos longos (2GB, 4K), thumbnails (500KB), transcodificações múltiplas (720p, 1080p, 4K), e metadados JSON. 80% do tráfego vem de 3 regiões específicas (América do Norte, Europa, Ásia), mas há picos sazonais em outras regiões. Os padrões de acesso são imprevisíveis: vídeos virais podem ter 100x aumento de tráfego em horas, enquanto conteúdo antigo raramente é acessado. A empresa precisa otimizar custos de transferência (que representam 40% do custo total) e manter latência abaixo de 200ms para 95% das requisições. Qual estratégia de cache é mais eficiente considerando TTL dinâmico, invalidação inteligente e otimização de custos?",
+      "en": "A video streaming platform has 10 million concurrent active users, serving 500TB of content daily. Content includes long videos (2GB, 4K), thumbnails (500KB), multiple transcodings (720p, 1080p, 4K), and JSON metadata. 80% of traffic comes from 3 specific regions (North America, Europe, Asia), but there are seasonal peaks in other regions. Access patterns are unpredictable: viral videos can have 100x traffic increase in hours, while old content is rarely accessed. The company needs to optimize transfer costs (which represent 40% of total cost) and maintain latency below 200ms for 95% of requests. Which caching strategy is most efficient considering dynamic TTL, intelligent invalidation and cost optimization?"
     },
     question: {
       "pt-BR": "",
@@ -155,13 +155,24 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "CloudFront com S3 como origem e cache de 24h para todos os objetos",
-          "en": "CloudFront with S3 as origin and 24h cache for all objects"
+          "pt-BR": "CloudFront com S3 como origem, cache diferenciado por tipo de conteúdo (vídeos 7 dias, thumbnails 30 dias), e invalidação manual via API",
+          "en": "CloudFront with S3 as origin, differentiated cache by content type (videos 7 days, thumbnails 30 days), and manual invalidation via API"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Cache de 24h uniforme para todos os objetos não é eficiente: vídeos grandes (2GB) podem não ser acessados novamente, desperdiçando espaço de cache. Vídeos pequenos (1MB) podem ser acessados frequentemente e precisariam de cache mais longo. Cache uniforme não otimiza custos nem performance para conteúdo variável e acesso imprevisível.",
-          "en": "Uniform 24h cache for all objects isn't efficient: large videos (2GB) may not be accessed again, wasting cache space. Small videos (1MB) may be accessed frequently and would need longer cache. Uniform cache doesn't optimize costs or performance for variable content and unpredictable access."
+          "pt-BR": "Esta solução usa cache diferenciado (correto), mas invalidação manual via API não escala para conteúdo viral que precisa de atualização imediata quando há picos de tráfego. Para vídeos virais com 100x aumento de tráfego em horas, invalidação manual é lenta e propensa a erros. Lambda@Edge permite invalidação automática baseada em padrões de acesso, comportamento do usuário e região, otimizando cache dinamicamente. Além disso, cache fixo de 7 dias para vídeos não se adapta a padrões de acesso imprevisíveis - vídeos populares podem precisar de cache mais longo, enquanto vídeos antigos podem ter cache mais curto.",
+          "en": "This solution uses differentiated cache (correct), but manual invalidation via API doesn't scale for viral content that needs immediate updates when there are traffic spikes. For viral videos with 100x traffic increase in hours, manual invalidation is slow and error-prone. Lambda@Edge allows automatic invalidation based on access patterns, user behavior and region, dynamically optimizing cache. Additionally, fixed 7-day cache for videos doesn't adapt to unpredictable access patterns - popular videos may need longer cache, while old videos may have shorter cache."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "CloudFront com S3 como origem, cache uniforme de 24h, Lambda@Edge para personalização de headers, e ElastiCache Redis para cache de metadados",
+          "en": "CloudFront with S3 as origin, uniform 24h cache, Lambda@Edge for header customization, and ElastiCache Redis for metadata cache"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa CloudFront e Lambda@Edge (componentes corretos), mas cache uniforme de 24h não otimiza custos: vídeos grandes (2GB) raramente acessados desperdiçam espaço de cache, enquanto thumbnails pequenos (500KB) frequentemente acessados precisariam de cache mais longo. ElastiCache Redis para metadados adiciona complexidade e custo desnecessários - CloudFront pode cachear metadados JSON eficientemente. Para otimizar os 40% de custos de transferência, cache diferenciado por tipo de conteúdo é essencial, não cache uniforme.",
+          "en": "This solution uses CloudFront and Lambda@Edge (correct components), but uniform 24h cache doesn't optimize costs: rarely accessed large videos (2GB) waste cache space, while frequently accessed small thumbnails (500KB) would need longer cache. ElastiCache Redis for metadata adds unnecessary complexity and cost - CloudFront can efficiently cache JSON metadata. To optimize the 40% transfer costs, differentiated cache by content type is essential, not uniform cache."
         }
       },
       {
@@ -177,24 +188,13 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas S3 com transfer acceleration",
-          "en": "Only S3 with transfer acceleration"
+          "pt-BR": "CloudFront com S3 como origem, cache diferenciado por tipo de conteúdo, Lambda@Edge para personalização e invalidação inteligente, e CloudFront Origin Shield para cache adicional",
+          "en": "CloudFront with S3 as origin, differentiated cache by content type, Lambda@Edge for customization and intelligent invalidation, and CloudFront Origin Shield for additional cache"
         },
         correct: false,
         explanation: {
-          "pt-BR": "S3 Transfer Acceleration acelera uploads, mas não oferece cache, não otimiza distribuição global, e não oferece edge locations para reduzir latência. Para 10 milhões de usuários distribuídos globalmente, é necessário CloudFront que oferece cache em edge locations, reduzindo latência e custos de transferência.",
-          "en": "S3 Transfer Acceleration speeds up uploads, but doesn't offer cache, doesn't optimize global distribution, and doesn't offer edge locations to reduce latency. For 10 million globally distributed users, CloudFront is needed which offers cache at edge locations, reducing latency and transfer costs."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "ElastiCache Redis em cada região",
-          "en": "ElastiCache Redis in each region"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "ElastiCache Redis não escala globalmente como CloudFront: requer provisionamento em cada região, não oferece edge locations automaticamente, não otimiza distribuição global, e é mais caro para conteúdo estático grande. Para streaming de vídeo com 10 milhões de usuários, CloudFront é muito mais eficiente e escalável.",
-          "en": "ElastiCache Redis doesn't scale globally like CloudFront: requires provisioning in each region, doesn't automatically offer edge locations, doesn't optimize global distribution, and is more expensive for large static content. For video streaming with 10 million users, CloudFront is much more efficient and scalable."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (cache diferenciado, Lambda@Edge), mas adiciona Origin Shield que pode não ser necessário para este caso. Origin Shield é útil quando há muitas edge locations fazendo requisições para a origem, mas para 80% do tráfego vindo de 3 regiões, o benefício é limitado e adiciona latência extra (uma camada adicional de cache). Para otimizar latência abaixo de 200ms para 95% das requisições, cache direto em edge locations sem Origin Shield é mais eficiente. A solução correta é cache diferenciado + Lambda@Edge, sem Origin Shield.",
+          "en": "This solution includes all correct components (differentiated cache, Lambda@Edge), but adds Origin Shield which may not be necessary for this case. Origin Shield is useful when there are many edge locations making requests to origin, but for 80% of traffic coming from 3 regions, the benefit is limited and adds extra latency (an additional cache layer). To optimize latency below 200ms for 95% of requests, direct cache at edge locations without Origin Shield is more efficient. The correct solution is differentiated cache + Lambda@Edge, without Origin Shield."
         }
       }
     ],
@@ -210,8 +210,8 @@ export const solutionsArchitectQuestions = [
       "en": "Advanced Security - Zero Trust Architecture"
     },
     description: {
-      "pt-BR": "Uma empresa financeira precisa implementar uma arquitetura Zero Trust. A aplicação tem componentes em múltiplas VPCs, APIs internas e externas, e dados sensíveis que precisam de auditoria completa. Qual combinação de serviços AWS implementa melhor Zero Trust?",
-      "en": "A financial company needs to implement a Zero Trust architecture. The application has components in multiple VPCs, internal and external APIs, and sensitive data that needs complete auditing. Which combination of AWS services best implements Zero Trust?"
+      "pt-BR": "Uma empresa financeira multinacional precisa implementar uma arquitetura Zero Trust completa para atender regulamentações GDPR, PCI-DSS e SOX. A aplicação possui 15 VPCs distribuídas em 5 regiões AWS, com 200+ microserviços que se comunicam via APIs REST e gRPC. Há APIs públicas expostas via internet, APIs privadas entre VPCs, e integrações com sistemas on-premises via Direct Connect. A empresa processa 5 milhões de transações financeiras diárias com dados altamente sensíveis (PII, dados de cartão de crédito). Todos os acessos precisam ser verificados continuamente, não apenas na autenticação inicial. A arquitetura deve prevenir lateral movement entre VPCs, detectar ameaças em tempo real, e manter auditoria completa de todas as ações para compliance. Qual combinação de serviços AWS implementa melhor Zero Trust considerando verificação contínua, segmentação de rede, detecção de ameaças e compliance?",
+      "en": "A multinational financial company needs to implement a complete Zero Trust architecture to meet GDPR, PCI-DSS and SOX regulations. The application has 15 VPCs distributed across 5 AWS regions, with 200+ microservices communicating via REST and gRPC APIs. There are public APIs exposed via internet, private APIs between VPCs, and integrations with on-premises systems via Direct Connect. The company processes 5 million financial transactions daily with highly sensitive data (PII, credit card data). All access must be continuously verified, not just at initial authentication. The architecture must prevent lateral movement between VPCs, detect threats in real-time, and maintain complete audit trail of all actions for compliance. Which combination of AWS services best implements Zero Trust considering continuous verification, network segmentation, threat detection and compliance?"
     },
     question: {
       "pt-BR": "",
@@ -223,13 +223,35 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "VPC Endpoints, AWS WAF, e CloudTrail",
-          "en": "VPC Endpoints, AWS WAF, and CloudTrail"
+          "pt-BR": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Advanced, CloudTrail, e GuardDuty",
+          "en": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Advanced, CloudTrail, and GuardDuty"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Esta combinação cobre conectividade privada (VPC Endpoints), proteção de APIs (WAF) e auditoria (CloudTrail), mas não é completa para Zero Trust: falta detecção de ameaças (GuardDuty), proteção DDoS (Shield), compliance contínuo (Config), e conectividade privada entre VPCs (PrivateLink). Zero Trust requer camadas múltiplas de segurança e verificação contínua.",
-          "en": "This combination covers private connectivity (VPC Endpoints), API protection (WAF) and auditing (CloudTrail), but isn't complete for Zero Trust: lacks threat detection (GuardDuty), DDoS protection (Shield), continuous compliance (Config), and private connectivity between VPCs (PrivateLink). Zero Trust requires multiple security layers and continuous verification."
+          "pt-BR": "Esta combinação cobre conectividade privada (PrivateLink, VPC Endpoints), proteção de APIs (WAF), proteção DDoS (Shield Advanced), auditoria (CloudTrail) e detecção de ameaças (GuardDuty), mas falta AWS Config para compliance contínuo e governança. Para atender regulamentações GDPR, PCI-DSS e SOX, é necessário Config com regras customizadas para verificar continuamente conformidade de recursos, detectar mudanças não autorizadas, e gerar relatórios de compliance. Sem Config, não há verificação contínua de conformidade de configurações, o que é essencial para Zero Trust e compliance financeiro.",
+          "en": "This combination covers private connectivity (PrivateLink, VPC Endpoints), API protection (WAF), DDoS protection (Shield Advanced), auditing (CloudTrail) and threat detection (GuardDuty), but lacks AWS Config for continuous compliance and governance. To meet GDPR, PCI-DSS and SOX regulations, Config with custom rules is needed to continuously verify resource compliance, detect unauthorized changes, and generate compliance reports. Without Config, there's no continuous verification of configuration compliance, which is essential for Zero Trust and financial compliance."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Standard, CloudTrail, GuardDuty, e AWS Config com regras padrão",
+          "en": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Standard, CloudTrail, GuardDuty, and AWS Config with default rules"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes necessários, mas AWS Shield Standard oferece proteção DDoS básica apenas, não Shield Advanced que oferece proteção DDoS avançada, proteção contra ataques sofisticados, e suporte 24/7 do DRT (DDoS Response Team). Para uma empresa financeira processando 5 milhões de transações diárias, Shield Advanced é essencial. Além disso, Config com regras padrão pode não atender requisitos específicos de GDPR, PCI-DSS e SOX - regras customizadas são necessárias para verificar compliance específico do setor financeiro.",
+          "en": "This solution includes all necessary components, but AWS Shield Standard offers only basic DDoS protection, not Shield Advanced which offers advanced DDoS protection, protection against sophisticated attacks, and 24/7 support from DRT (DDoS Response Team). For a financial company processing 5 million daily transactions, Shield Advanced is essential. Additionally, Config with default rules may not meet specific GDPR, PCI-DSS and SOX requirements - custom rules are needed to verify financial sector-specific compliance."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Advanced, CloudTrail, GuardDuty, AWS Config com regras customizadas, e AWS Security Hub para agregação",
+          "en": "AWS PrivateLink, VPC Endpoints, AWS WAF, AWS Shield Advanced, CloudTrail, GuardDuty, AWS Config with custom rules, and AWS Security Hub for aggregation"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes essenciais para Zero Trust (PrivateLink, VPC Endpoints, WAF, Shield Advanced, CloudTrail, GuardDuty, Config com regras customizadas) e adiciona Security Hub. Security Hub agrega findings de múltiplos serviços de segurança, mas não é um requisito obrigatório para implementar Zero Trust - é uma ferramenta de visibilidade adicional. A solução correta é a mesma sem Security Hub, pois Security Hub não adiciona proteção, apenas centraliza informações. Para Zero Trust completo, os componentes essenciais são suficientes.",
+          "en": "This solution includes all essential components for Zero Trust (PrivateLink, VPC Endpoints, WAF, Shield Advanced, CloudTrail, GuardDuty, Config with custom rules) and adds Security Hub. Security Hub aggregates findings from multiple security services, but isn't a mandatory requirement to implement Zero Trust - it's an additional visibility tool. The correct solution is the same without Security Hub, as Security Hub doesn't add protection, only centralizes information. For complete Zero Trust, the essential components are sufficient."
         }
       },
       {
@@ -241,28 +263,6 @@ export const solutionsArchitectQuestions = [
         explanation: {
           "pt-BR": "Esta combinação implementa Zero Trust completo: PrivateLink para conectividade privada entre VPCs sem expor tráfego à internet, VPC Endpoints para acesso seguro a serviços AWS, WAF para proteção de APIs, Shield para proteção DDoS, CloudTrail para auditoria completa, GuardDuty para detecção contínua de ameaças, e Config para compliance e governança. Esta é a arquitetura Zero Trust mais completa.",
           "en": "This combination implements complete Zero Trust: PrivateLink for private connectivity between VPCs without exposing traffic to internet, VPC Endpoints for secure AWS service access, WAF for API protection, Shield for DDoS protection, CloudTrail for complete auditing, GuardDuty for continuous threat detection, and Config for compliance and governance. This is the most complete Zero Trust architecture."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas Security Groups e NACLs",
-          "en": "Only Security Groups and NACLs"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Security Groups e NACLs são apenas controles de rede básicos, não implementam Zero Trust que requer verificação contínua, detecção de ameaças, auditoria, compliance, e proteção em múltiplas camadas. Zero Trust não é apenas controle de rede, mas uma arquitetura de segurança abrangente com monitoramento e verificação contínua.",
-          "en": "Security Groups and NACLs are only basic network controls, don't implement Zero Trust which requires continuous verification, threat detection, auditing, compliance, and multi-layer protection. Zero Trust isn't just network control, but a comprehensive security architecture with continuous monitoring and verification."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "AWS Cognito e IAM roles",
-          "en": "AWS Cognito and IAM roles"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Cognito e IAM cobrem autenticação e autorização, mas não implementam Zero Trust completo que requer: conectividade privada (PrivateLink, VPC Endpoints), proteção de APIs (WAF), proteção DDoS (Shield), detecção de ameaças (GuardDuty), auditoria (CloudTrail), e compliance (Config). Zero Trust é mais que autenticação, é uma arquitetura completa.",
-          "en": "Cognito and IAM cover authentication and authorization, but don't implement complete Zero Trust which requires: private connectivity (PrivateLink, VPC Endpoints), API protection (WAF), DDoS protection (Shield), threat detection (GuardDuty), auditing (CloudTrail), and compliance (Config). Zero Trust is more than authentication, it's a complete architecture."
         }
       }
     ],
@@ -278,8 +278,8 @@ export const solutionsArchitectQuestions = [
       "en": "Data Architecture - Data Lake and Analytics"
     },
     description: {
-      "pt-BR": "Uma empresa de e-commerce precisa processar 100TB de dados diários (logs, transações, comportamento do usuário) para analytics em tempo real e batch. Os dados vêm de múltiplas fontes (APIs, bancos, streams) e precisam ser processados com diferentes latências. Qual arquitetura AWS é mais adequada?",
-      "en": "An e-commerce company needs to process 100TB of daily data (logs, transactions, user behavior) for real-time and batch analytics. Data comes from multiple sources (APIs, databases, streams) and needs to be processed with different latencies. Which AWS architecture is most suitable?"
+      "pt-BR": "Uma empresa de e-commerce global precisa processar 100TB de dados diários de múltiplas fontes heterogêneas: 50 milhões de eventos de clickstream por hora via APIs, 10TB de logs de aplicação de 500+ microserviços, 30TB de dados transacionais de RDS e DynamoDB, 20TB de dados de comportamento do usuário de sistemas externos, e 40TB de dados de marketing e campanhas. Os dados precisam ser processados em tempo real (latência < 1 segundo) para personalização de recomendações e detecção de fraude, e em batch (latência de horas) para relatórios analíticos e machine learning. A arquitetura deve suportar queries SQL complexas sobre dados históricos, processamento de streams em tempo real, e armazenamento econômico de dados não estruturados. Qual arquitetura AWS é mais adequada considerando throughput alto, processamento híbrido (real-time + batch), e otimização de custos?",
+      "en": "A global e-commerce company needs to process 100TB of daily data from multiple heterogeneous sources: 50 million clickstream events per hour via APIs, 10TB of application logs from 500+ microservices, 30TB of transactional data from RDS and DynamoDB, 20TB of user behavior data from external systems, and 40TB of marketing and campaign data. Data needs to be processed in real-time (latency < 1 second) for recommendation personalization and fraud detection, and in batch (hours latency) for analytical reports and machine learning. The architecture must support complex SQL queries on historical data, real-time stream processing, and economical storage of unstructured data. Which AWS architecture is most suitable considering high throughput, hybrid processing (real-time + batch), and cost optimization?"
     },
     question: {
       "pt-BR": "",
@@ -302,35 +302,35 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas RDS com read replicas",
-          "en": "Only RDS with read replicas"
+          "pt-BR": "S3 Data Lake + Kinesis Data Firehose + Kinesis Analytics + Redshift Spectrum + Glue para ETL",
+          "en": "S3 Data Lake + Kinesis Data Firehose + Kinesis Analytics + Redshift Spectrum + Glue for ETL"
         },
         correct: false,
         explanation: {
-          "pt-BR": "RDS não é adequado para processar 100TB diários de dados de múltiplas fontes: é caro para este volume, não suporta analytics em tempo real, não é otimizado para data lake, e não processa streams. Para analytics de 100TB diários de múltiplas fontes, é necessário S3 Data Lake com Kinesis para tempo real e Redshift Spectrum para batch.",
-          "en": "RDS isn't suitable for processing 100TB daily of data from multiple sources: it's expensive for this volume, doesn't support real-time analytics, isn't optimized for data lake, and doesn't process streams. For 100TB daily analytics from multiple sources, S3 Data Lake with Kinesis for real-time and Redshift Spectrum for batch is needed."
+          "pt-BR": "Esta solução usa S3 Data Lake (correto), Kinesis Analytics (tempo real), Redshift Spectrum (batch), mas Kinesis Data Firehose não processa streams em tempo real - ele apenas carrega dados em S3 com latência de minutos. Para processar 50 milhões de eventos/hora com latência < 1 segundo para personalização e detecção de fraude, é necessário Kinesis Data Streams que oferece processamento de streams em tempo real com baixa latência. Firehose é adequado para carregar dados em S3, mas não para processamento em tempo real.",
+          "en": "This solution uses S3 Data Lake (correct), Kinesis Analytics (real-time), Redshift Spectrum (batch), but Kinesis Data Firehose doesn't process streams in real-time - it only loads data to S3 with minutes latency. To process 50 million events/hour with latency < 1 second for personalization and fraud detection, Kinesis Data Streams is needed which offers real-time stream processing with low latency. Firehose is suitable for loading data to S3, but not for real-time processing."
         }
       },
       {
         title: {
-          "pt-BR": "DynamoDB com DynamoDB Streams",
-          "en": "DynamoDB with DynamoDB Streams"
+          "pt-BR": "S3 Data Lake + Kinesis Data Streams + Kinesis Analytics + Redshift (cluster dedicado) + Glue para ETL",
+          "en": "S3 Data Lake + Kinesis Data Streams + Kinesis Analytics + Redshift (dedicated cluster) + Glue for ETL"
         },
         correct: false,
         explanation: {
-          "pt-BR": "DynamoDB é um banco NoSQL transacional, não um data lake. DynamoDB Streams processa eventos, mas não é adequado para analytics de 100TB diários. DynamoDB é caro para armazenar 100TB e não oferece analytics batch eficiente. Para analytics de dados grandes de múltiplas fontes, S3 Data Lake é necessário.",
-          "en": "DynamoDB is a transactional NoSQL database, not a data lake. DynamoDB Streams processes events, but isn't suitable for 100TB daily analytics. DynamoDB is expensive for storing 100TB and doesn't offer efficient batch analytics. For large data analytics from multiple sources, S3 Data Lake is needed."
+          "pt-BR": "Esta solução usa Kinesis Data Streams (correto para tempo real), mas Redshift cluster dedicado requer mover dados de S3 para Redshift, o que adiciona custo de armazenamento duplicado e latência. Para 100TB diários, manter dados em S3 e usar Redshift Spectrum para queries SQL é muito mais econômico - você paga apenas por queries executadas, não por armazenamento duplicado. Redshift cluster dedicado é caro para este volume e não é necessário quando Redshift Spectrum pode consultar dados diretamente em S3.",
+          "en": "This solution uses Kinesis Data Streams (correct for real-time), but Redshift dedicated cluster requires moving data from S3 to Redshift, which adds duplicate storage cost and latency. For 100TB daily, keeping data in S3 and using Redshift Spectrum for SQL queries is much more economical - you only pay for executed queries, not duplicate storage. Redshift dedicated cluster is expensive for this volume and not necessary when Redshift Spectrum can query data directly in S3."
         }
       },
       {
         title: {
-          "pt-BR": "ElastiCache com backup em S3",
-          "en": "ElastiCache with S3 backup"
+          "pt-BR": "S3 Data Lake + Kinesis Data Streams + Kinesis Analytics + Redshift Spectrum + Athena para queries ad-hoc",
+          "en": "S3 Data Lake + Kinesis Data Streams + Kinesis Analytics + Redshift Spectrum + Athena for ad-hoc queries"
         },
         correct: false,
         explanation: {
-          "pt-BR": "ElastiCache é um serviço de cache em memória, não um data lake. Não é adequado para armazenar 100TB diários, não processa streams, não oferece analytics em tempo real ou batch. ElastiCache é para cache de dados acessados frequentemente, não para analytics de grandes volumes de dados de múltiplas fontes.",
-          "en": "ElastiCache is an in-memory caching service, not a data lake. It isn't suitable for storing 100TB daily, doesn't process streams, doesn't offer real-time or batch analytics. ElastiCache is for caching frequently accessed data, not for analytics of large data volumes from multiple sources."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (S3 Data Lake, Kinesis Data Streams para tempo real, Kinesis Analytics, Redshift Spectrum para batch), mas adiciona Athena que é redundante. Athena e Redshift Spectrum ambos consultam dados em S3 usando SQL, mas Redshift Spectrum é mais adequado para queries analíticas complexas e workloads batch, enquanto Athena é para queries ad-hoc exploratórias. Para uma arquitetura de data lake completa, Redshift Spectrum é suficiente para analytics batch, e Athena adiciona complexidade e custo desnecessários. A solução correta é S3 + Kinesis Data Streams + Kinesis Analytics + Redshift Spectrum, sem Athena.",
+          "en": "This solution includes all correct components (S3 Data Lake, Kinesis Data Streams for real-time, Kinesis Analytics, Redshift Spectrum for batch), but adds Athena which is redundant. Both Athena and Redshift Spectrum query data in S3 using SQL, but Redshift Spectrum is more suitable for complex analytical queries and batch workloads, while Athena is for exploratory ad-hoc queries. For a complete data lake architecture, Redshift Spectrum is sufficient for batch analytics, and Athena adds unnecessary complexity and cost. The correct solution is S3 + Kinesis Data Streams + Kinesis Analytics + Redshift Spectrum, without Athena."
         }
       }
     ],
@@ -346,8 +346,8 @@ export const solutionsArchitectQuestions = [
       "en": "Advanced Serverless - Event-Driven Architecture"
     },
     description: {
-      "pt-BR": "Uma aplicação de IoT processa 1 milhão de eventos por minuto de sensores distribuídos globalmente. Cada evento precisa ser validado, transformado, armazenado, e pode disparar ações em tempo real. Alguns eventos são críticos e precisam de processamento garantido. Qual arquitetura serverless é mais robusta?",
-      "en": "An IoT application processes 1 million events per minute from globally distributed sensors. Each event needs to be validated, transformed, stored, and can trigger real-time actions. Some events are critical and need guaranteed processing. Which serverless architecture is most robust?"
+      "pt-BR": "Uma aplicação de IoT industrial processa 1 milhão de eventos por minuto de 500.000 sensores distribuídos globalmente em 50 países. Cada evento contém telemetria de sensores (temperatura, pressão, vibração), metadados de localização, timestamp, e status do dispositivo. Os eventos precisam ser validados (schema validation, range checks), transformados (normalização, enriquecimento com dados de referência), armazenados em banco de dados para análise histórica, e podem disparar ações em tempo real (alertas críticos, acionamento de atuadores). Alguns eventos são críticos (anomalias de segurança, falhas de equipamento) e precisam de processamento garantido com retry automático e Dead Letter Queue. A aplicação deve tolerar falhas de dispositivos individuais, latência variável de rede, e picos de tráfego durante manutenções programadas. Qual arquitetura serverless é mais robusta considerando throughput alto, processamento garantido, e resiliência a falhas?",
+      "en": "An industrial IoT application processes 1 million events per minute from 500,000 sensors distributed globally across 50 countries. Each event contains sensor telemetry (temperature, pressure, vibration), location metadata, timestamp, and device status. Events need to be validated (schema validation, range checks), transformed (normalization, enrichment with reference data), stored in database for historical analysis, and can trigger real-time actions (critical alerts, actuator activation). Some events are critical (security anomalies, equipment failures) and need guaranteed processing with automatic retry and Dead Letter Queue. The application must tolerate individual device failures, variable network latency, and traffic spikes during scheduled maintenance. Which serverless architecture is most robust considering high throughput, guaranteed processing, and failure resilience?"
     },
     question: {
       "pt-BR": "",
@@ -359,13 +359,13 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "IoT Core + SQS + Lambda + DynamoDB",
-          "en": "IoT Core + SQS + Lambda + DynamoDB"
+          "pt-BR": "IoT Core + Kinesis Data Streams + Lambda (com retry automático) + DynamoDB + SNS para eventos críticos",
+          "en": "IoT Core + Kinesis Data Streams + Lambda (with automatic retry) + DynamoDB + SNS for critical events"
         },
         correct: false,
         explanation: {
-          "pt-BR": "SQS não escala para 1 milhão de eventos por minuto: tem limite de throughput muito menor que Kinesis. Para processar 1 milhão de eventos/minuto de sensores IoT distribuídos globalmente, é necessário Kinesis Data Streams que oferece alta throughput e processamento em tempo real. SQS é adequado para volumes menores.",
-          "en": "SQS doesn't scale to 1 million events per minute: has much lower throughput limit than Kinesis. To process 1 million events/minute from globally distributed IoT sensors, Kinesis Data Streams is needed which offers high throughput and real-time processing. SQS is suitable for smaller volumes."
+          "pt-BR": "Esta solução usa Kinesis Data Streams (correto para alta throughput) e Lambda com retry automático, mas falta Dead Letter Queue (DLQ) para capturar eventos críticos que falharam após múltiplas tentativas. Para eventos críticos de segurança e falhas de equipamento que precisam de processamento garantido, DLQ é essencial para identificar padrões de falha, reprocessar eventos críticos manualmente, e evitar perda de dados importantes. Retry automático sozinho não garante que eventos críticos sejam processados - se um evento falhar após todas as tentativas, ele é perdido sem DLQ.",
+          "en": "This solution uses Kinesis Data Streams (correct for high throughput) and Lambda with automatic retry, but lacks Dead Letter Queue (DLQ) to capture critical events that failed after multiple attempts. For critical security and equipment failure events that need guaranteed processing, DLQ is essential to identify failure patterns, manually reprocess critical events, and avoid loss of important data. Automatic retry alone doesn't guarantee critical events are processed - if an event fails after all attempts, it's lost without DLQ."
         }
       },
       {
@@ -381,24 +381,24 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas Lambda com API Gateway",
-          "en": "Only Lambda with API Gateway"
+          "pt-BR": "IoT Core + Kinesis Data Firehose + Lambda + DynamoDB + SNS para eventos críticos + DLQ",
+          "en": "IoT Core + Kinesis Data Firehose + Lambda + DynamoDB + SNS for critical events + DLQ"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Lambda com API Gateway não processa IoT Core diretamente: IoT Core precisa de integração com Kinesis ou SQS para processar eventos de sensores. API Gateway é para APIs REST, não para streaming de eventos IoT em alta escala. Para 1 milhão de eventos/minuto, é necessário Kinesis Data Streams.",
-          "en": "Lambda with API Gateway doesn't process IoT Core directly: IoT Core needs integration with Kinesis or SQS to process sensor events. API Gateway is for REST APIs, not for high-scale IoT event streaming. For 1 million events/minute, Kinesis Data Streams is needed."
+          "pt-BR": "Esta solução inclui DLQ (correto), mas usa Kinesis Data Firehose que não processa streams em tempo real - Firehose apenas carrega dados em S3 com latência de minutos. Para processar 1 milhão de eventos/minuto com ações em tempo real (alertas críticos, acionamento de atuadores), é necessário Kinesis Data Streams que oferece processamento de streams com latência de segundos. Firehose é adequado para carregar dados históricos em S3, mas não para processamento em tempo real que requer baixa latência.",
+          "en": "This solution includes DLQ (correct), but uses Kinesis Data Firehose which doesn't process streams in real-time - Firehose only loads data to S3 with minutes latency. To process 1 million events/minute with real-time actions (critical alerts, actuator activation), Kinesis Data Streams is needed which offers stream processing with seconds latency. Firehose is suitable for loading historical data to S3, but not for real-time processing that requires low latency."
         }
       },
       {
         title: {
-          "pt-BR": "S3 + EventBridge + Step Functions",
-          "en": "S3 + EventBridge + Step Functions"
+          "pt-BR": "IoT Core + Kinesis Data Streams + Lambda (com DLQ) + DynamoDB + SNS para eventos críticos + Step Functions para orquestração",
+          "en": "IoT Core + Kinesis Data Streams + Lambda (with DLQ) + DynamoDB + SNS for critical events + Step Functions for orchestration"
         },
         correct: false,
         explanation: {
-          "pt-BR": "S3 não processa eventos em tempo real (é armazenamento), EventBridge não processa 1 milhão de eventos/minuto (tem limites de throughput), e Step Functions orquestra workflows mas não processa streams de IoT. Para processar 1 milhão de eventos/minuto de sensores IoT em tempo real, é necessário Kinesis Data Streams.",
-          "en": "S3 doesn't process events in real-time (it's storage), EventBridge doesn't process 1 million events/minute (has throughput limits), and Step Functions orchestrates workflows but doesn't process IoT streams. To process 1 million events/minute from IoT sensors in real-time, Kinesis Data Streams is needed."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (IoT Core, Kinesis Data Streams, Lambda com DLQ, DynamoDB, SNS), mas adiciona Step Functions desnecessariamente. Step Functions é para orquestração de workflows complexos com múltiplas etapas, não para processamento de streams de IoT em tempo real. Para processar 1 milhão de eventos/minuto de sensores, Kinesis Data Streams + Lambda é suficiente - Step Functions adiciona latência e custo desnecessários. A solução correta é IoT Core + Kinesis Data Streams + Lambda (com DLQ) + DynamoDB + SNS, sem Step Functions.",
+          "en": "This solution includes all correct components (IoT Core, Kinesis Data Streams, Lambda with DLQ, DynamoDB, SNS), but unnecessarily adds Step Functions. Step Functions is for orchestrating complex multi-step workflows, not for real-time IoT stream processing. To process 1 million events/minute from sensors, Kinesis Data Streams + Lambda is sufficient - Step Functions adds unnecessary latency and cost. The correct solution is IoT Core + Kinesis Data Streams + Lambda (with DLQ) + DynamoDB + SNS, without Step Functions."
         }
       }
     ],
@@ -414,8 +414,8 @@ export const solutionsArchitectQuestions = [
       "en": "Hybrid Architecture - Advanced Connectivity"
     },
     description: {
-      "pt-BR": "Uma empresa multinacional tem data centers em 5 países e precisa conectar todos à AWS com redundância, baixa latência, e compliance com regulamentações locais. Alguns workloads precisam permanecer on-premises. Qual solução AWS oferece a melhor conectividade híbrida?",
-      "en": "A multinational company has data centers in 5 countries and needs to connect all to AWS with redundancy, low latency, and compliance with local regulations. Some workloads need to remain on-premises. Which AWS solution offers the best hybrid connectivity?"
+      "pt-BR": "Uma empresa multinacional de manufatura tem data centers críticos em 5 países (EUA, Alemanha, Japão, Brasil, Índia) processando dados sensíveis de produção industrial. A empresa precisa conectar todos os data centers à AWS com redundância (99.99% disponibilidade), baixa latência (< 50ms para aplicações críticas), e compliance com regulamentações locais (GDPR na Europa, LGPD no Brasil, etc.). Alguns workloads críticos de controle industrial precisam permanecer on-premises por requisitos de latência ultra-baixa (< 10ms) e compliance regulatório. A empresa processa 10TB de dados diários entre on-premises e AWS, com picos de 500GB/hora durante operações de manufatura. A conectividade deve tolerar falhas de link, ter failover automático, e suportar múltiplos protocolos (TCP, UDP, HTTP/HTTPS). Qual solução AWS oferece a melhor conectividade híbrida considerando redundância, baixa latência, compliance e failover automático?",
+      "en": "A multinational manufacturing company has critical data centers in 5 countries (USA, Germany, Japan, Brazil, India) processing sensitive industrial production data. The company needs to connect all data centers to AWS with redundancy (99.99% availability), low latency (< 50ms for critical applications), and compliance with local regulations (GDPR in Europe, LGPD in Brazil, etc.). Some critical industrial control workloads need to remain on-premises due to ultra-low latency requirements (< 10ms) and regulatory compliance. The company processes 10TB of daily data between on-premises and AWS, with peaks of 500GB/hour during manufacturing operations. Connectivity must tolerate link failures, have automatic failover, and support multiple protocols (TCP, UDP, HTTP/HTTPS). Which AWS solution offers the best hybrid connectivity considering redundancy, low latency, compliance and automatic failover?"
     },
     question: {
       "pt-BR": "",
@@ -425,6 +425,28 @@ export const solutionsArchitectQuestions = [
     answered: false,
     correct: false,
     alternatives: [
+      {
+        title: {
+          "pt-BR": "VPN Site-to-Site com múltiplos links + AWS Outposts para workloads críticos",
+          "en": "Site-to-Site VPN with multiple links + AWS Outposts for critical workloads"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa Outposts (correto para workloads on-premises), mas VPN Site-to-Site mesmo com múltiplos links não oferece baixa latência garantida (< 50ms) nem largura de banda dedicada - depende da internet pública com latência variável. Para processar 10TB diários com picos de 500GB/hora e latência < 50ms para aplicações críticas, Direct Connect é necessário para oferecer conexão dedicada de baixa latência. VPN pode ser usado como backup, mas não como solução principal para requisitos de baixa latência e alta throughput.",
+          "en": "This solution uses Outposts (correct for on-premises workloads), but Site-to-Site VPN even with multiple links doesn't offer guaranteed low latency (< 50ms) nor dedicated bandwidth - depends on public internet with variable latency. To process 10TB daily with peaks of 500GB/hour and latency < 50ms for critical applications, Direct Connect is needed to offer dedicated low-latency connection. VPN can be used as backup, but not as primary solution for low latency and high throughput requirements."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Direct Connect sem redundância + AWS Outposts para workloads críticos",
+          "en": "AWS Direct Connect without redundancy + AWS Outposts for critical workloads"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa Direct Connect e Outposts (componentes corretos), mas Direct Connect sem redundância é um ponto único de falha crítico. Para uma empresa multinacional com data centers em 5 países processando dados críticos de manufatura, se a conexão Direct Connect falhar, toda a conectividade é perdida. Para 99.99% de disponibilidade, redundância é essencial - VPN como backup garante continuidade em caso de falha do Direct Connect, permitindo failover automático e mantendo conectividade mesmo durante manutenções ou falhas de link.",
+          "en": "This solution uses Direct Connect and Outposts (correct components), but Direct Connect without redundancy is a critical single point of failure. For a multinational company with data centers in 5 countries processing critical manufacturing data, if the Direct Connect connection fails, all connectivity is lost. For 99.99% availability, redundancy is essential - VPN as backup ensures continuity in case of Direct Connect failure, allowing automatic failover and maintaining connectivity even during maintenance or link failures."
+        }
+      },
       {
         title: {
           "pt-BR": "AWS Direct Connect + VPN como backup + AWS Outposts para workloads críticos",
@@ -438,35 +460,13 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas VPN Site-to-Site",
-          "en": "Only Site-to-Site VPN"
+          "pt-BR": "AWS Direct Connect + VPN como backup + AWS Outposts para workloads críticos + Transit Gateway para conectividade centralizada",
+          "en": "AWS Direct Connect + VPN as backup + AWS Outposts for critical workloads + Transit Gateway for centralized connectivity"
         },
         correct: false,
         explanation: {
-          "pt-BR": "VPN Site-to-Site sozinha não oferece baixa latência garantida (depende da internet pública), não oferece largura de banda dedicada, e não executa workloads AWS on-premises para compliance local. Para uma empresa multinacional com requisitos de baixa latência e compliance, é necessário Direct Connect e Outposts.",
-          "en": "Site-to-Site VPN alone doesn't offer guaranteed low latency (depends on public internet), doesn't offer dedicated bandwidth, and doesn't run AWS workloads on-premises for local compliance. For a multinational company with low latency and compliance requirements, Direct Connect and Outposts are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "AWS Direct Connect sem redundância",
-          "en": "AWS Direct Connect without redundancy"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Direct Connect sem redundância é um ponto único de falha: se a conexão falhar, toda a conectividade entre data centers e AWS é perdida. Para uma empresa multinacional com data centers críticos em 5 países, redundância é essencial. VPN como backup garante continuidade em caso de falha do Direct Connect.",
-          "en": "Direct Connect without redundancy is a single point of failure: if the connection fails, all connectivity between data centers and AWS is lost. For a multinational company with critical data centers in 5 countries, redundancy is essential. VPN as backup ensures continuity in case of Direct Connect failure."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Internet Gateway com criptografia",
-          "en": "Internet Gateway with encryption"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Internet Gateway é para conectar VPCs à internet pública, não conecta data centers on-premises à AWS. Não oferece baixa latência garantida, não oferece largura de banda dedicada, e não atende requisitos de conectividade híbrida. Para conectar data centers on-premises à AWS, é necessário Direct Connect ou VPN.",
-          "en": "Internet Gateway is for connecting VPCs to public internet, doesn't connect on-premises data centers to AWS. Doesn't offer guaranteed low latency, doesn't offer dedicated bandwidth, and doesn't meet hybrid connectivity requirements. To connect on-premises data centers to AWS, Direct Connect or VPN is needed."
+          "pt-BR": "Esta solução inclui Direct Connect, VPN como backup e Outposts (componentes corretos), mas adiciona Transit Gateway que é para conectar múltiplas VPCs, não para conectar data centers on-premises à AWS. Transit Gateway não melhora conectividade híbrida entre on-premises e AWS - ele é para roteamento entre VPCs. Para conectar data centers on-premises à AWS, Direct Connect e VPN são suficientes. Transit Gateway adiciona complexidade e custo desnecessários para este caso de uso. A solução correta é Direct Connect + VPN como backup + Outposts, sem Transit Gateway.",
+          "en": "This solution includes Direct Connect, VPN as backup and Outposts (correct components), but adds Transit Gateway which is for connecting multiple VPCs, not for connecting on-premises data centers to AWS. Transit Gateway doesn't improve hybrid connectivity between on-premises and AWS - it's for routing between VPCs. To connect on-premises data centers to AWS, Direct Connect and VPN are sufficient. Transit Gateway adds unnecessary complexity and cost for this use case. The correct solution is Direct Connect + VPN as backup + Outposts, without Transit Gateway."
         }
       }
     ],
@@ -482,8 +482,8 @@ export const solutionsArchitectQuestions = [
       "en": "Cost Optimization - Advanced FinOps"
     },
     description: {
-      "pt-BR": "Uma empresa tem 500+ contas AWS com recursos distribuídos globalmente. O gasto mensal é de $2M e há desperdício de 30% em recursos subutilizados. A empresa precisa de visibilidade granular, automação de otimização, e controle de orçamento por departamento. Qual solução AWS é mais completa?",
-      "en": "A company has 500+ AWS accounts with resources distributed globally. Monthly spending is $2M with 30% waste in underutilized resources. The company needs granular visibility, optimization automation, and budget control by department. Which AWS solution is most complete?"
+      "pt-BR": "Uma empresa multinacional tem 500+ contas AWS organizadas em 50+ OUs (Organizational Units) distribuídas globalmente em 12 regiões. O gasto mensal total é de $2M com desperdício identificado de 30% ($600K/mês) em recursos subutilizados: instâncias EC2 com utilização média de 15%, volumes EBS não anexados, snapshots antigos, Load Balancers sem tráfego, e instâncias RDS subdimensionadas. A empresa precisa de visibilidade granular por departamento, região, projeto e tag, automação de otimização (downsizing automático, terminação de recursos ociosos), controle de orçamento com alertas proativos, e recomendações de otimização baseadas em machine learning. A solução deve integrar com processos de aprovação existentes e suportar múltiplas moedas. Qual solução AWS é mais completa considerando FinOps, automação e governança de custos?",
+      "en": "A multinational company has 500+ AWS accounts organized in 50+ OUs (Organizational Units) distributed globally across 12 regions. Total monthly spending is $2M with identified waste of 30% ($600K/month) in underutilized resources: EC2 instances with 15% average utilization, unattached EBS volumes, old snapshots, Load Balancers without traffic, and undersized RDS instances. The company needs granular visibility by department, region, project and tag, optimization automation (automatic downsizing, termination of idle resources), budget control with proactive alerts, and optimization recommendations based on machine learning. The solution must integrate with existing approval processes and support multiple currencies. Which AWS solution is most complete considering FinOps, automation and cost governance?"
     },
     question: {
       "pt-BR": "",
@@ -495,13 +495,35 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS Cost Explorer + Trusted Advisor + Budgets",
-          "en": "AWS Cost Explorer + Trusted Advisor + Budgets"
+          "pt-BR": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer + Lambda para automação + Service Catalog",
+          "en": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer + Lambda for automation + Service Catalog"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Esta combinação fornece visibilidade (Cost Explorer), recomendações (Trusted Advisor) e controle de orçamento (Budgets), mas não automatiza otimizações. Para 500+ contas com 30% de desperdício, é necessário automação com Lambda para aplicar otimizações automaticamente e Compute Optimizer para recomendações de instâncias. Sem automação, otimizações ficam manuais.",
-          "en": "This combination provides visibility (Cost Explorer), recommendations (Trusted Advisor) and budget control (Budgets), but doesn't automate optimizations. For 500+ accounts with 30% waste, automation with Lambda is needed to automatically apply optimizations and Compute Optimizer for instance recommendations. Without automation, optimizations remain manual."
+          "pt-BR": "Esta solução inclui todos os componentes essenciais para FinOps (Organizations, Cost Explorer, Budgets, Trusted Advisor, Compute Optimizer, Lambda), mas adiciona Service Catalog que não é necessário para otimização de custos. Service Catalog é para padronização de recursos e governança, não para identificar ou otimizar recursos subutilizados. Para uma empresa com 30% de desperdício ($600K/mês), focar em otimização de custos é prioritário - Service Catalog adiciona complexidade sem contribuir diretamente para redução de custos. A solução correta é Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer + Lambda, sem Service Catalog.",
+          "en": "This solution includes all essential components for FinOps (Organizations, Cost Explorer, Budgets, Trusted Advisor, Compute Optimizer, Lambda), but adds Service Catalog which isn't necessary for cost optimization. Service Catalog is for resource standardization and governance, not for identifying or optimizing underutilized resources. For a company with 30% waste ($600K/month), focusing on cost optimization is priority - Service Catalog adds complexity without directly contributing to cost reduction. The correct solution is Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer + Lambda, without Service Catalog."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Lambda para automação (sem Compute Optimizer)",
+          "en": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Lambda for automation (without Compute Optimizer)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui Organizations, Cost Explorer, Budgets, Trusted Advisor e Lambda (componentes corretos), mas falta Compute Optimizer que é essencial para recomendações de otimização de instâncias baseadas em machine learning. Para identificar instâncias EC2 com 15% de utilização e recomendar downsizing, e identificar instâncias RDS subdimensionadas, Compute Optimizer analisa padrões de uso históricos e oferece recomendações específicas. Sem Compute Optimizer, você perderia recomendações automatizadas de otimização de instâncias, deixando de identificar oportunidades de economia significativas.",
+          "en": "This solution includes Organizations, Cost Explorer, Budgets, Trusted Advisor and Lambda (correct components), but lacks Compute Optimizer which is essential for machine learning-based instance optimization recommendations. To identify EC2 instances with 15% utilization and recommend downsizing, and identify undersized RDS instances, Compute Optimizer analyzes historical usage patterns and offers specific recommendations. Without Compute Optimizer, you would miss automated instance optimization recommendations, failing to identify significant savings opportunities."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer (sem automação Lambda)",
+          "en": "AWS Organizations + Cost Explorer + Budgets + Trusted Advisor + Compute Optimizer (without Lambda automation)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os serviços de visibilidade e recomendações (Organizations, Cost Explorer, Budgets, Trusted Advisor, Compute Optimizer), mas falta Lambda para automação de ações de otimização. Para 500+ contas com 30% de desperdício ($600K/mês), automação é essencial: Lambda pode automaticamente aplicar recomendações do Compute Optimizer (downsizing de instâncias), terminar recursos ociosos identificados pelo Trusted Advisor, e executar ações de otimização em escala. Sem automação, todas as otimizações precisariam ser aplicadas manualmente, o que não escala para 500+ contas e deixa desperdício continuar.",
+          "en": "This solution includes all visibility and recommendation services (Organizations, Cost Explorer, Budgets, Trusted Advisor, Compute Optimizer), but lacks Lambda for automation of optimization actions. For 500+ accounts with 30% waste ($600K/month), automation is essential: Lambda can automatically apply Compute Optimizer recommendations (instance downsizing), terminate idle resources identified by Trusted Advisor, and execute optimization actions at scale. Without automation, all optimizations would need to be applied manually, which doesn't scale for 500+ accounts and allows waste to continue."
         }
       },
       {
@@ -513,28 +535,6 @@ export const solutionsArchitectQuestions = [
         explanation: {
           "pt-BR": "Organizations gerencia 500+ contas, Cost Explorer fornece visibilidade granular por departamento, Budgets controla gastos com alertas, Trusted Advisor identifica otimizações, Compute Optimizer recomenda otimizações de instâncias automaticamente, e Lambda automatiza ações de otimização. Esta combinação oferece FinOps completo com automação.",
           "en": "Organizations manages 500+ accounts, Cost Explorer provides granular visibility by department, Budgets controls spending with alerts, Trusted Advisor identifies optimizations, Compute Optimizer automatically recommends instance optimizations, and Lambda automates optimization actions. This combination offers complete FinOps with automation."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas AWS Cost Explorer",
-          "en": "Only AWS Cost Explorer"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Cost Explorer sozinho apenas mostra custos, não identifica otimizações, não controla orçamentos, não gerencia múltiplas contas, não automatiza ações, e não oferece recomendações de otimização. Para uma empresa com 500+ contas e 30% de desperdício, é necessário um conjunto completo de ferramentas com automação.",
-          "en": "Cost Explorer alone only shows costs, doesn't identify optimizations, doesn't control budgets, doesn't manage multiple accounts, doesn't automate actions, and doesn't offer optimization recommendations. For a company with 500+ accounts and 30% waste, a complete set of tools with automation is needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "CloudWatch com métricas customizadas",
-          "en": "CloudWatch with custom metrics"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "CloudWatch monitora métricas de performance, mas não otimiza custos, não identifica recursos subutilizados, não gerencia orçamentos, e não automatiza otimizações. Para FinOps e otimização de custos, é necessário serviços específicos como Cost Explorer, Trusted Advisor, Compute Optimizer e Budgets.",
-          "en": "CloudWatch monitors performance metrics, but doesn't optimize costs, doesn't identify underutilized resources, doesn't manage budgets, and doesn't automate optimizations. For FinOps and cost optimization, specific services like Cost Explorer, Trusted Advisor, Compute Optimizer and Budgets are needed."
         }
       }
     ],
@@ -550,8 +550,8 @@ export const solutionsArchitectQuestions = [
       "en": "Machine Learning Architecture - MLOps"
     },
     description: {
-      "pt-BR": "Uma empresa de fintech precisa implementar um sistema de detecção de fraude em tempo real que processa 10.000 transações por segundo. O modelo ML precisa ser treinado diariamente com novos dados, versionado, e deployado automaticamente. Qual arquitetura AWS suporta melhor este pipeline MLOps?",
-      "en": "A fintech company needs to implement a real-time fraud detection system that processes 10,000 transactions per second. The ML model needs to be trained daily with new data, versioned, and deployed automatically. Which AWS architecture best supports this MLOps pipeline?"
+      "pt-BR": "Uma empresa de fintech precisa implementar um sistema de detecção de fraude em tempo real que processa 10.000 transações por segundo (864 milhões de transações/dia) com latência de inferência < 100ms. O modelo ML de deep learning (TensorFlow) precisa ser treinado diariamente com 50GB de novos dados transacionais, versionado com controle de linha de base, A/B testado em produção com 5% do tráfego, e deployado automaticamente apenas se o novo modelo superar o modelo atual em métricas de precisão (F1-score > 0.95). O pipeline MLOps deve suportar rollback automático se o modelo em produção degradar, monitoramento de drift de dados, e retreino automático quando drift é detectado. A arquitetura deve processar dados de múltiplas fontes (APIs REST, streams Kinesis, bancos de dados), suportar múltiplos frameworks (TensorFlow, PyTorch), e manter histórico completo de experimentos. Qual arquitetura AWS suporta melhor este pipeline MLOps considerando automação completa, versionamento, A/B testing e monitoramento?",
+      "en": "A fintech company needs to implement a real-time fraud detection system that processes 10,000 transactions per second (864 million transactions/day) with inference latency < 100ms. The deep learning ML model (TensorFlow) needs to be trained daily with 50GB of new transactional data, versioned with baseline control, A/B tested in production with 5% of traffic, and deployed automatically only if the new model outperforms the current model on precision metrics (F1-score > 0.95). The MLOps pipeline must support automatic rollback if the production model degrades, data drift monitoring, and automatic retraining when drift is detected. The architecture must process data from multiple sources (REST APIs, Kinesis streams, databases), support multiple frameworks (TensorFlow, PyTorch), and maintain complete experiment history. Which AWS architecture best supports this MLOps pipeline considering complete automation, versioning, A/B testing and monitoring?"
     },
     question: {
       "pt-BR": "",
@@ -574,35 +574,35 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas EC2 com TensorFlow",
-          "en": "Only EC2 with TensorFlow"
+          "pt-BR": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Model Registry para versionamento",
+          "en": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Model Registry for versioning"
         },
         correct: false,
         explanation: {
-          "pt-BR": "EC2 com TensorFlow requer muito gerenciamento: provisionamento de instâncias, configuração de frameworks, gerenciamento de treinamento, versionamento manual de modelos, deployment manual, e não escala automaticamente para 10.000 transações/segundo. SageMaker oferece tudo isso de forma gerenciada com automação completa.",
-          "en": "EC2 with TensorFlow requires much management: instance provisioning, framework configuration, training management, manual model versioning, manual deployment, and doesn't scale automatically to 10,000 transactions/second. SageMaker offers all of this in a managed way with complete automation."
+          "pt-BR": "Esta solução inclui SageMaker, Kinesis, Lambda, API Gateway, S3, CodePipeline e Model Registry (componentes corretos), mas Model Registry sozinho não oferece A/B testing em produção nem rollback automático. Para A/B testar modelos com 5% do tráfego e fazer rollback automático se o modelo degradar, é necessário SageMaker Endpoint Configurations com traffic splitting e CloudWatch alarms para monitorar métricas de performance. Model Registry gerencia versões, mas não gerencia deployment com A/B testing e rollback automático.",
+          "en": "This solution includes SageMaker, Kinesis, Lambda, API Gateway, S3, CodePipeline and Model Registry (correct components), but Model Registry alone doesn't offer A/B testing in production nor automatic rollback. To A/B test models with 5% of traffic and automatically rollback if model degrades, SageMaker Endpoint Configurations with traffic splitting and CloudWatch alarms to monitor performance metrics are needed. Model Registry manages versions, but doesn't manage deployment with A/B testing and automatic rollback."
         }
       },
       {
         title: {
-          "pt-BR": "SageMaker sem automação",
-          "en": "SageMaker without automation"
+          "pt-BR": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Endpoint Configurations com traffic splitting",
+          "en": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Endpoint Configurations with traffic splitting"
         },
         correct: false,
         explanation: {
-          "pt-BR": "SageMaker sem automação não atende requisitos: o modelo precisa ser treinado diariamente com novos dados e deployado automaticamente. Sem CodePipeline ou automação, você teria que fazer treinamento e deployment manualmente diariamente, o que não escala e é propenso a erros. Automação é essencial para MLOps.",
-          "en": "SageMaker without automation doesn't meet requirements: the model needs to be trained daily with new data and deployed automatically. Without CodePipeline or automation, you would have to do training and deployment manually daily, which doesn't scale and is error-prone. Automation is essential for MLOps."
+          "pt-BR": "Esta solução inclui SageMaker, Kinesis, Lambda, API Gateway, S3, CodePipeline e Endpoint Configurations com traffic splitting (componentes corretos), mas falta monitoramento de drift de dados e retreino automático quando drift é detectado. Para detectar drift e retreinar automaticamente, é necessário SageMaker Model Monitor que monitora dados de entrada e saída do modelo, detecta drift, e pode disparar retreino automático via EventBridge. Sem Model Monitor, você não detectaria mudanças nos padrões de dados que degradam a performance do modelo ao longo do tempo.",
+          "en": "This solution includes SageMaker, Kinesis, Lambda, API Gateway, S3, CodePipeline and Endpoint Configurations with traffic splitting (correct components), but lacks data drift monitoring and automatic retraining when drift is detected. To detect drift and automatically retrain, SageMaker Model Monitor is needed which monitors model input and output data, detects drift, and can trigger automatic retraining via EventBridge. Without Model Monitor, you wouldn't detect changes in data patterns that degrade model performance over time."
         }
       },
       {
         title: {
-          "pt-BR": "Lambda com modelo estático",
-          "en": "Lambda with static model"
+          "pt-BR": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Model Registry + Model Monitor + Endpoint Configurations",
+          "en": "SageMaker + Kinesis Data Streams + Lambda + API Gateway + S3 + CodePipeline + SageMaker Model Registry + Model Monitor + Endpoint Configurations"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Lambda com modelo estático não permite retreino diário com novos dados, não versiona modelos, não escala automaticamente para 10.000 transações/segundo, e não oferece pipeline MLOps. Para detecção de fraude que precisa de retreino diário e deployment automático, SageMaker com automação é necessário.",
-          "en": "Lambda with static model doesn't allow daily retraining with new data, doesn't version models, doesn't scale automatically to 10,000 transactions/second, and doesn't offer MLOps pipeline. For fraud detection that needs daily retraining and automatic deployment, SageMaker with automation is needed."
+          "pt-BR": "Esta solução inclui todos os componentes do SageMaker (Model Registry, Model Monitor, Endpoint Configurations), mas adiciona componentes redundantes ou desnecessários. Model Registry e Endpoint Configurations podem ser suficientes - Model Registry gerencia versionamento e aprovação de modelos, enquanto Endpoint Configurations gerencia deployment com A/B testing. Model Monitor é útil mas pode ser configurado separadamente. A solução correta é SageMaker + Kinesis + Lambda + API Gateway + S3 + CodePipeline, que já inclui as funcionalidades essenciais de MLOps do SageMaker.",
+          "en": "This solution includes all SageMaker components (Model Registry, Model Monitor, Endpoint Configurations), but adds redundant or unnecessary components. Model Registry and Endpoint Configurations may be sufficient - Model Registry manages versioning and model approval, while Endpoint Configurations manages deployment with A/B testing. Model Monitor is useful but can be configured separately. The correct solution is SageMaker + Kinesis + Lambda + API Gateway + S3 + CodePipeline, which already includes essential SageMaker MLOps functionality."
         }
       }
     ],
@@ -618,8 +618,8 @@ export const solutionsArchitectQuestions = [
       "en": "Observability Architecture - Distributed Tracing"
     },
     description: {
-      "pt-BR": "Uma aplicação distribuída com 50+ microserviços está enfrentando problemas de performance difíceis de diagnosticar. As requisições passam por múltiplos serviços e a latência varia entre 100ms e 30s. A equipe precisa de visibilidade completa do fluxo de requisições e métricas de negócio. Qual solução AWS oferece observabilidade completa?",
-      "en": "A distributed application with 50+ microservices is facing performance issues that are difficult to diagnose. Requests pass through multiple services and latency varies between 100ms and 30s. The team needs complete visibility of request flow and business metrics. Which AWS solution offers complete observability?"
+      "pt-BR": "Uma aplicação distribuída crítica com 50+ microserviços em produção está enfrentando problemas de performance intermitentes difíceis de diagnosticar. As requisições passam por 8-12 serviços em média (API Gateway → Lambda → SQS → Lambda → DynamoDB → Lambda → SNS → Lambda → RDS), e a latência P95 varia entre 100ms e 30s de forma imprevisível. Durante picos de tráfego (10.000 req/s), alguns serviços apresentam timeouts, outros têm alta latência, e a equipe não consegue identificar qual serviço está causando o gargalo. A aplicação processa transações financeiras críticas e precisa de observabilidade completa: logs centralizados de todos os serviços, métricas de performance (latência, throughput, erro rate), traces distribuídos mostrando o caminho completo de cada requisição, alertas proativos quando métricas excedem thresholds, dashboards em tempo real, e métricas de negócio customizadas (transações processadas, receita por minuto). A equipe precisa identificar rapidamente qual serviço está causando latência de 30s e correlacionar logs entre serviços para debugging. Qual solução AWS oferece observabilidade completa considerando logs, métricas, traces, alertas e dashboards?",
+      "en": "A critical distributed application with 50+ microservices in production is facing intermittent performance issues that are difficult to diagnose. Requests pass through 8-12 services on average (API Gateway → Lambda → SQS → Lambda → DynamoDB → Lambda → SNS → Lambda → RDS), and P95 latency varies unpredictably between 100ms and 30s. During traffic peaks (10,000 req/s), some services experience timeouts, others have high latency, and the team cannot identify which service is causing the bottleneck. The application processes critical financial transactions and needs complete observability: centralized logs from all services, performance metrics (latency, throughput, error rate), distributed traces showing complete path of each request, proactive alerts when metrics exceed thresholds, real-time dashboards, and custom business metrics (processed transactions, revenue per minute). The team needs to quickly identify which service is causing 30s latency and correlate logs between services for debugging. Which AWS solution offers complete observability considering logs, metrics, traces, alerts and dashboards?"
     },
     question: {
       "pt-BR": "",
@@ -631,8 +631,19 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "CloudWatch + X-Ray + CloudWatch Insights + Custom Metrics",
-          "en": "CloudWatch + X-Ray + CloudWatch Insights + Custom Metrics"
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms (sem Dashboards)",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms (without Dashboards)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui Logs, Metrics, X-Ray, Insights e Alarms (componentes corretos), mas falta CloudWatch Dashboards que são essenciais para visualização em tempo real de métricas de múltiplos serviços. Para uma equipe que precisa identificar rapidamente problemas de performance durante picos de tráfego (10.000 req/s), dashboards oferecem visão consolidada de latência, throughput e erro rate de todos os 50+ microserviços em uma única tela. Sem dashboards, a equipe precisaria consultar métricas individualmente, tornando diagnóstico muito mais lento.",
+          "en": "This solution includes Logs, Metrics, X-Ray, Insights and Alarms (correct components), but lacks CloudWatch Dashboards which are essential for real-time visualization of metrics from multiple services. For a team that needs to quickly identify performance issues during traffic peaks (10,000 req/s), dashboards offer consolidated view of latency, throughput and error rate from all 50+ microservices in a single screen. Without dashboards, the team would need to consult metrics individually, making diagnosis much slower."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms + CloudWatch Dashboards + Custom Metrics",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms + CloudWatch Dashboards + Custom Metrics"
         },
         correct: true,
         explanation: {
@@ -642,35 +653,24 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas CloudWatch Logs",
-          "en": "Only CloudWatch Logs"
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Dashboards (sem Alarms)",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Dashboards (without Alarms)"
         },
         correct: false,
         explanation: {
-          "pt-BR": "CloudWatch Logs sozinho não mostra correlação entre serviços, não rastreia requisições através de múltiplos microserviços, não mostra onde está a latência (100ms vs 30s), e não oferece métricas de negócio. Para diagnosticar problemas de performance em uma aplicação distribuída, X-Ray é essencial para rastreamento distribuído.",
-          "en": "CloudWatch Logs alone doesn't show correlation between services, doesn't trace requests across multiple microservices, doesn't show where latency is (100ms vs 30s), and doesn't offer business metrics. To diagnose performance issues in a distributed application, X-Ray is essential for distributed tracing."
+          "pt-BR": "Esta solução inclui Logs, Metrics, X-Ray, Insights e Dashboards (componentes corretos), mas falta CloudWatch Alarms que são essenciais para alertas proativos quando métricas excedem thresholds. Para uma aplicação crítica que processa transações financeiras, se latência P95 exceder 5s ou erro rate exceder 1%, a equipe precisa ser notificada imediatamente. Sem Alarms, problemas só seriam detectados quando alguém verificar dashboards manualmente, o que pode levar a perda de receita e experiência ruim do usuário.",
+          "en": "This solution includes Logs, Metrics, X-Ray, Insights and Dashboards (correct components), but lacks CloudWatch Alarms which are essential for proactive alerts when metrics exceed thresholds. For a critical application processing financial transactions, if P95 latency exceeds 5s or error rate exceeds 1%, the team needs to be notified immediately. Without Alarms, problems would only be detected when someone manually checks dashboards, which can lead to revenue loss and poor user experience."
         }
       },
       {
         title: {
-          "pt-BR": "X-Ray sem CloudWatch",
-          "en": "X-Ray without CloudWatch"
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms + CloudWatch Dashboards + Prometheus para métricas adicionais",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Insights + CloudWatch Alarms + CloudWatch Dashboards + Prometheus for additional metrics"
         },
         correct: false,
         explanation: {
-          "pt-BR": "X-Ray mostra rastreamento de requisições, mas sem CloudWatch você perde métricas de performance, logs detalhados, e capacidade de fazer queries complexas nos logs. Para observabilidade completa de uma aplicação distribuída com 50+ microserviços, é necessário combinar X-Ray (rastreamento) com CloudWatch (métricas e logs).",
-          "en": "X-Ray shows request tracing, but without CloudWatch you lose performance metrics, detailed logs, and ability to do complex queries on logs. For complete observability of a distributed application with 50+ microservices, combining X-Ray (tracing) with CloudWatch (metrics and logs) is needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas métricas de aplicação customizadas",
-          "en": "Only custom application metrics"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Métricas customizadas sozinhas não mostram o fluxo de requisições através de múltiplos serviços, não rastreiam onde a latência ocorre, não correlacionam logs entre serviços, e não oferecem visibilidade completa do sistema distribuído. Para diagnosticar problemas de performance em microserviços, X-Ray e CloudWatch são necessários.",
-          "en": "Custom metrics alone don't show request flow across multiple services, don't trace where latency occurs, don't correlate logs between services, and don't offer complete visibility of the distributed system. To diagnose performance issues in microservices, X-Ray and CloudWatch are needed."
+          "pt-BR": "Esta solução inclui todos os componentes essenciais do CloudWatch (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), mas adiciona Prometheus desnecessariamente. CloudWatch Metrics já oferece métricas customizadas e suporta métricas de negócio via PutMetricData API. Prometheus adiciona complexidade (requer servidor Prometheus, configuração de scraping, integração com CloudWatch), custo adicional, e não é necessário quando CloudWatch já oferece todas as funcionalidades necessárias. Para observabilidade completa de aplicações AWS, CloudWatch é suficiente - Prometheus é redundante.",
+          "en": "This solution includes all essential CloudWatch components (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), but unnecessarily adds Prometheus. CloudWatch Metrics already offers custom metrics and supports business metrics via PutMetricData API. Prometheus adds complexity (requires Prometheus server, scraping configuration, CloudWatch integration), additional cost, and isn't necessary when CloudWatch already offers all needed functionality. For complete observability of AWS applications, CloudWatch is sufficient - Prometheus is redundant."
         }
       }
     ],
@@ -686,8 +686,8 @@ export const solutionsArchitectQuestions = [
       "en": "Multi-Regional Architecture - Active-Active"
     },
     description: {
-      "pt-BR": "Uma aplicação global precisa estar disponível em múltiplas regiões com latência baixa para usuários em diferentes continentes. A aplicação precisa sincronizar dados entre regiões e rotear tráfego para a região mais próxima. Qual arquitetura AWS oferece melhor performance global?",
-      "en": "A global application needs to be available in multiple regions with low latency for users in different continents. The application needs to synchronize data between regions and route traffic to the nearest region. Which AWS architecture offers best global performance?"
+      "pt-BR": "Uma aplicação global de e-commerce precisa estar disponível em múltiplas regiões (América do Norte, Europa, Ásia-Pacífico) com latência baixa (< 200ms P95) para usuários em diferentes continentes. A aplicação processa 50 milhões de requisições/dia, serve conteúdo estático (imagens, CSS, JS) e dinâmico (APIs REST), e precisa sincronizar dados transacionais (pedidos, carrinho, inventário) entre regiões com consistência eventual. Durante eventos globais (Black Friday), o tráfego pode aumentar 10x em múltiplas regiões simultaneamente. A arquitetura deve rotear tráfego automaticamente para a região mais próxima do usuário, cachear conteúdo estático globalmente, sincronizar dados de inventário entre regiões em tempo quase real (< 5 minutos), e manter disponibilidade mesmo se uma região inteira falhar. Qual arquitetura AWS oferece melhor performance global considerando roteamento inteligente, cache global, sincronização de dados e alta disponibilidade?",
+      "en": "A global e-commerce application needs to be available in multiple regions (North America, Europe, Asia-Pacific) with low latency (< 200ms P95) for users in different continents. The application processes 50 million requests/day, serves static content (images, CSS, JS) and dynamic content (REST APIs), and needs to synchronize transactional data (orders, cart, inventory) between regions with eventual consistency. During global events (Black Friday), traffic can increase 10x in multiple regions simultaneously. The architecture must automatically route traffic to the region closest to the user, cache static content globally, synchronize inventory data between regions in near real-time (< 5 minutes), and maintain availability even if an entire region fails. Which AWS architecture offers best global performance considering intelligent routing, global caching, data synchronization and high availability?"
     },
     question: {
       "pt-BR": "",
@@ -697,6 +697,28 @@ export const solutionsArchitectQuestions = [
     answered: false,
     correct: false,
     alternatives: [
+      {
+        title: {
+          "pt-BR": "Route 53 com geolocation routing + CloudFront + RDS Cross-Region Read Replica + Application Load Balancer em múltiplas regiões",
+          "en": "Route 53 with geolocation routing + CloudFront + RDS Cross-Region Read Replica + Application Load Balancer in multiple regions"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa Route 53, CloudFront e ALB (componentes corretos), mas RDS Cross-Region Read Replica é apenas para leitura, não permite escrita em múltiplas regiões, e não sincroniza dados automaticamente com latência < 5 minutos. Para sincronizar dados de inventário entre regiões em tempo quase real com consistência eventual, DynamoDB Global Tables é necessário - ele replica dados automaticamente entre regiões com latência de segundos, permitindo escrita em múltiplas regiões. RDS Read Replica não atende requisitos de sincronização rápida e escrita global.",
+          "en": "This solution uses Route 53, CloudFront and ALB (correct components), but RDS Cross-Region Read Replica is read-only, doesn't allow writes in multiple regions, and doesn't automatically synchronize data with < 5 minute latency. To synchronize inventory data between regions in near real-time with eventual consistency, DynamoDB Global Tables is needed - it automatically replicates data between regions with seconds latency, allowing writes in multiple regions. RDS Read Replica doesn't meet fast synchronization and global write requirements."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Route 53 com geolocation routing + CloudFront + DynamoDB Global Tables + Application Load Balancer em múltiplas regiões + ElastiCache Global Datastore",
+          "en": "Route 53 with geolocation routing + CloudFront + DynamoDB Global Tables + Application Load Balancer in multiple regions + ElastiCache Global Datastore"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes essenciais (Route 53, CloudFront, DynamoDB Global Tables, ALB), mas adiciona ElastiCache Global Datastore desnecessariamente. CloudFront já cacheia conteúdo estático globalmente em edge locations, e DynamoDB Global Tables sincroniza dados transacionais. ElastiCache Global Datastore é para cache de dados em memória entre regiões, mas para uma aplicação de e-commerce, CloudFront para conteúdo estático e DynamoDB Global Tables para dados transacionais são suficientes. ElastiCache adiciona complexidade e custo sem benefício proporcional.",
+          "en": "This solution includes all essential components (Route 53, CloudFront, DynamoDB Global Tables, ALB), but unnecessarily adds ElastiCache Global Datastore. CloudFront already caches static content globally at edge locations, and DynamoDB Global Tables synchronizes transactional data. ElastiCache Global Datastore is for in-memory data cache between regions, but for an e-commerce application, CloudFront for static content and DynamoDB Global Tables for transactional data are sufficient. ElastiCache adds complexity and cost without proportional benefit."
+        }
+      },
       {
         title: {
           "pt-BR": "Route 53 com geolocation routing + CloudFront + DynamoDB Global Tables + Application Load Balancer em múltiplas regiões",
@@ -710,35 +732,13 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas CloudFront",
-          "en": "Only CloudFront"
+          "pt-BR": "Route 53 com latency-based routing + CloudFront + DynamoDB Global Tables + Application Load Balancer em múltiplas regiões",
+          "en": "Route 53 with latency-based routing + CloudFront + DynamoDB Global Tables + Application Load Balancer in multiple regions"
         },
         correct: false,
         explanation: {
-          "pt-BR": "CloudFront cacheia conteúdo estático, mas não roteia tráfego para múltiplas regiões ativas, não sincroniza dados entre regiões, e não oferece aplicação ativa em múltiplas regiões. Para uma aplicação global que precisa estar disponível em múltiplas regiões com sincronização de dados, Route 53, DynamoDB Global Tables e ALB em múltiplas regiões são necessários.",
-          "en": "CloudFront caches static content, but doesn't route traffic to multiple active regions, doesn't synchronize data between regions, and doesn't offer active application in multiple regions. For a global application that needs to be available in multiple regions with data synchronization, Route 53, DynamoDB Global Tables and ALB in multiple regions are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas Route 53",
-          "en": "Only Route 53"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Route 53 roteia tráfego, mas sozinho não cacheia conteúdo estático globalmente (CloudFront), não sincroniza dados entre regiões (DynamoDB Global Tables), e não oferece aplicação ativa em múltiplas regiões (ALB). Para performance global, é necessário combinar Route 53 com CloudFront, Global Tables e ALB em múltiplas regiões.",
-          "en": "Route 53 routes traffic, but alone doesn't cache static content globally (CloudFront), doesn't synchronize data between regions (DynamoDB Global Tables), and doesn't offer active application in multiple regions (ALB). For global performance, combining Route 53 with CloudFront, Global Tables and ALB in multiple regions is needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "RDS em uma única região",
-          "en": "RDS in a single region"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "RDS em uma única região não oferece latência baixa para usuários em outros continentes, não sincroniza dados entre regiões automaticamente, e não oferece disponibilidade global. Para uma aplicação global que precisa estar disponível em múltiplas regiões com baixa latência, é necessário DynamoDB Global Tables ou RDS Cross-Region Read Replica, não RDS em uma única região.",
-          "en": "RDS in a single region doesn't offer low latency for users in other continents, doesn't automatically synchronize data between regions, and doesn't offer global availability. For a global application that needs to be available in multiple regions with low latency, DynamoDB Global Tables or RDS Cross-Region Read Replica is needed, not RDS in a single region."
+          "pt-BR": "Esta solução usa Route 53 com latency-based routing (correto para rotear para região com menor latência), CloudFront, DynamoDB Global Tables e ALB (componentes corretos), mas latency-based routing pode não ser ideal para todos os casos. Geolocation routing direciona usuários para a região geograficamente mais próxima, que geralmente tem menor latência, e oferece mais controle sobre roteamento baseado em localização. Para uma aplicação global que precisa rotear baseado em localização geográfica do usuário (não apenas latência medida), geolocation routing é mais apropriado que latency-based routing.",
+          "en": "This solution uses Route 53 with latency-based routing (correct for routing to region with lowest latency), CloudFront, DynamoDB Global Tables and ALB (correct components), but latency-based routing may not be ideal for all cases. Geolocation routing directs users to the geographically closest region, which usually has lowest latency, and offers more control over location-based routing. For a global application that needs to route based on user's geographic location (not just measured latency), geolocation routing is more appropriate than latency-based routing."
         }
       }
     ],
@@ -754,8 +754,8 @@ export const solutionsArchitectQuestions = [
       "en": "Security - Advanced Network Segmentation"
     },
     description: {
-      "pt-BR": "Uma empresa precisa isolar ambientes de produção, desenvolvimento e staging em uma conta AWS. Cada ambiente precisa de acesso à internet, mas produção não deve acessar desenvolvimento. A empresa precisa de auditoria completa de tráfego de rede.",
-      "en": "A company needs to isolate production, development, and staging environments in one AWS account. Each environment needs internet access, but production shouldn't access development. The company needs complete network traffic auditing."
+      "pt-BR": "Uma empresa financeira precisa isolar completamente ambientes de produção, desenvolvimento e staging em uma única conta AWS para otimizar custos. Cada ambiente possui 20+ recursos (EC2, RDS, Lambda, S3 buckets) e precisa de acesso à internet para APIs externas e atualizações. Produção processa dados financeiros sensíveis (PCI-DSS) e não deve ter qualquer acesso de rede a desenvolvimento ou staging. A empresa precisa de auditoria completa de tráfego de rede para compliance (todos os pacotes devem ser logados), segmentação de rede granular, e conectividade centralizada para facilitar gerenciamento. A arquitetura deve prevenir lateral movement entre ambientes, suportar múltiplos protocolos (TCP, UDP, HTTP/HTTPS), e permitir compartilhamento de recursos AWS gerenciados (como VPC Endpoints) quando apropriado. Qual arquitetura AWS oferece melhor segmentação de rede considerando isolamento completo, auditoria e conectividade centralizada?",
+      "en": "A financial company needs to completely isolate production, development, and staging environments in a single AWS account to optimize costs. Each environment has 20+ resources (EC2, RDS, Lambda, S3 buckets) and needs internet access for external APIs and updates. Production processes sensitive financial data (PCI-DSS) and must not have any network access to development or staging. The company needs complete network traffic auditing for compliance (all packets must be logged), granular network segmentation, and centralized connectivity to facilitate management. The architecture must prevent lateral movement between environments, support multiple protocols (TCP, UDP, HTTP/HTTPS), and allow sharing of managed AWS resources (like VPC Endpoints) when appropriate. Which AWS architecture offers best network segmentation considering complete isolation, auditing and centralized connectivity?"
     },
     question: {
       "pt-BR": "",
@@ -767,6 +767,39 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
+          "pt-BR": "VPCs separadas por ambiente + Security Groups com regras restritivas + NACLs + VPC Flow Logs (sem Transit Gateway)",
+          "en": "Separate VPCs per environment + Security Groups with restrictive rules + NACLs + VPC Flow Logs (without Transit Gateway)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui VPCs separadas, Security Groups, NACLs e VPC Flow Logs (componentes corretos), mas falta Transit Gateway que é essencial para conectividade centralizada e gerenciamento simplificado. Para uma empresa com 3 ambientes (produção, desenvolvimento, staging) que precisam de acesso à internet e compartilhamento de recursos AWS gerenciados, Transit Gateway conecta VPCs de forma segura e centralizada, facilitando gerenciamento de rotas, políticas de roteamento, e permitindo compartilhamento de VPC Endpoints. Sem Transit Gateway, cada VPC precisaria de seu próprio NAT Gateway e VPC Endpoints, aumentando custos e complexidade.",
+          "en": "This solution includes separate VPCs, Security Groups, NACLs and VPC Flow Logs (correct components), but lacks Transit Gateway which is essential for centralized connectivity and simplified management. For a company with 3 environments (production, development, staging) that need internet access and sharing of managed AWS resources, Transit Gateway connects VPCs securely and centrally, facilitating route management, routing policies, and allowing sharing of VPC Endpoints. Without Transit Gateway, each VPC would need its own NAT Gateway and VPC Endpoints, increasing costs and complexity."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Subnets separadas na mesma VPC + Security Groups com regras restritivas + NACLs + VPC Flow Logs + Transit Gateway",
+          "en": "Separate subnets in same VPC + Security Groups with restrictive rules + NACLs + VPC Flow Logs + Transit Gateway"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui Security Groups, NACLs, VPC Flow Logs e Transit Gateway (componentes corretos), mas subnets na mesma VPC não oferecem isolamento completo necessário para compliance PCI-DSS. Subnets compartilham recursos (VPC Endpoints, NAT Gateways, Route Tables), e uma configuração incorreta de Security Groups ou NACLs pode permitir acesso acidental entre ambientes. Para uma empresa financeira que processa dados sensíveis e precisa garantir que produção não acesse desenvolvimento, VPCs separadas são necessárias para isolamento completo de rede, não apenas subnets.",
+          "en": "This solution includes Security Groups, NACLs, VPC Flow Logs and Transit Gateway (correct components), but subnets in the same VPC don't offer complete isolation needed for PCI-DSS compliance. Subnets share resources (VPC Endpoints, NAT Gateways, Route Tables), and an incorrect Security Groups or NACLs configuration can allow accidental access between environments. For a financial company that processes sensitive data and needs to guarantee production doesn't access development, separate VPCs are needed for complete network isolation, not just subnets."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "VPCs separadas por ambiente + VPC Flow Logs + Transit Gateway para conectividade + Security Groups com regras restritivas + AWS Config para auditoria de configurações",
+          "en": "Separate VPCs per environment + VPC Flow Logs + Transit Gateway for connectivity + Security Groups with restrictive rules + AWS Config for configuration auditing"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes essenciais para segmentação de rede (VPCs separadas, VPC Flow Logs, Transit Gateway, Security Groups), mas adiciona AWS Config que não é necessário para segmentação de rede e auditoria de tráfego. AWS Config audita configurações de recursos, não tráfego de rede. VPC Flow Logs já oferece auditoria completa de tráfego de rede (todos os pacotes são logados). Para segmentação de rede com auditoria, VPCs separadas + VPC Flow Logs + Transit Gateway + Security Groups são suficientes - AWS Config adiciona complexidade sem contribuir para isolamento de rede.",
+          "en": "This solution includes all essential components for network segmentation (separate VPCs, VPC Flow Logs, Transit Gateway, Security Groups), but adds AWS Config which isn't necessary for network segmentation and traffic auditing. AWS Config audits resource configurations, not network traffic. VPC Flow Logs already offers complete network traffic auditing (all packets are logged). For network segmentation with auditing, separate VPCs + VPC Flow Logs + Transit Gateway + Security Groups are sufficient - AWS Config adds complexity without contributing to network isolation."
+        }
+      },
+      {
+        title: {
           "pt-BR": "VPCs separadas por ambiente + VPC Flow Logs + Transit Gateway para conectividade + Security Groups com regras restritivas",
           "en": "Separate VPCs per environment + VPC Flow Logs + Transit Gateway for connectivity + Security Groups with restrictive rules"
         },
@@ -774,39 +807,6 @@ export const solutionsArchitectQuestions = [
         explanation: {
           "pt-BR": "VPCs separadas isolam ambientes completamente (produção não pode acessar desenvolvimento). VPC Flow Logs audita todo tráfego de rede para compliance. Transit Gateway conecta VPCs de forma segura e centralizada permitindo acesso à internet. Security Groups com regras restritivas impedem acesso entre ambientes. Esta é a arquitetura de segmentação mais robusta.",
           "en": "Separate VPCs completely isolate environments (production cannot access development). VPC Flow Logs audits all network traffic for compliance. Transit Gateway connects VPCs securely and centrally allowing internet access. Restrictive Security Groups prevent access between environments. This is the most robust segmentation architecture."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas Security Groups",
-          "en": "Only Security Groups"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Security Groups sozinhos não oferecem isolamento suficiente entre ambientes na mesma VPC: há risco de configuração incorreta, não há auditoria de tráfego (VPC Flow Logs), e não há separação completa de rede. Para isolar produção de desenvolvimento completamente, VPCs separadas são necessárias.",
-          "en": "Security Groups alone don't offer sufficient isolation between environments in the same VPC: there's risk of incorrect configuration, no traffic auditing (VPC Flow Logs), and no complete network separation. To completely isolate production from development, separate VPCs are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Subnets na mesma VPC",
-          "en": "Subnets in same VPC"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Subnets na mesma VPC compartilham recursos (VPC endpoints, NAT Gateways, etc.) e não oferecem isolamento completo. Uma configuração incorreta de Security Groups ou NACLs pode permitir acesso entre ambientes. Para isolamento completo e auditoria, VPCs separadas são necessárias.",
-          "en": "Subnets in the same VPC share resources (VPC endpoints, NAT Gateways, etc.) and don't offer complete isolation. An incorrect Security Groups or NACLs configuration can allow access between environments. For complete isolation and auditing, separate VPCs are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas NACLs",
-          "en": "Only NACLs"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "NACLs sozinhos não oferecem auditoria completa de tráfego (VPC Flow Logs), não oferecem isolamento completo entre ambientes (subnets na mesma VPC), e não oferecem conectividade centralizada (Transit Gateway). Para segmentação de rede completa com auditoria, VPCs separadas com VPC Flow Logs são necessárias.",
-          "en": "NACLs alone don't offer complete traffic auditing (VPC Flow Logs), don't offer complete isolation between environments (subnets in same VPC), and don't offer centralized connectivity (Transit Gateway). For complete network segmentation with auditing, separate VPCs with VPC Flow Logs are needed."
         }
       }
     ],
@@ -822,8 +822,8 @@ export const solutionsArchitectQuestions = [
       "en": "Performance - Advanced Auto Scaling"
     },
     description: {
-      "pt-BR": "Uma aplicação web tem padrões de tráfego imprevisíveis com picos súbitos. A aplicação precisa escalar rapidamente durante picos e reduzir custos durante períodos de baixo tráfego. A latência deve permanecer baixa mesmo durante escalonamento.",
-      "en": "A web application has unpredictable traffic patterns with sudden spikes. The application needs to scale quickly during peaks and reduce costs during low traffic periods. Latency must remain low even during scaling."
+      "pt-BR": "Uma aplicação web crítica de e-commerce tem padrões de tráfego altamente imprevisíveis com picos súbitos de até 20x o tráfego normal em minutos (ex: eventos virais, campanhas de marketing, Black Friday). A aplicação processa 100.000 requisições/minuto normalmente, mas pode atingir 2 milhões de requisições/minuto durante picos. A aplicação precisa escalar rapidamente (adicionar instâncias em < 2 minutos) durante picos para manter latência P95 < 200ms, e reduzir custos automaticamente durante períodos de baixo tráfego (noite, fins de semana) quando o tráfego cai para 10.000 requisições/minuto. A latência deve permanecer baixa (< 200ms P95) mesmo durante escalonamento, e as conexões ativas não devem ser perdidas quando instâncias são removidas durante scale-down. A arquitetura deve prever picos futuros baseado em padrões históricos e escalar proativamente antes que ocorram. Qual arquitetura AWS oferece melhor auto-scaling considerando escalonamento proativo, redução de custos e manutenção de latência baixa?",
+      "en": "A critical e-commerce web application has highly unpredictable traffic patterns with sudden spikes of up to 20x normal traffic in minutes (e.g., viral events, marketing campaigns, Black Friday). The application processes 100,000 requests/minute normally, but can reach 2 million requests/minute during peaks. The application needs to scale quickly (add instances in < 2 minutes) during peaks to maintain P95 latency < 200ms, and automatically reduce costs during low traffic periods (night, weekends) when traffic drops to 10,000 requests/minute. Latency must remain low (< 200ms P95) even during scaling, and active connections must not be lost when instances are removed during scale-down. The architecture must predict future peaks based on historical patterns and scale proactively before they occur. Which AWS architecture offers best auto-scaling considering proactive scaling, cost reduction and maintaining low latency?"
     },
     question: {
       "pt-BR": "",
@@ -846,35 +846,35 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "Apenas instâncias fixas",
-          "en": "Only fixed instances"
+          "pt-BR": "EC2 Auto Scaling com Step Scaling + Target Tracking Policies + Application Load Balancer com connection draining",
+          "en": "EC2 Auto Scaling with Step Scaling + Target Tracking Policies + Application Load Balancer with connection draining"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Instâncias fixas não escalam durante picos (causando alta latência), não reduzem custos durante períodos de baixo tráfego (recursos ficam ociosos), e não se adaptam a padrões de tráfego imprevisíveis. Para uma aplicação com picos súbitos, auto-scaling é essencial para manter latência baixa e otimizar custos.",
-          "en": "Fixed instances don't scale during peaks (causing high latency), don't reduce costs during low traffic periods (resources remain idle), and don't adapt to unpredictable traffic patterns. For an application with sudden spikes, auto-scaling is essential to keep latency low and optimize costs."
+          "pt-BR": "Esta solução usa Step Scaling, Target Tracking Policies e ALB (componentes corretos), mas Step Scaling apenas reage a métricas após picos ocorrerem, não prevê picos futuros. Para uma aplicação com picos súbitos de 20x em minutos, Step Scaling pode não escalar rápido o suficiente (< 2 minutos) para manter latência < 200ms. Predictive Scaling usa machine learning para prever picos baseado em padrões históricos e escala proativamente antes que ocorram, mantendo latência baixa mesmo durante picos súbitos. Para padrões de tráfego imprevisíveis, Predictive Scaling é essencial.",
+          "en": "This solution uses Step Scaling, Target Tracking Policies and ALB (correct components), but Step Scaling only reacts to metrics after peaks occur, doesn't predict future peaks. For an application with sudden 20x spikes in minutes, Step Scaling may not scale fast enough (< 2 minutes) to maintain latency < 200ms. Predictive Scaling uses machine learning to predict peaks based on historical patterns and scales proactively before they occur, keeping latency low even during sudden spikes. For unpredictable traffic patterns, Predictive Scaling is essential."
         }
       },
       {
         title: {
-          "pt-BR": "Auto Scaling apenas com step scaling",
-          "en": "Auto Scaling only with step scaling"
+          "pt-BR": "EC2 Auto Scaling com Predictive Scaling + Step Scaling + Application Load Balancer (sem Target Tracking Policies)",
+          "en": "EC2 Auto Scaling with Predictive Scaling + Step Scaling + Application Load Balancer (without Target Tracking Policies)"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Step scaling apenas reage a métricas após picos ocorrerem, não prevê picos futuros. Para padrões de tráfego imprevisíveis com picos súbitos, Predictive Scaling é necessário para escalar proativamente antes dos picos, mantendo latência baixa. Step scaling sozinho pode não escalar rápido o suficiente.",
-          "en": "Step scaling only reacts to metrics after peaks occur, doesn't predict future peaks. For unpredictable traffic patterns with sudden spikes, Predictive Scaling is needed to scale proactively before peaks, keeping latency low. Step scaling alone may not scale fast enough."
+          "pt-BR": "Esta solução usa Predictive Scaling (correto para prever picos) e ALB (correto), mas falta Target Tracking Policies que são essenciais para manter métricas (CPU, latência) dentro de limites definidos automaticamente. Para uma aplicação que precisa manter latência P95 < 200ms, Target Tracking Policies ajusta automaticamente o número de instâncias baseado na métrica de latência, garantindo que a latência permaneça dentro do limite mesmo durante variações de tráfego. Sem Target Tracking Policies, você precisaria configurar manualmente múltiplos alarmes CloudWatch, o que é mais complexo e menos eficiente.",
+          "en": "This solution uses Predictive Scaling (correct for predicting peaks) and ALB (correct), but lacks Target Tracking Policies which are essential for keeping metrics (CPU, latency) within defined limits automatically. For an application that needs to maintain P95 latency < 200ms, Target Tracking Policies automatically adjusts the number of instances based on latency metric, ensuring latency remains within limit even during traffic variations. Without Target Tracking Policies, you would need to manually configure multiple CloudWatch alarms, which is more complex and less efficient."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas Classic Load Balancer",
-          "en": "Only Classic Load Balancer"
+          "pt-BR": "EC2 Auto Scaling com Predictive Scaling + Target Tracking Policies + Classic Load Balancer com connection draining",
+          "en": "EC2 Auto Scaling with Predictive Scaling + Target Tracking Policies + Classic Load Balancer with connection draining"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Classic Load Balancer não oferece recursos avançados do ALB: não tem connection draining avançado, não oferece roteamento baseado em conteúdo/caminho, não suporta WebSockets eficientemente, e é menos eficiente. ALB oferece melhor performance e recursos para aplicações modernas com auto-scaling.",
-          "en": "Classic Load Balancer doesn't offer ALB advanced features: doesn't have advanced connection draining, doesn't offer content/path-based routing, doesn't efficiently support WebSockets, and is less efficient. ALB offers better performance and features for modern applications with auto-scaling."
+          "pt-BR": "Esta solução usa Predictive Scaling e Target Tracking Policies (componentes corretos), mas Classic Load Balancer não oferece connection draining avançado como ALB. Para uma aplicação crítica que precisa manter conexões ativas durante scale-down, ALB oferece connection draining mais eficiente que Classic Load Balancer. Além disso, ALB oferece melhor performance, roteamento baseado em conteúdo/caminho, e suporte eficiente a WebSockets. Para aplicações modernas com auto-scaling, ALB é superior a Classic Load Balancer.",
+          "en": "This solution uses Predictive Scaling and Target Tracking Policies (correct components), but Classic Load Balancer doesn't offer advanced connection draining like ALB. For a critical application that needs to maintain active connections during scale-down, ALB offers more efficient connection draining than Classic Load Balancer. Additionally, ALB offers better performance, content/path-based routing, and efficient WebSocket support. For modern applications with auto-scaling, ALB is superior to Classic Load Balancer."
         }
       }
     ],
@@ -890,8 +890,8 @@ export const solutionsArchitectQuestions = [
       "en": "Database - Multi-Master and Replication"
     },
     description: {
-      "pt-BR": "Uma aplicação global precisa de escrita em múltiplas regiões com consistência eventual. O banco de dados precisa tolerar falhas de região inteira e manter disponibilidade. As escritas devem ser distribuídas para reduzir latência.",
-      "en": "A global application needs write capability in multiple regions with eventual consistency. The database needs to tolerate entire region failures and maintain availability. Writes must be distributed to reduce latency."
+      "pt-BR": "Uma aplicação global de gaming precisa de escrita em múltiplas regiões (América do Norte, Europa, Ásia) com consistência eventual para dados de jogadores (inventário, progresso, conquistas). O banco de dados processa 500.000 escritas/segundo globalmente, com usuários escrevendo em suas respectivas regiões. O banco de dados precisa tolerar falhas de região inteira e manter disponibilidade (99.99%), permitindo que jogadores continuem jogando mesmo se uma região falhar. As escritas devem ser distribuídas para reduzir latência (< 50ms P95 para escritas locais), e dados devem ser replicados entre regiões automaticamente com latência de replicação < 1 segundo. Durante eventos globais (lançamentos de jogos), o tráfego pode aumentar 10x em múltiplas regiões simultaneamente. Qual arquitetura AWS oferece melhor suporte para escrita multi-regional com consistência eventual, tolerância a falhas regionais e baixa latência?",
+      "en": "A global gaming application needs write capability in multiple regions (North America, Europe, Asia) with eventual consistency for player data (inventory, progress, achievements). The database processes 500,000 writes/second globally, with users writing in their respective regions. The database needs to tolerate entire region failures and maintain availability (99.99%), allowing players to continue playing even if a region fails. Writes must be distributed to reduce latency (< 50ms P95 for local writes), and data must be automatically replicated between regions with replication latency < 1 second. During global events (game launches), traffic can increase 10x in multiple regions simultaneously. Which AWS architecture offers best support for multi-regional writes with eventual consistency, regional failure tolerance and low latency?"
     },
     question: {
       "pt-BR": "",
@@ -901,6 +901,17 @@ export const solutionsArchitectQuestions = [
     answered: false,
     correct: false,
     alternatives: [
+      {
+        title: {
+          "pt-BR": "DynamoDB Global Tables com replicação automática multi-regional + RDS Multi-AZ em cada região para dados relacionais",
+          "en": "DynamoDB Global Tables with automatic multi-regional replication + RDS Multi-AZ in each region for relational data"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa DynamoDB Global Tables (correto para escrita multi-regional), mas adiciona RDS Multi-AZ desnecessariamente. Para uma aplicação de gaming que precisa de escrita em múltiplas regiões com consistência eventual, DynamoDB Global Tables sozinho é suficiente - ele replica dados automaticamente entre regiões com latência < 1 segundo. RDS Multi-AZ não oferece escrita multi-regional e adiciona complexidade e custo desnecessários. Para dados de jogadores (inventário, progresso, conquistas) que são NoSQL, DynamoDB Global Tables é a solução completa, não é necessário RDS.",
+          "en": "This solution uses DynamoDB Global Tables (correct for multi-regional writes), but unnecessarily adds RDS Multi-AZ. For a gaming application that needs writes in multiple regions with eventual consistency, DynamoDB Global Tables alone is sufficient - it automatically replicates data between regions with < 1 second latency. RDS Multi-AZ doesn't offer multi-regional writes and adds unnecessary complexity and cost. For player data (inventory, progress, achievements) which is NoSQL, DynamoDB Global Tables is the complete solution, RDS is not needed."
+        }
+      },
       {
         title: {
           "pt-BR": "DynamoDB Global Tables com replicação automática multi-regional",
@@ -914,35 +925,24 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "RDS Multi-AZ em uma região",
-          "en": "RDS Multi-AZ in one region"
+          "pt-BR": "DynamoDB Global Tables com replicação automática multi-regional + ElastiCache Global Datastore para cache",
+          "en": "DynamoDB Global Tables with automatic multi-regional replication + ElastiCache Global Datastore for cache"
         },
         correct: false,
         explanation: {
-          "pt-BR": "RDS Multi-AZ apenas em uma região não oferece escrita em múltiplas regiões, não tolera falhas de região inteira, e não distribui escritas globalmente para reduzir latência. Para uma aplicação global que precisa de escrita em múltiplas regiões, DynamoDB Global Tables é necessário.",
-          "en": "RDS Multi-AZ only in one region doesn't offer write capability in multiple regions, doesn't tolerate entire region failures, and doesn't distribute writes globally to reduce latency. For a global application that needs write capability in multiple regions, DynamoDB Global Tables is needed."
+          "pt-BR": "Esta solução usa DynamoDB Global Tables (correto para escrita multi-regional), mas adiciona ElastiCache Global Datastore desnecessariamente. DynamoDB Global Tables já oferece baixa latência (< 50ms P95) para escritas locais e replicação automática entre regiões. ElastiCache Global Datastore é para cache de dados em memória, mas para uma aplicação de gaming que processa 500.000 escritas/segundo, DynamoDB Global Tables sozinho oferece performance suficiente. ElastiCache adiciona complexidade e custo sem benefício proporcional para este caso de uso.",
+          "en": "This solution uses DynamoDB Global Tables (correct for multi-regional writes), but unnecessarily adds ElastiCache Global Datastore. DynamoDB Global Tables already offers low latency (< 50ms P95) for local writes and automatic replication between regions. ElastiCache Global Datastore is for in-memory data caching, but for a gaming application processing 500,000 writes/second, DynamoDB Global Tables alone offers sufficient performance. ElastiCache adds complexity and cost without proportional benefit for this use case."
         }
       },
       {
         title: {
-          "pt-BR": "RDS Read Replica em múltiplas regiões",
-          "en": "RDS Read Replica in multiple regions"
+          "pt-BR": "DynamoDB sem Global Tables com replicação manual via Lambda + S3 para backup",
+          "en": "DynamoDB without Global Tables with manual replication via Lambda + S3 for backup"
         },
         correct: false,
         explanation: {
-          "pt-BR": "RDS Read Replica é apenas para leitura, não permite escrita em múltiplas regiões. Todas as escritas devem ir para a região primária, não distribuindo escritas para reduzir latência. Para escrita global distribuída, DynamoDB Global Tables é necessário, não Read Replicas.",
-          "en": "RDS Read Replica is read-only, doesn't allow write capability in multiple regions. All writes must go to the primary region, not distributing writes to reduce latency. For distributed global writes, DynamoDB Global Tables is needed, not Read Replicas."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas DynamoDB sem Global Tables",
-          "en": "Only DynamoDB without Global Tables"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "DynamoDB sem Global Tables é apenas em uma região, não oferece escrita em múltiplas regiões, não replica dados automaticamente entre regiões, e não tolera falhas de região inteira. Para escrita global distribuída, Global Tables é necessário para habilitar replicação multi-regional.",
-          "en": "DynamoDB without Global Tables is only in one region, doesn't offer write capability in multiple regions, doesn't automatically replicate data between regions, and doesn't tolerate entire region failures. For distributed global writes, Global Tables is needed to enable multi-regional replication."
+          "pt-BR": "Esta solução tenta replicar dados manualmente via Lambda, mas não oferece escrita em múltiplas regiões (DynamoDB sem Global Tables é apenas em uma região), não replica automaticamente com latência < 1 segundo (replicação manual via Lambda tem latência muito maior), e não tolera falhas de região inteira automaticamente. Para uma aplicação global que precisa de escrita em múltiplas regiões, tolerância a falhas regionais e replicação automática, DynamoDB Global Tables é necessário - ele oferece tudo isso de forma gerenciada, não requer Lambda ou replicação manual.",
+          "en": "This solution attempts to manually replicate data via Lambda, but doesn't offer writes in multiple regions (DynamoDB without Global Tables is only in one region), doesn't automatically replicate with < 1 second latency (manual replication via Lambda has much higher latency), and doesn't automatically tolerate entire region failures. For a global application that needs writes in multiple regions, regional failure tolerance and automatic replication, DynamoDB Global Tables is needed - it offers all of this in a managed way, doesn't require Lambda or manual replication."
         }
       }
     ],
@@ -958,8 +958,8 @@ export const solutionsArchitectQuestions = [
       "en": "Container Architecture - ECS and Kubernetes"
     },
     description: {
-      "pt-BR": "Uma empresa precisa executar aplicações containerizadas em escala com alta disponibilidade. A aplicação precisa de auto-scaling baseado em métricas customizadas, service discovery, e integração com serviços AWS. A equipe prefere gerenciamento mínimo.",
-      "en": "A company needs to run containerized applications at scale with high availability. The application needs auto-scaling based on custom metrics, service discovery, and integration with AWS services. The team prefers minimal management."
+      "pt-BR": "Uma empresa de fintech precisa executar 30+ microserviços containerizados (Docker) em escala com alta disponibilidade (99.99%). A aplicação processa 1 milhão de requisições/dia, precisa de auto-scaling baseado em métricas customizadas de negócio (transações por segundo, latência de processamento de pagamentos), service discovery para que microserviços se encontrem automaticamente via DNS, e integração nativa com serviços AWS (S3, DynamoDB, SQS, SNS). A equipe de desenvolvimento prefere gerenciamento mínimo de infraestrutura para focar em desenvolvimento de features. A arquitetura deve suportar deployment contínuo, rollback rápido, e escalonamento automático de 10 a 500 containers baseado em demanda. Qual arquitetura AWS oferece melhor suporte para containers em escala com gerenciamento mínimo, auto-scaling baseado em métricas customizadas e service discovery?",
+      "en": "A fintech company needs to run 30+ containerized microservices (Docker) at scale with high availability (99.99%). The application processes 1 million requests/day, needs auto-scaling based on custom business metrics (transactions per second, payment processing latency), service discovery for microservices to find each other automatically via DNS, and native integration with AWS services (S3, DynamoDB, SQS, SNS). The development team prefers minimal infrastructure management to focus on feature development. The architecture must support continuous deployment, fast rollback, and automatic scaling from 10 to 500 containers based on demand. Which AWS architecture offers best support for containers at scale with minimal management, auto-scaling based on custom metrics and service discovery?"
     },
     question: {
       "pt-BR": "",
@@ -969,6 +969,28 @@ export const solutionsArchitectQuestions = [
     answered: false,
     correct: false,
     alternatives: [
+      {
+        title: {
+          "pt-BR": "Amazon ECS com Fargate + Service Discovery + Auto Scaling baseado em CloudWatch Metrics (sem Application Load Balancer)",
+          "en": "Amazon ECS with Fargate + Service Discovery + Auto Scaling based on CloudWatch Metrics (without Application Load Balancer)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa ECS Fargate, Service Discovery e Auto Scaling baseado em CloudWatch Metrics (componentes corretos), mas falta Application Load Balancer que é essencial para distribuir tráfego entre containers, integrar com serviços AWS (S3, DynamoDB, SQS, SNS), e oferecer health checks para auto-scaling. Para uma aplicação que processa 1 milhão de requisições/dia e precisa escalar de 10 a 500 containers, ALB distribui tráfego eficientemente e oferece integração nativa com serviços AWS. Sem ALB, você precisaria configurar roteamento manual ou usar outros load balancers, perdendo integração nativa com AWS.",
+          "en": "This solution uses ECS Fargate, Service Discovery and Auto Scaling based on CloudWatch Metrics (correct components), but lacks Application Load Balancer which is essential for distributing traffic between containers, integrating with AWS services (S3, DynamoDB, SQS, SNS), and offering health checks for auto-scaling. For an application that processes 1 million requests/day and needs to scale from 10 to 500 containers, ALB efficiently distributes traffic and offers native integration with AWS services. Without ALB, you would need to configure manual routing or use other load balancers, losing native AWS integration."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Amazon ECS com Fargate + Service Discovery + Auto Scaling baseado em métricas padrão (CPU, memória) + Application Load Balancer",
+          "en": "Amazon ECS with Fargate + Service Discovery + Auto Scaling based on standard metrics (CPU, memory) + Application Load Balancer"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução usa ECS Fargate, Service Discovery e ALB (componentes corretos), mas Auto Scaling baseado apenas em métricas padrão (CPU, memória) não atende requisitos. Para uma aplicação de fintech que precisa escalar baseado em métricas customizadas de negócio (transações por segundo, latência de processamento de pagamentos), é necessário Auto Scaling baseado em CloudWatch Custom Metrics. Métricas padrão (CPU, memória) não refletem carga de negócio - uma aplicação pode ter CPU baixa mas alta carga de transações, necessitando mais containers.",
+          "en": "This solution uses ECS Fargate, Service Discovery and ALB (correct components), but Auto Scaling based only on standard metrics (CPU, memory) doesn't meet requirements. For a fintech application that needs to scale based on custom business metrics (transactions per second, payment processing latency), Auto Scaling based on CloudWatch Custom Metrics is needed. Standard metrics (CPU, memory) don't reflect business load - an application can have low CPU but high transaction load, needing more containers."
+        }
+      },
       {
         title: {
           "pt-BR": "Amazon ECS com Fargate + Service Discovery + Auto Scaling baseado em CloudWatch Metrics + Application Load Balancer",
@@ -982,35 +1004,13 @@ export const solutionsArchitectQuestions = [
       },
       {
         title: {
-          "pt-BR": "EKS sem gerenciamento",
-          "en": "EKS without management"
+          "pt-BR": "Amazon ECS com Fargate + Service Discovery + Auto Scaling baseado em CloudWatch Metrics + Application Load Balancer + EKS para orquestração adicional",
+          "en": "Amazon ECS with Fargate + Service Discovery + Auto Scaling based on CloudWatch Metrics + Application Load Balancer + EKS for additional orchestration"
         },
         correct: false,
         explanation: {
-          "pt-BR": "EKS requer mais gerenciamento que ECS Fargate: gerenciamento do cluster Kubernetes, nodes, patches, escalabilidade de nodes, e configuração de networking. Para uma equipe que prefere gerenciamento mínimo, ECS Fargate é mais adequado pois elimina gerenciamento de infraestrutura completamente.",
-          "en": "EKS requires more management than ECS Fargate: Kubernetes cluster management, nodes, patches, node scaling, and networking configuration. For a team that prefers minimal management, ECS Fargate is more suitable as it completely eliminates infrastructure management."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "EC2 com Docker manual",
-          "en": "EC2 with manual Docker"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "EC2 com Docker manual requer muito gerenciamento: provisionamento de instâncias, configuração de Docker, orquestração manual, gerenciamento de escalabilidade, patches, e não oferece service discovery ou integração nativa com serviços AWS. Para containers em escala com gerenciamento mínimo, ECS Fargate é necessário.",
-          "en": "EC2 with manual Docker requires much management: instance provisioning, Docker configuration, manual orchestration, scaling management, patches, and doesn't offer service discovery or native integration with AWS services. For containers at scale with minimal management, ECS Fargate is needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "ECS sem Fargate",
-          "en": "ECS without Fargate"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "ECS sem Fargate requer gerenciamento de instâncias EC2: provisionamento, configuração, patches, escalabilidade de instâncias, e monitoramento. Para uma equipe que prefere gerenciamento mínimo, Fargate elimina toda essa sobrecarga, permitindo focar apenas nos containers e aplicações.",
-          "en": "ECS without Fargate requires EC2 instance management: provisioning, configuration, patches, instance scaling, and monitoring. For a team that prefers minimal management, Fargate eliminates all this overhead, allowing focus only on containers and applications."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (ECS Fargate, Service Discovery, Auto Scaling baseado em CloudWatch Metrics, ALB), mas adiciona EKS desnecessariamente. ECS Fargate e EKS são plataformas de orquestração de containers concorrentes - não é necessário usar ambos. EKS requer mais gerenciamento (cluster Kubernetes, nodes, patches) e adiciona complexidade sem benefício. Para uma equipe que prefere gerenciamento mínimo, ECS Fargate sozinho é suficiente - EKS adiciona sobrecarga desnecessária.",
+          "en": "This solution includes all correct components (ECS Fargate, Service Discovery, Auto Scaling based on CloudWatch Metrics, ALB), but unnecessarily adds EKS. ECS Fargate and EKS are competing container orchestration platforms - it's not necessary to use both. EKS requires more management (Kubernetes cluster, nodes, patches) and adds complexity without benefit. For a team that prefers minimal management, ECS Fargate alone is sufficient - EKS adds unnecessary overhead."
         }
       }
     ],
@@ -1026,8 +1026,8 @@ export const solutionsArchitectQuestions = [
       "en": "Backup and Disaster Recovery - Advanced Strategies"
     },
     description: {
-      "pt-BR": "Uma aplicação crítica precisa de backup contínuo com RPO de 1 minuto e RTO de 5 minutos. Os dados devem ser replicados para múltiplas regiões e o sistema deve fazer failover automático em caso de falha regional.",
-      "en": "A critical application needs continuous backup with RPO of 1 minute and RTO of 5 minutes. Data must be replicated to multiple regions and the system must automatically failover in case of regional failure."
+      "pt-BR": "Uma aplicação crítica de saúde processa 100.000 registros médicos por hora e precisa de backup contínuo com RPO de 1 minuto e RTO de 5 minutos para atender regulamentações HIPAA. Os dados incluem registros de pacientes em RDS PostgreSQL (500GB), imagens médicas em S3 (10TB), e logs de auditoria em CloudWatch Logs (1TB/mês). Os dados devem ser replicados para múltiplas regiões (pelo menos 2 regiões) e o sistema deve fazer failover automático em caso de falha regional sem perda de dados. A aplicação processa transações críticas que não podem ser perdidas, e o failover deve ser transparente para usuários (sem interrupção de serviço). Qual arquitetura AWS oferece melhor suporte para backup contínuo, replicação multi-regional e failover automático considerando RPO de 1 minuto e RTO de 5 minutos?",
+      "en": "A critical healthcare application processes 100,000 medical records per hour and needs continuous backup with RPO of 1 minute and RTO of 5 minutes to meet HIPAA regulations. Data includes patient records in RDS PostgreSQL (500GB), medical images in S3 (10TB), and audit logs in CloudWatch Logs (1TB/month). Data must be replicated to multiple regions (at least 2 regions) and the system must automatically failover in case of regional failure without data loss. The application processes critical transactions that cannot be lost, and failover must be transparent to users (no service interruption). Which AWS architecture offers best support for continuous backup, multi-regional replication and automatic failover considering 1 minute RPO and 5 minute RTO?"
     },
     question: {
       "pt-BR": "",
@@ -1039,46 +1039,46 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "RDS Continuous Backups + Cross-Region Automated Backups + Multi-AZ + Route 53 health checks para failover",
-          "en": "RDS Continuous Backups + Cross-Region Automated Backups + Multi-AZ + Route 53 health checks for failover"
+          "pt-BR": "RDS Continuous Backups + Cross-Region Automated Backups + Multi-AZ + Route 53 health checks para failover + S3 Cross-Region Replication + CloudWatch Logs export para S3",
+          "en": "RDS Continuous Backups + Cross-Region Automated Backups + Multi-AZ + Route 53 health checks for failover + S3 Cross-Region Replication + CloudWatch Logs export to S3"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes corretos para RDS (Continuous Backups, Cross-Region Automated Backups, Multi-AZ, Route 53), S3 CRR e exportação de CloudWatch Logs, mas Cross-Region Automated Backups não oferece failover automático rápido o suficiente para RTO de 5 minutos. Para RTO de 5 minutos, é necessário RDS Cross-Region Read Replica com failover automático, não apenas Automated Backups. Automated Backups são para restauração, não para failover rápido - restaurar de backup leva 15-30 minutos. Read Replica pode ser promovida em segundos, atendendo RTO de 5 minutos.",
+          "en": "This solution includes all correct components for RDS (Continuous Backups, Cross-Region Automated Backups, Multi-AZ, Route 53), S3 CRR and CloudWatch Logs export, but Cross-Region Automated Backups doesn't offer fast enough automatic failover for 5 minute RTO. For 5 minute RTO, RDS Cross-Region Read Replica with automatic failover is needed, not just Automated Backups. Automated Backups are for restoration, not for fast failover - restoring from backup takes 15-30 minutes. Read Replica can be promoted in seconds, meeting 5 minute RTO."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "RDS Continuous Backups + Cross-Region Read Replica com failover automático + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication (sem exportação de CloudWatch Logs)",
+          "en": "RDS Continuous Backups + Cross-Region Read Replica with automatic failover + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication (without CloudWatch Logs export)"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes corretos para RDS (Continuous Backups, Cross-Region Read Replica com failover automático, Multi-AZ, Route 53) e S3 CRR, mas falta exportação de CloudWatch Logs para S3 em outra região. Para uma aplicação de saúde que precisa de auditoria completa (HIPAA), logs de CloudWatch devem ser replicados para outra região para garantir que logs de auditoria não sejam perdidos em caso de falha regional. Sem exportação de logs, você perderia histórico de auditoria crítico para compliance.",
+          "en": "This solution includes all correct components for RDS (Continuous Backups, Cross-Region Read Replica with automatic failover, Multi-AZ, Route 53) and S3 CRR, but lacks CloudWatch Logs export to S3 in another region. For a healthcare application that needs complete auditing (HIPAA), CloudWatch logs must be replicated to another region to ensure audit logs aren't lost in case of regional failure. Without log export, you would lose critical audit history for compliance."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "RDS Continuous Backups + Cross-Region Read Replica com failover automático + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication + CloudWatch Logs export para S3 + DynamoDB Global Tables para metadados",
+          "en": "RDS Continuous Backups + Cross-Region Read Replica with automatic failover + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication + CloudWatch Logs export to S3 + DynamoDB Global Tables for metadata"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes corretos para RDS, S3 e CloudWatch Logs, mas adiciona DynamoDB Global Tables desnecessariamente. Para uma aplicação que armazena dados em RDS PostgreSQL (500GB) e S3 (10TB), DynamoDB Global Tables não é necessário - RDS Cross-Region Read Replica e S3 CRR já oferecem replicação multi-regional. DynamoDB Global Tables é para dados NoSQL, não para dados relacionais ou objetos. Adicionar DynamoDB Global Tables para metadados adiciona complexidade e custo sem benefício proporcional.",
+          "en": "This solution includes all correct components for RDS, S3 and CloudWatch Logs, but unnecessarily adds DynamoDB Global Tables. For an application that stores data in RDS PostgreSQL (500GB) and S3 (10TB), DynamoDB Global Tables isn't necessary - RDS Cross-Region Read Replica and S3 CRR already offer multi-regional replication. DynamoDB Global Tables is for NoSQL data, not for relational data or objects. Adding DynamoDB Global Tables for metadata adds complexity and cost without proportional benefit."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "RDS Continuous Backups + Cross-Region Read Replica com failover automático + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication + CloudWatch Logs export para S3",
+          "en": "RDS Continuous Backups + Cross-Region Read Replica with automatic failover + Multi-AZ + Route 53 health checks + S3 Cross-Region Replication + CloudWatch Logs export to S3"
         },
         correct: true,
         explanation: {
-          "pt-BR": "RDS Continuous Backups oferece RPO de 1 minuto através de backups contínuos. Cross-Region Automated Backups replica dados para múltiplas regiões automaticamente. Multi-AZ oferece alta disponibilidade. Route 53 health checks detecta falhas regionais e faz failover automático em 5 minutos. Esta combinação atende RPO de 1 minuto e RTO de 5 minutos.",
-          "en": "RDS Continuous Backups offers 1 minute RPO through continuous backups. Cross-Region Automated Backups automatically replicates data to multiple regions. Multi-AZ offers high availability. Route 53 health checks detects regional failures and automatically fails over in 5 minutes. This combination meets 1 minute RPO and 5 minute RTO."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas snapshots manuais diários",
-          "en": "Only daily manual snapshots"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Snapshots manuais diários têm RPO muito alto (até 24 horas de perda de dados) e RTO muito alto (horas para restaurar e configurar). Para uma aplicação crítica que precisa de RPO de 1 minuto e RTO de 5 minutos, snapshots manuais são completamente inadequados. É necessário backups contínuos e failover automático.",
-          "en": "Daily manual snapshots have very high RPO (up to 24 hours of data loss) and very high RTO (hours to restore and configure). For a critical application that needs 1 minute RPO and 5 minute RTO, manual snapshots are completely inadequate. Continuous backups and automatic failover are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "RDS Single-AZ sem backup",
-          "en": "RDS Single-AZ without backup"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "RDS Single-AZ sem backup não tem redundância, não tem backup, não replica dados para outras regiões, e não oferece failover. Para uma aplicação crítica que precisa de RPO de 1 minuto e RTO de 5 minutos, é necessário Multi-AZ, backups contínuos, e replicação cross-region.",
-          "en": "RDS Single-AZ without backup has no redundancy, no backup, doesn't replicate data to other regions, and doesn't offer failover. For a critical application that needs 1 minute RPO and 5 minute RTO, Multi-AZ, continuous backups, and cross-region replication are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas S3 backup",
-          "en": "Only S3 backup"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "S3 backup sozinho não oferece RTO de 5 minutos: restaurar de S3 requer tempo para baixar e restaurar dados, configurar instâncias, e não oferece failover automático. Para RTO de 5 minutos, é necessário backups contínuos com replicação cross-region e failover automático com Route 53.",
-          "en": "S3 backup alone doesn't offer 5 minute RTO: restoring from S3 requires time to download and restore data, configure instances, and doesn't offer automatic failover. For 5 minute RTO, continuous backups with cross-region replication and automatic failover with Route 53 are needed."
+          "pt-BR": "RDS Continuous Backups oferece RPO de 1 minuto através de backups contínuos. Cross-Region Read Replica com failover automático oferece RTO de 5 minutos - a réplica pode ser promovida em segundos quando a região primária falha, muito mais rápido que restaurar de backup (15-30 minutos). Multi-AZ oferece alta disponibilidade dentro da região. Route 53 health checks detecta falhas regionais e faz failover automático. S3 Cross-Region Replication replica imagens médicas (10TB) para múltiplas regiões. CloudWatch Logs export para S3 garante que logs de auditoria (1TB/mês) sejam replicados para compliance HIPAA. Esta combinação atende RPO de 1 minuto e RTO de 5 minutos com replicação completa de todos os dados.",
+          "en": "RDS Continuous Backups offers 1 minute RPO through continuous backups. Cross-Region Read Replica with automatic failover offers 5 minute RTO - the replica can be promoted in seconds when the primary region fails, much faster than restoring from backup (15-30 minutes). Multi-AZ offers high availability within the region. Route 53 health checks detects regional failures and automatically fails over. S3 Cross-Region Replication replicates medical images (10TB) to multiple regions. CloudWatch Logs export to S3 ensures audit logs (1TB/month) are replicated for HIPAA compliance. This combination meets 1 minute RPO and 5 minute RTO with complete replication of all data."
         }
       }
     ],
@@ -1094,8 +1094,8 @@ export const solutionsArchitectQuestions = [
       "en": "Streaming Architecture - Kinesis and Analytics"
     },
     description: {
-      "pt-BR": "Uma aplicação precisa processar 1 milhão de eventos por segundo de IoT devices, aplicar transformações em tempo real, e armazenar resultados para análise. A aplicação precisa de processamento com baixa latência e alta throughput.",
-      "en": "An application needs to process 1 million events per second from IoT devices, apply real-time transformations, and store results for analysis. The application needs processing with low latency and high throughput."
+      "pt-BR": "Uma aplicação de monitoramento industrial precisa processar 1 milhão de eventos por segundo de 200.000 sensores IoT distribuídos em 100 fábricas, aplicar transformações em tempo real (normalização, enriquecimento com dados de referência, cálculos de agregação), e armazenar resultados para análise histórica e machine learning. Cada evento contém telemetria (temperatura, pressão, vibração, consumo de energia), metadados de localização, timestamp, e status do sensor. A aplicação precisa de processamento com baixa latência (< 100ms do recebimento até armazenamento) e alta throughput (1M eventos/segundo = 86.4 bilhões de eventos/dia). Os dados transformados precisam ser armazenados em formato otimizado para analytics (Parquet) em S3, e análises em tempo real precisam ser executadas sobre os streams para detectar anomalias e disparar alertas. Qual arquitetura AWS oferece melhor suporte para processamento de streaming em alta escala com baixa latência, transformações em tempo real e armazenamento otimizado para análise?",
+      "en": "An industrial monitoring application needs to process 1 million events per second from 200,000 IoT sensors distributed across 100 factories, apply real-time transformations (normalization, enrichment with reference data, aggregation calculations), and store results for historical analysis and machine learning. Each event contains telemetry (temperature, pressure, vibration, energy consumption), location metadata, timestamp, and sensor status. The application needs processing with low latency (< 100ms from receipt to storage) and high throughput (1M events/second = 86.4 billion events/day). Transformed data must be stored in analytics-optimized format (Parquet) in S3, and real-time analyses must be executed on streams to detect anomalies and trigger alerts. Which AWS architecture offers best support for high-scale streaming processing with low latency, real-time transformations and analytics-optimized storage?"
     },
     question: {
       "pt-BR": "",
@@ -1112,41 +1112,41 @@ export const solutionsArchitectQuestions = [
         },
         correct: true,
         explanation: {
-          "pt-BR": "Kinesis Data Streams processa 1 milhão de eventos/segundo com baixa latência e alta throughput. Kinesis Data Firehose carrega dados transformados em S3 automaticamente. Kinesis Analytics analisa streams em tempo real. Lambda aplica transformações. S3 armazena resultados para análise. Esta arquitetura oferece processamento de streaming completo.",
-          "en": "Kinesis Data Streams processes 1 million events/second with low latency and high throughput. Kinesis Data Firehose automatically loads transformed data to S3. Kinesis Analytics analyzes streams in real-time. Lambda applies transformations. S3 stores results for analysis. This architecture offers complete streaming processing."
+          "pt-BR": "Kinesis Data Streams processa 1 milhão de eventos/segundo com baixa latência (< 100ms) e alta throughput, suportando 200.000 sensores IoT. Kinesis Data Firehose carrega dados transformados em S3 automaticamente em formato Parquet otimizado para analytics. Kinesis Analytics analisa streams em tempo real para detectar anomalias e disparar alertas. Lambda aplica transformações em tempo real (normalização, enriquecimento, agregação). S3 armazena resultados para análise histórica e machine learning. Esta arquitetura oferece processamento de streaming completo escalando para 86.4 bilhões de eventos/dia.",
+          "en": "Kinesis Data Streams processes 1 million events/second with low latency (< 100ms) and high throughput, supporting 200,000 IoT sensors. Kinesis Data Firehose automatically loads transformed data to S3 in Parquet format optimized for analytics. Kinesis Analytics analyzes streams in real-time to detect anomalies and trigger alerts. Lambda applies real-time transformations (normalization, enrichment, aggregation). S3 stores results for historical analysis and machine learning. This architecture offers complete streaming processing scaling to 86.4 billion events/day."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas SQS",
-          "en": "Only SQS"
+          "pt-BR": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda para transformações + Glue para ETL adicional",
+          "en": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda for transformations + Glue for additional ETL"
         },
         correct: false,
         explanation: {
-          "pt-BR": "SQS não escala para 1 milhão de eventos por segundo: tem limite de throughput muito menor que Kinesis Data Streams. Para processar 1 milhão de eventos/segundo de IoT devices com baixa latência, é necessário Kinesis Data Streams que oferece alta throughput e processamento em tempo real.",
-          "en": "SQS doesn't scale to 1 million events per second: has much lower throughput limit than Kinesis Data Streams. To process 1 million events/second from IoT devices with low latency, Kinesis Data Streams is needed which offers high throughput and real-time processing."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), mas adiciona Glue desnecessariamente. Glue é para ETL batch em dados já armazenados em S3, não para processamento de streaming em tempo real. Para uma aplicação que precisa processar 1 milhão de eventos/segundo com latência < 100ms, Lambda já aplica transformações em tempo real no stream. Glue adiciona complexidade e latência desnecessária - ele é para transformações batch em dados históricos, não para streaming em tempo real. A solução correta é Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, sem Glue.",
+          "en": "This solution includes all correct components (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), but unnecessarily adds Glue. Glue is for batch ETL on data already stored in S3, not for real-time streaming processing. For an application that needs to process 1 million events/second with < 100ms latency, Lambda already applies real-time transformations on the stream. Glue adds unnecessary complexity and latency - it's for batch transformations on historical data, not for real-time streaming. The correct solution is Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, without Glue."
         }
       },
       {
         title: {
-          "pt-BR": "S3 com Lambda triggers",
-          "en": "S3 with Lambda triggers"
+          "pt-BR": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda para transformações + Redshift para análise adicional",
+          "en": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda for transformations + Redshift for additional analysis"
         },
         correct: false,
         explanation: {
-          "pt-BR": "S3 com Lambda triggers não processa eventos em tempo real: S3 é armazenamento, não processa streams, e Lambda triggers são para objetos já armazenados, não para streaming de eventos em tempo real. Para processar 1 milhão de eventos/segundo em tempo real, é necessário Kinesis Data Streams.",
-          "en": "S3 with Lambda triggers doesn't process events in real-time: S3 is storage, doesn't process streams, and Lambda triggers are for already stored objects, not for real-time event streaming. To process 1 million events/second in real-time, Kinesis Data Streams is needed."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), mas adiciona Redshift desnecessariamente. Para uma aplicação que precisa processar 1 milhão de eventos/segundo em tempo real e armazenar em S3 para análise histórica, Redshift adiciona complexidade e custo significativo. Kinesis Analytics já oferece análise em tempo real sobre streams, e S3 com Redshift Spectrum pode consultar dados históricos quando necessário. Redshift cluster dedicado é caro para este caso e não é necessário quando Kinesis Analytics + S3 já oferecem análise em tempo real e histórico. A solução correta é Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, sem Redshift.",
+          "en": "This solution includes all correct components (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), but unnecessarily adds Redshift. For an application that needs to process 1 million events/second in real-time and store in S3 for historical analysis, Redshift adds complexity and significant cost. Kinesis Analytics already offers real-time analysis on streams, and S3 with Redshift Spectrum can query historical data when needed. Dedicated Redshift cluster is expensive for this case and not necessary when Kinesis Analytics + S3 already offer real-time and historical analysis. The correct solution is Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, without Redshift."
         }
       },
       {
         title: {
-          "pt-BR": "DynamoDB Streams",
-          "en": "DynamoDB Streams"
+          "pt-BR": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda para transformações + DynamoDB para armazenamento adicional",
+          "en": "Kinesis Data Streams + Kinesis Data Firehose + Kinesis Analytics + S3 + Lambda for transformations + DynamoDB for additional storage"
         },
         correct: false,
         explanation: {
-          "pt-BR": "DynamoDB Streams processa mudanças em tabelas DynamoDB, não processa eventos diretamente de IoT devices. DynamoDB Streams não escala para 1 milhão de eventos/segundo e não é otimizado para processamento de streaming de IoT. Para processar eventos de IoT devices em alta escala, Kinesis Data Streams é necessário.",
-          "en": "DynamoDB Streams processes changes in DynamoDB tables, doesn't process events directly from IoT devices. DynamoDB Streams doesn't scale to 1 million events/second and isn't optimized for IoT streaming processing. To process IoT device events at high scale, Kinesis Data Streams is needed."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), mas adiciona DynamoDB desnecessariamente. Para uma aplicação que precisa armazenar dados transformados para análise histórica e machine learning, S3 já oferece armazenamento escalável e econômico em formato Parquet. DynamoDB é para dados transacionais com acesso rápido, não para armazenamento de dados históricos para analytics. Para 86.4 bilhões de eventos/dia, S3 é muito mais econômico que DynamoDB para armazenamento histórico. DynamoDB adiciona custo significativo sem benefício proporcional para análise histórica. A solução correta é Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, sem DynamoDB.",
+          "en": "This solution includes all correct components (Kinesis Data Streams, Firehose, Analytics, S3, Lambda), but unnecessarily adds DynamoDB. For an application that needs to store transformed data for historical analysis and machine learning, S3 already offers scalable and economical storage in Parquet format. DynamoDB is for transactional data with fast access, not for historical data storage for analytics. For 86.4 billion events/day, S3 is much more economical than DynamoDB for historical storage. DynamoDB adds significant cost without proportional benefit for historical analysis. The correct solution is Kinesis Data Streams + Firehose + Analytics + S3 + Lambda, without DynamoDB."
         }
       }
     ],
@@ -1158,12 +1158,12 @@ export const solutionsArchitectQuestions = [
   {
     id: 18,
     title: {
-      "pt-BR": "Segurança - Encryption e Key Management",
-      "en": "Security - Encryption and Key Management"
+      "pt-BR": "Segurança - Encryption e Key Management Avançado",
+      "en": "Security - Advanced Encryption and Key Management"
     },
     description: {
-      "pt-BR": "Uma aplicação financeira precisa criptografar todos os dados em repouso e em trânsito. As chaves de criptografia precisam ser rotacionadas automaticamente e o acesso deve ser auditado. A aplicação precisa de compliance com regulamentações financeiras.",
-      "en": "A financial application needs to encrypt all data at rest and in transit. Encryption keys need to be rotated automatically and access must be audited. The application needs compliance with financial regulations."
+      "pt-BR": "Uma instituição financeira multinacional processa 50 milhões de transações diárias com dados altamente sensíveis (PII, dados bancários, informações de cartão de crédito) distribuídos em 8 regiões AWS. A aplicação armazena dados em múltiplos serviços: RDS PostgreSQL (2TB de dados transacionais), DynamoDB (500GB de dados de sessão e cache), S3 (50TB de documentos e relatórios), EBS volumes (1TB de dados temporários), e ElastiCache Redis (100GB de dados em memória). A empresa precisa atender múltiplas regulamentações simultaneamente: PCI-DSS (requer rotação de chaves a cada 90 dias), GDPR (requer criptografia de dados pessoais), SOX (requer auditoria completa de acesso a dados financeiros), e regulamentações locais em cada país. As chaves de criptografia devem ser rotacionadas automaticamente sem downtime, o acesso a chaves deve ser auditado em tempo real, e a arquitetura deve suportar múltiplos algoritmos de criptografia (AES-256, RSA-4096) para diferentes tipos de dados. A solução deve permitir revogação imediata de acesso em caso de violação de segurança, manter histórico completo de todas as operações de chaves para compliance, e suportar envelope encryption para otimizar performance. Qual arquitetura AWS oferece gerenciamento de chaves mais completo considerando rotação automática, auditoria em tempo real, compliance multi-regulamentação e suporte a múltiplos algoritmos?",
+      "en": "A multinational financial institution processes 50 million daily transactions with highly sensitive data (PII, banking data, credit card information) distributed across 8 AWS regions. The application stores data in multiple services: RDS PostgreSQL (2TB of transactional data), DynamoDB (500GB of session and cache data), S3 (50TB of documents and reports), EBS volumes (1TB of temporary data), and ElastiCache Redis (100GB of in-memory data). The company needs to meet multiple regulations simultaneously: PCI-DSS (requires key rotation every 90 days), GDPR (requires encryption of personal data), SOX (requires complete auditing of access to financial data), and local regulations in each country. Encryption keys must be rotated automatically without downtime, key access must be audited in real-time, and the architecture must support multiple encryption algorithms (AES-256, RSA-4096) for different data types. The solution must allow immediate access revocation in case of security breach, maintain complete history of all key operations for compliance, and support envelope encryption to optimize performance. Which AWS architecture offers most complete key management considering automatic rotation, real-time auditing, multi-regulation compliance and support for multiple algorithms?"
     },
     question: {
       "pt-BR": "",
@@ -1175,46 +1175,46 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
+          "pt-BR": "AWS KMS com rotação automática + CloudTrail para auditoria + TLS/SSL para dados em trânsito + encryption at rest habilitado em todos os serviços + AWS Secrets Manager para segredos",
+          "en": "AWS KMS with automatic rotation + CloudTrail for auditing + TLS/SSL for data in transit + encryption at rest enabled on all services + AWS Secrets Manager for secrets"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui KMS com rotação automática, CloudTrail, TLS/SSL e encryption at rest (componentes corretos), mas adiciona Secrets Manager que não é necessário para gerenciamento de chaves de criptografia. Secrets Manager é para armazenar segredos (senhas, tokens, API keys), não para gerenciar chaves de criptografia usadas para criptografar dados. KMS já gerencia chaves de criptografia para todos os serviços AWS (RDS, S3, DynamoDB, EBS). Para uma arquitetura de gerenciamento de chaves completa, KMS + CloudTrail + TLS/SSL + encryption at rest são suficientes - Secrets Manager adiciona complexidade sem contribuir para gerenciamento de chaves de criptografia.",
+          "en": "This solution includes KMS with automatic rotation, CloudTrail, TLS/SSL and encryption at rest (correct components), but adds Secrets Manager which isn't necessary for encryption key management. Secrets Manager is for storing secrets (passwords, tokens, API keys), not for managing encryption keys used to encrypt data. KMS already manages encryption keys for all AWS services (RDS, S3, DynamoDB, EBS). For a complete key management architecture, KMS + CloudTrail + TLS/SSL + encryption at rest are sufficient - Secrets Manager adds complexity without contributing to encryption key management."
+        }
+      },
+      {
+        title: {
           "pt-BR": "AWS KMS com rotação automática + CloudTrail para auditoria + TLS/SSL para dados em trânsito + encryption at rest habilitado em todos os serviços",
           "en": "AWS KMS with automatic rotation + CloudTrail for auditing + TLS/SSL for data in transit + encryption at rest enabled on all services"
         },
         correct: true,
         explanation: {
-          "pt-BR": "KMS gerencia chaves centralizadamente com rotação automática para compliance. CloudTrail audita todos os acessos a chaves para compliance financeiro. TLS/SSL criptografa dados em trânsito. Encryption at rest em todos os serviços (RDS, S3, DynamoDB, EBS) protege dados armazenados. Esta combinação oferece segurança completa e compliance.",
-          "en": "KMS manages keys centrally with automatic rotation for compliance. CloudTrail audits all key access for financial compliance. TLS/SSL encrypts data in transit. Encryption at rest on all services (RDS, S3, DynamoDB, EBS) protects stored data. This combination offers complete security and compliance."
+          "pt-BR": "KMS gerencia chaves centralizadamente com rotação automática (atende PCI-DSS de 90 dias) e suporta múltiplos algoritmos (AES-256, RSA-4096) para diferentes tipos de dados. CloudTrail audita todos os acessos a chaves em tempo real (atende SOX e GDPR). TLS/SSL criptografa dados em trânsito. Encryption at rest em todos os serviços (RDS, S3, DynamoDB, EBS, ElastiCache) protege dados armazenados em todas as 8 regiões. KMS permite revogação imediata de acesso e mantém histórico completo de operações. Esta combinação oferece segurança completa e compliance multi-regulamentação.",
+          "en": "KMS manages keys centrally with automatic rotation (meets PCI-DSS 90-day requirement) and supports multiple algorithms (AES-256, RSA-4096) for different data types. CloudTrail audits all key access in real-time (meets SOX and GDPR). TLS/SSL encrypts data in transit. Encryption at rest on all services (RDS, S3, DynamoDB, EBS, ElastiCache) protects stored data across all 8 regions. KMS allows immediate access revocation and maintains complete operation history. This combination offers complete security and multi-regulation compliance."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas KMS sem rotação",
-          "en": "Only KMS without rotation"
+          "pt-BR": "AWS KMS com rotação automática + CloudTrail para auditoria + TLS/SSL para dados em trânsito + encryption at rest habilitado em todos os serviços + AWS CloudHSM para chaves críticas",
+          "en": "AWS KMS with automatic rotation + CloudTrail for auditing + TLS/SSL for data in transit + encryption at rest enabled on all services + AWS CloudHSM for critical keys"
         },
         correct: false,
         explanation: {
-          "pt-BR": "KMS sem rotação automática não atende compliance com regulamentações financeiras que exigem rotação periódica de chaves. Além disso, falta auditoria (CloudTrail), proteção de dados em trânsito (TLS/SSL), e encryption at rest em todos os serviços. Para uma aplicação financeira, rotação automática e auditoria são essenciais.",
-          "en": "KMS without automatic rotation doesn't meet compliance with financial regulations that require periodic key rotation. Additionally, lacks auditing (CloudTrail), data in transit protection (TLS/SSL), and encryption at rest on all services. For a financial application, automatic rotation and auditing are essential."
+          "pt-BR": "Esta solução inclui todos os componentes corretos (KMS, CloudTrail, TLS/SSL, encryption at rest), mas adiciona CloudHSM desnecessariamente. CloudHSM é um hardware dedicado para requisitos de compliance muito específicos (FIPS 140-2 Level 3), mas para a maioria dos casos de uso financeiros, KMS já oferece gerenciamento de chaves completo com rotação automática, auditoria e suporte a múltiplos algoritmos. CloudHSM adiciona complexidade (gerenciamento de hardware dedicado), custo significativo, e não é necessário para atender PCI-DSS, GDPR e SOX - KMS é suficiente. A solução correta é KMS + CloudTrail + TLS/SSL + encryption at rest, sem CloudHSM.",
+          "en": "This solution includes all correct components (KMS, CloudTrail, TLS/SSL, encryption at rest), but unnecessarily adds CloudHSM. CloudHSM is dedicated hardware for very specific compliance requirements (FIPS 140-2 Level 3), but for most financial use cases, KMS already offers complete key management with automatic rotation, auditing and support for multiple algorithms. CloudHSM adds complexity (dedicated hardware management), significant cost, and isn't necessary to meet PCI-DSS, GDPR and SOX - KMS is sufficient. The correct solution is KMS + CloudTrail + TLS/SSL + encryption at rest, without CloudHSM."
         }
       },
       {
         title: {
-          "pt-BR": "Chaves hardcoded no código",
-          "en": "Hardcoded keys in code"
+          "pt-BR": "AWS KMS com rotação manual + CloudTrail para auditoria + TLS/SSL para dados em trânsito + encryption at rest habilitado em todos os serviços",
+          "en": "AWS KMS with manual rotation + CloudTrail for auditing + TLS/SSL for data in transit + encryption at rest enabled on all services"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Chaves hardcoded no código são extremamente inseguras: ficam expostas no repositório Git, não podem ser rotacionadas facilmente, não há auditoria de acesso, e viola todas as práticas de segurança e compliance. Para uma aplicação financeira, chaves devem ser gerenciadas por KMS com rotação automática.",
-          "en": "Hardcoded keys in code are extremely insecure: exposed in Git repository, cannot be easily rotated, no access auditing, and violates all security and compliance practices. For a financial application, keys must be managed by KMS with automatic rotation."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas SSL/TLS",
-          "en": "Only SSL/TLS"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "SSL/TLS protege dados em trânsito, mas não protege dados em repouso (armazenados em RDS, S3, DynamoDB, etc.), não gerencia chaves de criptografia, não oferece rotação de chaves, e não oferece auditoria. Para uma aplicação financeira, é necessário encryption at rest, gerenciamento de chaves (KMS), e auditoria (CloudTrail).",
-          "en": "SSL/TLS protects data in transit, but doesn't protect data at rest (stored in RDS, S3, DynamoDB, etc.), doesn't manage encryption keys, doesn't offer key rotation, and doesn't offer auditing. For a financial application, encryption at rest, key management (KMS), and auditing (CloudTrail) are needed."
+          "pt-BR": "Esta solução inclui KMS, CloudTrail, TLS/SSL e encryption at rest (componentes corretos), mas rotação manual não atende requisitos de compliance. Para uma instituição financeira que precisa atender PCI-DSS (rotação a cada 90 dias), GDPR e SOX, rotação manual é propensa a erros humanos, pode ser esquecida, e não escala para 8 regiões com múltiplos serviços. Para 50 milhões de transações diárias distribuídas em múltiplas regiões, rotação automática é essencial para garantir compliance contínuo sem downtime e sem risco de esquecimento. Rotação automática do KMS garante que chaves sejam rotacionadas exatamente a cada 90 dias sem intervenção manual.",
+          "en": "This solution includes KMS, CloudTrail, TLS/SSL and encryption at rest (correct components), but manual rotation doesn't meet compliance requirements. For a financial institution that needs to meet PCI-DSS (rotation every 90 days), GDPR and SOX, manual rotation is prone to human errors, can be forgotten, and doesn't scale for 8 regions with multiple services. For 50 million daily transactions distributed across multiple regions, automatic rotation is essential to ensure continuous compliance without downtime and without risk of forgetting. KMS automatic rotation ensures keys are rotated exactly every 90 days without manual intervention."
         }
       }
     ],
@@ -1226,12 +1226,12 @@ export const solutionsArchitectQuestions = [
   {
     id: 19,
     title: {
-      "pt-BR": "Arquitetura de Eventos - EventBridge e SQS",
-      "en": "Event Architecture - EventBridge and SQS"
+      "pt-BR": "Arquitetura de Eventos - Event-Driven Avançado",
+      "en": "Event Architecture - Advanced Event-Driven"
     },
     description: {
-      "pt-BR": "Uma aplicação de microserviços precisa desacoplar componentes e permitir que múltiplos serviços reajam a eventos. Alguns eventos precisam de processamento garantido, outros são fire-and-forget. A aplicação precisa de roteamento de eventos baseado em regras.",
-      "en": "A microservices application needs to decouple components and allow multiple services to react to events. Some events need guaranteed processing, others are fire-and-forget. The application needs event routing based on rules."
+      "pt-BR": "Uma plataforma de e-commerce global com 200+ microserviços processa 10 milhões de eventos por minuto durante picos (Black Friday, eventos sazonais). A arquitetura precisa suportar múltiplos padrões de processamento: eventos críticos de pagamento que requerem processamento garantido com exactly-once semantics e retry automático, eventos de analytics que são fire-and-forget mas precisam de alta throughput, eventos de notificações que precisam ser entregues a múltiplos consumidores simultaneamente, e eventos de auditoria que devem ser persistidos para compliance. A aplicação precisa de roteamento de eventos baseado em regras complexas (filtros por tipo de evento, origem, região, prioridade), suporte a transformações de eventos em tempo real, integração com sistemas externos via webhooks, e capacidade de reprocessar eventos históricos para análise. Durante falhas parciais, eventos críticos não podem ser perdidos e devem ser reprocessados automaticamente, enquanto eventos não-críticos podem ser descartados após timeout. A arquitetura deve suportar event sourcing para reconstruir estado de aplicação, manter ordem de eventos quando necessário, e oferecer visibilidade completa do fluxo de eventos através de múltiplos serviços. Qual arquitetura AWS oferece melhor suporte para processamento de eventos em alta escala considerando múltiplos padrões, roteamento complexo, processamento garantido e reprocessamento?",
+      "en": "A global e-commerce platform with 200+ microservices processes 10 million events per minute during peaks (Black Friday, seasonal events). The architecture needs to support multiple processing patterns: critical payment events requiring guaranteed processing with exactly-once semantics and automatic retry, analytics events that are fire-and-forget but need high throughput, notification events that need to be delivered to multiple consumers simultaneously, and audit events that must be persisted for compliance. The application needs event routing based on complex rules (filters by event type, origin, region, priority), support for real-time event transformations, integration with external systems via webhooks, and ability to reprocess historical events for analysis. During partial failures, critical events cannot be lost and must be automatically reprocessed, while non-critical events can be discarded after timeout. The architecture must support event sourcing to reconstruct application state, maintain event order when necessary, and offer complete visibility of event flow across multiple services. Which AWS architecture offers best support for high-scale event processing considering multiple patterns, complex routing, guaranteed processing and reprocessing?"
     },
     question: {
       "pt-BR": "",
@@ -1243,46 +1243,46 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
+          "pt-BR": "EventBridge para roteamento de eventos + SQS para processamento garantido + Dead Letter Queues para falhas + SNS para notificações múltiplas",
+          "en": "EventBridge for event routing + SQS for guaranteed processing + Dead Letter Queues for failures + SNS for multiple notifications"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui EventBridge, SQS e DLQ (componentes corretos), mas adiciona SNS que pode ser redundante. EventBridge já pode rotear eventos para múltiplos consumidores simultaneamente através de regras, e SQS pode garantir processamento de eventos críticos. SNS é útil para notificações push (email, SMS, mobile), mas para uma arquitetura de eventos entre microserviços, EventBridge + SQS já oferece roteamento e processamento garantido. SNS adiciona complexidade adicional sem benefício proporcional para este caso de uso específico de eventos entre microserviços.",
+          "en": "This solution includes EventBridge, SQS and DLQ (correct components), but adds SNS which may be redundant. EventBridge can already route events to multiple consumers simultaneously through rules, and SQS can guarantee processing of critical events. SNS is useful for push notifications (email, SMS, mobile), but for an event architecture between microservices, EventBridge + SQS already offers routing and guaranteed processing. SNS adds additional complexity without proportional benefit for this specific microservices event use case."
+        }
+      },
+      {
+        title: {
           "pt-BR": "EventBridge para roteamento de eventos + SQS para processamento garantido + Dead Letter Queues para falhas",
           "en": "EventBridge for event routing + SQS for guaranteed processing + Dead Letter Queues for failures"
         },
         correct: true,
         explanation: {
-          "pt-BR": "EventBridge roteia eventos baseado em regras para múltiplos serviços (fire-and-forget). SQS garante processamento de eventos críticos com retry automático. Dead Letter Queues captura eventos que falharam após múltiplas tentativas. Esta combinação oferece desacoplamento completo: roteamento de eventos (EventBridge) e processamento garantido (SQS).",
-          "en": "EventBridge routes events based on rules to multiple services (fire-and-forget). SQS guarantees processing of critical events with automatic retry. Dead Letter Queues captures events that failed after multiple attempts. This combination offers complete decoupling: event routing (EventBridge) and guaranteed processing (SQS)."
+          "pt-BR": "EventBridge roteia eventos baseado em regras complexas (tipo, origem, região, prioridade) para múltiplos serviços simultaneamente (fire-and-forget para analytics, notificações). SQS garante processamento de eventos críticos (pagamentos) com exactly-once semantics e retry automático. Dead Letter Queues captura eventos que falharam após múltiplas tentativas, permitindo reprocessamento manual e análise de falhas. EventBridge suporta transformações de eventos e integração com webhooks. Esta combinação oferece desacoplamento completo, processamento garantido para eventos críticos, e alta throughput para eventos não-críticos, escalando para 10 milhões de eventos/minuto.",
+          "en": "EventBridge routes events based on complex rules (type, origin, region, priority) to multiple services simultaneously (fire-and-forget for analytics, notifications). SQS guarantees processing of critical events (payments) with exactly-once semantics and automatic retry. Dead Letter Queues captures events that failed after multiple attempts, allowing manual reprocessing and failure analysis. EventBridge supports event transformations and webhook integration. This combination offers complete decoupling, guaranteed processing for critical events, and high throughput for non-critical events, scaling to 10 million events/minute."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas SNS",
-          "en": "Only SNS"
+          "pt-BR": "EventBridge para roteamento de eventos + SQS FIFO para processamento garantido + Dead Letter Queues para falhas",
+          "en": "EventBridge for event routing + SQS FIFO for guaranteed processing + Dead Letter Queues for failures"
         },
         correct: false,
         explanation: {
-          "pt-BR": "SNS é pub/sub para notificações, mas não oferece roteamento baseado em regras complexas (EventBridge), não garante processamento de eventos críticos da mesma forma que SQS, e não oferece Dead Letter Queues. Para uma aplicação que precisa de roteamento de eventos e processamento garantido, EventBridge e SQS são necessários.",
-          "en": "SNS is pub/sub for notifications, but doesn't offer complex rule-based routing (EventBridge), doesn't guarantee processing of critical events the same way SQS does, and doesn't offer Dead Letter Queues. For an application that needs event routing and guaranteed processing, EventBridge and SQS are needed."
+          "pt-BR": "Esta solução usa EventBridge e DLQ (componentes corretos), mas SQS FIFO tem throughput limitado (3.000 mensagens/segundo por fila) e latência mais alta que SQS Standard. Para processar 10 milhões de eventos/minuto (166.667/segundo) durante picos, SQS FIFO não escala adequadamente - seria necessário múltiplas filas FIFO, aumentando complexidade. SQS Standard oferece throughput ilimitado e latência mais baixa, sendo mais adequado para alta escala. FIFO é necessário apenas quando ordem exata de eventos é crítica - para a maioria dos eventos de e-commerce, ordem eventual é suficiente e Standard Queues oferecem melhor performance.",
+          "en": "This solution uses EventBridge and DLQ (correct components), but SQS FIFO has limited throughput (3,000 messages/second per queue) and higher latency than SQS Standard. To process 10 million events/minute (166,667/second) during peaks, SQS FIFO doesn't scale adequately - multiple FIFO queues would be needed, increasing complexity. SQS Standard offers unlimited throughput and lower latency, being more suitable for high scale. FIFO is needed only when exact event order is critical - for most e-commerce events, eventual order is sufficient and Standard Queues offer better performance."
         }
       },
       {
         title: {
-          "pt-BR": "Chamadas HTTP diretas",
-          "en": "Direct HTTP calls"
+          "pt-BR": "EventBridge para roteamento de eventos + SQS para processamento garantido + Dead Letter Queues para falhas + Step Functions para orquestração de workflows",
+          "en": "EventBridge for event routing + SQS for guaranteed processing + Dead Letter Queues for failures + Step Functions for workflow orchestration"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Chamadas HTTP diretas acoplam serviços fortemente: se um serviço falhar, todos os serviços que dependem dele falham, não há desacoplamento, não há roteamento de eventos baseado em regras, e não há processamento garantido. Para uma arquitetura de microserviços desacoplada, EventBridge e SQS são necessários.",
-          "en": "Direct HTTP calls tightly couple services: if a service fails, all services that depend on it fail, there's no decoupling, no rule-based event routing, and no guaranteed processing. For a decoupled microservices architecture, EventBridge and SQS are needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas SQS",
-          "en": "Only SQS"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "SQS garante processamento de eventos, mas não oferece roteamento de eventos baseado em regras complexas (EventBridge), não permite que múltiplos serviços reajam ao mesmo evento facilmente, e não oferece roteamento fire-and-forget eficiente. Para roteamento de eventos, EventBridge é necessário.",
-          "en": "SQS guarantees event processing, but doesn't offer complex rule-based event routing (EventBridge), doesn't allow multiple services to react to the same event easily, and doesn't offer efficient fire-and-forget routing. For event routing, EventBridge is needed."
+          "pt-BR": "Esta solução inclui EventBridge, SQS e DLQ (componentes corretos), mas adiciona Step Functions desnecessariamente. Step Functions é para orquestração de workflows complexos com múltiplas etapas sequenciais, não para processamento de eventos em alta escala entre microserviços. Para uma plataforma que processa 10 milhões de eventos/minuto, Step Functions adiciona latência e custo significativos. EventBridge + SQS já oferece roteamento de eventos e processamento garantido - Step Functions é para workflows de negócio, não para arquitetura de eventos entre microserviços. A solução correta é EventBridge + SQS + DLQ, sem Step Functions.",
+          "en": "This solution includes EventBridge, SQS and DLQ (correct components), but unnecessarily adds Step Functions. Step Functions is for orchestrating complex multi-step workflows, not for high-scale event processing between microservices. For a platform processing 10 million events/minute, Step Functions adds significant latency and cost. EventBridge + SQS already offers event routing and guaranteed processing - Step Functions is for business workflows, not for event architecture between microservices. The correct solution is EventBridge + SQS + DLQ, without Step Functions."
         }
       }
     ],
@@ -1294,12 +1294,12 @@ export const solutionsArchitectQuestions = [
   {
     id: 20,
     title: {
-      "pt-BR": "Arquitetura de Observabilidade - Logs, Métricas e Traces",
-      "en": "Observability Architecture - Logs, Metrics and Traces"
+      "pt-BR": "Arquitetura de Observabilidade - Observabilidade Completa em Escala",
+      "en": "Observability Architecture - Complete Observability at Scale"
     },
     description: {
-      "pt-BR": "Uma aplicação distribuída complexa precisa de observabilidade completa: logs centralizados, métricas de performance, traces distribuídos, e alertas proativos. A equipe precisa identificar rapidamente problemas e entender o impacto no negócio.",
-      "en": "A complex distributed application needs complete observability: centralized logs, performance metrics, distributed traces, and proactive alerts. The team needs to quickly identify problems and understand business impact."
+      "pt-BR": "Uma plataforma de fintech crítica com 150+ microserviços distribuídos em 5 regiões AWS processa 100 milhões de requisições diárias com picos de 50.000 requisições/segundo. A aplicação possui arquitetura complexa: API Gateway → Lambda → SQS → Lambda → DynamoDB → Lambda → SNS → Lambda → RDS, com requisições passando por 10-15 serviços em média. Durante incidentes, a latência P95 pode variar de 200ms a 30 segundos de forma imprevisível, e a equipe precisa identificar qual serviço específico está causando degradação em menos de 2 minutos. A aplicação precisa de observabilidade completa: logs centralizados de todos os serviços com retenção de 90 dias para compliance, métricas de performance em tempo real (latência, throughput, erro rate) com granularidade de 1 minuto, traces distribuídos mostrando o caminho completo de cada requisição com spans detalhados, alertas proativos baseados em thresholds dinâmicos e anomalias detectadas por machine learning, dashboards em tempo real com métricas de negócio customizadas (transações processadas, receita por minuto, taxa de conversão), e capacidade de correlacionar logs, métricas e traces para debugging rápido. A solução deve suportar queries complexas em logs (CloudWatch Insights), análise de padrões de erro, identificação de dependências entre serviços, e métricas de SLA (99.9% disponibilidade). Qual arquitetura AWS oferece observabilidade mais completa considerando logs, métricas, traces, alertas, dashboards e análise em escala?",
+      "en": "A critical fintech platform with 150+ microservices distributed across 5 AWS regions processes 100 million daily requests with peaks of 50,000 requests/second. The application has complex architecture: API Gateway → Lambda → SQS → Lambda → DynamoDB → Lambda → SNS → Lambda → RDS, with requests passing through 10-15 services on average. During incidents, P95 latency can vary unpredictably from 200ms to 30 seconds, and the team needs to identify which specific service is causing degradation in less than 2 minutes. The application needs complete observability: centralized logs from all services with 90-day retention for compliance, real-time performance metrics (latency, throughput, error rate) with 1-minute granularity, distributed traces showing complete path of each request with detailed spans, proactive alerts based on dynamic thresholds and anomalies detected by machine learning, real-time dashboards with custom business metrics (processed transactions, revenue per minute, conversion rate), and ability to correlate logs, metrics and traces for rapid debugging. The solution must support complex log queries (CloudWatch Insights), error pattern analysis, service dependency identification, and SLA metrics (99.9% availability). Which AWS architecture offers most complete observability considering logs, metrics, traces, alerts, dashboards and analysis at scale?"
     },
     question: {
       "pt-BR": "",
@@ -1311,46 +1311,46 @@ export const solutionsArchitectQuestions = [
     alternatives: [
       {
         title: {
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights + Prometheus para métricas adicionais",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights + Prometheus for additional metrics"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Esta solução inclui todos os componentes essenciais do CloudWatch (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), mas adiciona Prometheus desnecessariamente. CloudWatch Metrics já oferece métricas customizadas via PutMetricData API, suporta métricas de negócio, e escala para 100 milhões de requisições diárias. Prometheus adiciona complexidade (requer servidor Prometheus, configuração de scraping, integração com CloudWatch), custo adicional, e não é necessário quando CloudWatch já oferece todas as funcionalidades necessárias para observabilidade completa. Para observabilidade de aplicações AWS em escala, CloudWatch é suficiente - Prometheus é redundante e adiciona overhead operacional.",
+          "en": "This solution includes all essential CloudWatch components (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), but unnecessarily adds Prometheus. CloudWatch Metrics already offers custom metrics via PutMetricData API, supports business metrics, and scales to 100 million daily requests. Prometheus adds complexity (requires Prometheus server, scraping configuration, CloudWatch integration), additional cost, and isn't necessary when CloudWatch already offers all needed functionality for complete observability. For observability of AWS applications at scale, CloudWatch is sufficient - Prometheus is redundant and adds operational overhead."
+        }
+      },
+      {
+        title: {
           "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights",
           "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights"
         },
         correct: true,
         explanation: {
-          "pt-BR": "CloudWatch Logs centraliza logs de todos os serviços. CloudWatch Metrics rastreia métricas de performance. X-Ray rastreia requisições distribuídas mostrando latência de cada componente. Alarms alerta proativamente sobre problemas. Dashboards visualiza métricas em tempo real. Insights permite queries complexas em logs. Esta combinação oferece observabilidade completa (logs, métricas, traces, alertas).",
-          "en": "CloudWatch Logs centralizes logs from all services. CloudWatch Metrics tracks performance metrics. X-Ray traces distributed requests showing latency of each component. Alarms proactively alerts about problems. Dashboards visualizes metrics in real-time. Insights allows complex queries on logs. This combination offers complete observability (logs, metrics, traces, alerts)."
+          "pt-BR": "CloudWatch Logs centraliza logs de todos os 150+ microserviços com retenção de 90 dias para compliance. CloudWatch Metrics rastreia métricas de performance em tempo real (latência, throughput, erro rate) com granularidade de 1 minuto e suporta métricas customizadas de negócio. X-Ray rastreia requisições distribuídas mostrando latência de cada componente (identificando qual serviço causa latência de 30s em < 2 minutos). CloudWatch Alarms alerta proativamente baseado em thresholds e anomalias. Dashboards visualiza métricas em tempo real com métricas de negócio. Insights permite queries complexas em logs para correlacionar logs, métricas e traces. Esta combinação oferece observabilidade completa escalando para 100 milhões de requisições diárias.",
+          "en": "CloudWatch Logs centralizes logs from all 150+ microservices with 90-day retention for compliance. CloudWatch Metrics tracks real-time performance metrics (latency, throughput, error rate) with 1-minute granularity and supports custom business metrics. X-Ray traces distributed requests showing latency of each component (identifying which service causes 30s latency in < 2 minutes). CloudWatch Alarms proactively alerts based on thresholds and anomalies. Dashboards visualizes real-time metrics with business metrics. Insights allows complex log queries to correlate logs, metrics and traces. This combination offers complete observability scaling to 100 million daily requests."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas console.log",
-          "en": "Only console.log"
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards (sem CloudWatch Insights)",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards (without CloudWatch Insights)"
         },
         correct: false,
         explanation: {
-          "pt-BR": "Console.log não oferece observabilidade estruturada: logs não são centralizados, não há métricas, não há traces distribuídos, não há alertas, não há dashboards, e não há queries complexas. Para uma aplicação distribuída complexa, é necessário observabilidade completa com CloudWatch e X-Ray.",
-          "en": "Console.log doesn't offer structured observability: logs aren't centralized, no metrics, no distributed traces, no alerts, no dashboards, and no complex queries. For a complex distributed application, complete observability with CloudWatch and X-Ray is needed."
+          "pt-BR": "Esta solução inclui Logs, Metrics, X-Ray, Alarms e Dashboards (componentes corretos), mas falta CloudWatch Insights que é essencial para queries complexas em logs e correlação entre logs, métricas e traces. Para uma equipe que precisa identificar rapidamente qual serviço está causando degradação em menos de 2 minutos, Insights permite queries SQL-like em logs para encontrar padrões de erro, correlacionar logs entre múltiplos serviços, e identificar a causa raiz de problemas. Sem Insights, a equipe precisaria analisar logs manualmente ou usar ferramentas externas, tornando diagnóstico muito mais lento. Para observabilidade completa em escala, Insights é essencial.",
+          "en": "This solution includes Logs, Metrics, X-Ray, Alarms and Dashboards (correct components), but lacks CloudWatch Insights which is essential for complex log queries and correlation between logs, metrics and traces. For a team that needs to quickly identify which service is causing degradation in less than 2 minutes, Insights allows SQL-like queries on logs to find error patterns, correlate logs between multiple services, and identify root cause of problems. Without Insights, the team would need to manually analyze logs or use external tools, making diagnosis much slower. For complete observability at scale, Insights is essential."
         }
       },
       {
         title: {
-          "pt-BR": "Apenas CloudWatch Logs",
-          "en": "Only CloudWatch Logs"
+          "pt-BR": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights + Elasticsearch para análise de logs",
+          "en": "CloudWatch Logs + CloudWatch Metrics + X-Ray + CloudWatch Alarms + CloudWatch Dashboards + CloudWatch Insights + Elasticsearch for log analysis"
         },
         correct: false,
         explanation: {
-          "pt-BR": "CloudWatch Logs sozinho não mostra traces distribuídos (X-Ray), não oferece métricas de performance (CloudWatch Metrics), não oferece alertas proativos (CloudWatch Alarms), e não oferece visualização em tempo real (Dashboards). Para observabilidade completa, é necessário combinar Logs com Metrics, X-Ray, Alarms e Dashboards.",
-          "en": "CloudWatch Logs alone doesn't show distributed traces (X-Ray), doesn't offer performance metrics (CloudWatch Metrics), doesn't offer proactive alerts (CloudWatch Alarms), and doesn't offer real-time visualization (Dashboards). For complete observability, combining Logs with Metrics, X-Ray, Alarms and Dashboards is needed."
-        }
-      },
-      {
-        title: {
-          "pt-BR": "Apenas X-Ray",
-          "en": "Only X-Ray"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "X-Ray mostra traces distribuídos, mas sozinho não oferece logs centralizados (CloudWatch Logs), não oferece métricas de performance (CloudWatch Metrics), não oferece alertas proativos (CloudWatch Alarms), e não oferece queries complexas em logs (CloudWatch Insights). Para observabilidade completa, é necessário combinar X-Ray com CloudWatch.",
-          "en": "X-Ray shows distributed traces, but alone doesn't offer centralized logs (CloudWatch Logs), doesn't offer performance metrics (CloudWatch Metrics), doesn't offer proactive alerts (CloudWatch Alarms), and doesn't offer complex queries on logs (CloudWatch Insights). For complete observability, combining X-Ray with CloudWatch is needed."
+          "pt-BR": "Esta solução inclui todos os componentes essenciais do CloudWatch (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), mas adiciona Elasticsearch desnecessariamente. CloudWatch Insights já oferece análise de logs com queries SQL-like, suporta queries complexas, e integra nativamente com CloudWatch Logs. Elasticsearch adiciona complexidade (requer cluster Elasticsearch, configuração de índices, exportação de logs do CloudWatch), custo significativo, e não é necessário quando CloudWatch Insights já oferece análise de logs completa. Para observabilidade de aplicações AWS, CloudWatch Insights é suficiente - Elasticsearch é redundante e adiciona overhead operacional e financeiro.",
+          "en": "This solution includes all essential CloudWatch components (Logs, Metrics, X-Ray, Insights, Alarms, Dashboards), but unnecessarily adds Elasticsearch. CloudWatch Insights already offers log analysis with SQL-like queries, supports complex queries, and natively integrates with CloudWatch Logs. Elasticsearch adds complexity (requires Elasticsearch cluster, index configuration, log export from CloudWatch), significant cost, and isn't necessary when CloudWatch Insights already offers complete log analysis. For observability of AWS applications, CloudWatch Insights is sufficient - Elasticsearch is redundant and adds operational and financial overhead."
         }
       }
     ],

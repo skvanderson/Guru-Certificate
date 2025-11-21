@@ -127,78 +127,62 @@ const ExamProtection = ({ children }) => {
     // Detectar tentativas de captura
     const detectCapture = () => {
       // Detectar mudanças no foco da janela (possível captura)
+      // Desabilitar detecção de visibility change pois causa muitos falsos positivos
+      // (mudanças de aba, notificações do sistema, etc.)
+      // Apenas detectar através de atalhos de teclado que já estão cobertos
       const handleVisibilityChange = () => {
-        if (document.hidden) {
-          setTimeout(() => {
-            if (!document.hidden) {
-              triggerWarning();
-            }
-          }, 100);
-        }
+        // Desabilitado - não fazer nada para evitar falsos positivos
+        // Em produção, poderia ser reativado com lógica mais sofisticada
       };
 
       // Detectar mudanças no tamanho da janela (apenas mudanças significativas)
       const handleResize = () => {
-        // No mobile, ignorar pequenas mudanças de tamanho (barra de navegação, etc)
+        // No mobile, desabilitar completamente a detecção de resize
+        // pois mudanças pequenas são muito comuns (barra de navegação, rotação, etc)
         if (isMobile) {
-          // Limpar timer anterior
-          if (resizeTimer) {
-            clearTimeout(resizeTimer);
-          }
-          
-          // Aguardar um pouco antes de verificar (debounce)
-          resizeTimer = setTimeout(() => {
-            const currentWidth = window.innerWidth;
-            const currentHeight = window.innerHeight;
-            
-            // Só disparar se houver uma mudança significativa (mais de 50px)
-            const widthDiff = Math.abs(currentWidth - initialWidth);
-            const heightDiff = Math.abs(currentHeight - initialHeight);
-            
-            if (widthDiff > 50 || heightDiff > 50) {
-              initialWidth = currentWidth;
-              initialHeight = currentHeight;
-              triggerWarning();
-            }
-          }, 500);
-        } else {
-          // No desktop, verificar mudanças significativas
+          // Atualizar tamanho inicial silenciosamente para evitar falsos positivos
           if (resizeTimer) {
             clearTimeout(resizeTimer);
           }
           
           resizeTimer = setTimeout(() => {
-            const currentWidth = window.innerWidth;
-            const currentHeight = window.innerHeight;
-            
-            const widthDiff = Math.abs(currentWidth - initialWidth);
-            const heightDiff = Math.abs(currentHeight - initialHeight);
-            
-            // No desktop, threshold menor (30px) mas ainda significativo
-            if (widthDiff > 30 || heightDiff > 30) {
-              initialWidth = currentWidth;
-              initialHeight = currentHeight;
-              triggerWarning();
-            }
-          }, 300);
+            // Apenas atualizar o tamanho inicial, sem disparar aviso
+            initialWidth = window.innerWidth;
+            initialHeight = window.innerHeight;
+          }, 1000);
+          return; // Não fazer mais nada no mobile
         }
+        
+        // No desktop, verificar mudanças significativas apenas
+        if (resizeTimer) {
+          clearTimeout(resizeTimer);
+        }
+        
+        resizeTimer = setTimeout(() => {
+          const currentWidth = window.innerWidth;
+          const currentHeight = window.innerHeight;
+          
+          const widthDiff = Math.abs(currentWidth - initialWidth);
+          const heightDiff = Math.abs(currentHeight - initialHeight);
+          
+          // No desktop, threshold muito maior (100px) para evitar falsos positivos
+          // Só disparar se for uma mudança realmente significativa (redimensionamento de janela)
+          if (widthDiff > 100 || heightDiff > 100) {
+            initialWidth = currentWidth;
+            initialHeight = currentHeight;
+            triggerWarning();
+          } else {
+            // Atualizar silenciosamente para pequenas mudanças
+            initialWidth = currentWidth;
+            initialHeight = currentHeight;
+          }
+        }, 500);
       };
 
       // Detectar tentativas de abrir DevTools
-      let devtools = { open: false, orientation: null };
-      const threshold = 160;
-      
-      const devtoolsInterval = setInterval(() => {
-        if (window.outerHeight - window.innerHeight > threshold || 
-            window.outerWidth - window.innerWidth > threshold) {
-          if (!devtools.open) {
-            devtools.open = true;
-            triggerWarning();
-          }
-        } else {
-          devtools.open = false;
-        }
-      }, 500);
+      // Desabilitar detecção automática de DevTools pois causa muitos falsos positivos
+      // Apenas detectar através de atalhos de teclado (F12, Ctrl+Shift+I) que já estão cobertos
+      // const devtoolsInterval = null; // Desabilitado
 
       document.addEventListener('visibilitychange', handleVisibilityChange);
       window.addEventListener('resize', handleResize);
@@ -207,7 +191,7 @@ const ExamProtection = ({ children }) => {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         window.removeEventListener('resize', handleResize);
         if (resizeTimer) clearTimeout(resizeTimer);
-        clearInterval(devtoolsInterval);
+        // DevTools detection e visibility change desabilitados para evitar falsos positivos
       };
     };
 

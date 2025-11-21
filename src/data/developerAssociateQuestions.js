@@ -19,17 +19,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Aumentar o timeout das funções Lambda para 30 segundos",
-          "en": "Increase Lambda function timeout to 30 seconds"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Aumentar apenas o timeout não resolve o problema de performance, apenas adia o timeout. Se uma função precisa processar 50.000 pedidos por hora e está falhando, o problema é arquitetural (workflow complexo, falta de desacoplamento), não apenas o timeout. É necessário refatorar a arquitetura, não apenas aumentar limites.",
-          "en": "Increasing only the timeout doesn't solve the performance problem, it just delays the timeout. If a function needs to process 50,000 orders per hour and is failing, the problem is architectural (complex workflow, lack of decoupling), not just the timeout. Architecture refactoring is needed, not just increasing limits."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Implementar Step Functions para orquestração, SQS para desacoplamento, e otimizar queries DynamoDB com batch operations",
           "en": "Implement Step Functions for orchestration, SQS for decoupling, and optimize DynamoDB queries with batch operations"
         },
@@ -37,6 +26,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Step Functions orquestra workflows complexos permitindo que funções Lambda sejam executadas em sequência ou paralelo, evitando timeouts. SQS desacopla componentes permitindo processamento assíncrono e melhor tolerância a falhas. Batch operations no DynamoDB reduzem custos e latência. Esta solução arquitetural resolve o problema de raiz.",
           "en": "Step Functions orchestrates complex workflows allowing Lambda functions to run in sequence or parallel, avoiding timeouts. SQS decouples components allowing asynchronous processing and better fault tolerance. DynamoDB batch operations reduce costs and latency. This architectural solution solves the root problem."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Aumentar o timeout das funções Lambda para 30 segundos",
+          "en": "Increase Lambda function timeout to 30 seconds"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Aumentar apenas o timeout não resolve o problema de performance, apenas adia o timeout. Se uma função precisa processar 50.000 pedidos por hora e está falhando, o problema é arquitetural (workflow complexo, falta de desacoplamento), não apenas o timeout. É necessário refatorar a arquitetura, não apenas aumentar limites.",
+          "en": "Increasing only the timeout doesn't solve the performance problem, it just delays the timeout. If a function needs to process 50,000 orders per hour and is failing, the problem is architectural (complex workflow, lack of decoupling), not just the timeout. Architecture refactoring is needed, not just increasing limits."
         }
       },
       {
@@ -87,17 +87,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "API Gateway com usage plans, API keys, Lambda authorizers, e CloudWatch Logs",
-          "en": "API Gateway with usage plans, API keys, Lambda authorizers, and CloudWatch Logs"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "API Gateway oferece versionamento nativo de APIs (v1, v2, v3), usage plans para rate limiting granular por cliente, Lambda authorizers para autenticação JWT personalizada, e integração nativa com CloudWatch Logs para logging detalhado. Esta combinação atende todos os requisitos: versionamento, rate limiting, autenticação JWT, logging, e suporte a diferentes SLAs através de usage plans.",
-          "en": "API Gateway offers native API versioning (v1, v2, v3), usage plans for granular per-client rate limiting, Lambda authorizers for custom JWT authentication, and native integration with CloudWatch Logs for detailed logging. This combination meets all requirements: versioning, rate limiting, JWT authentication, logging, and support for different SLAs through usage plans."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas Application Load Balancer com Lambda",
           "en": "Only Application Load Balancer with Lambda"
         },
@@ -105,6 +94,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Application Load Balancer não oferece versionamento de APIs, rate limiting granular por cliente, ou autenticação JWT integrada. Você teria que implementar tudo isso manualmente no código Lambda, aumentando complexidade e custos. API Gateway oferece todos esses recursos nativamente.",
           "en": "Application Load Balancer doesn't offer API versioning, granular per-client rate limiting, or integrated JWT authentication. You would have to implement all of this manually in Lambda code, increasing complexity and costs. API Gateway offers all these features natively."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "API Gateway com usage plans, API keys, Lambda authorizers, e CloudWatch Logs",
+          "en": "API Gateway with usage plans, API keys, Lambda authorizers, and CloudWatch Logs"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "API Gateway oferece versionamento nativo de APIs (v1, v2, v3), usage plans para rate limiting granular por cliente, Lambda authorizers para autenticação JWT personalizada, e integração nativa com CloudWatch Logs para logging detalhado. Esta combinação atende todos os requisitos: versionamento, rate limiting, autenticação JWT, logging, e suporte a diferentes SLAs através de usage plans.",
+          "en": "API Gateway offers native API versioning (v1, v2, v3), usage plans for granular per-client rate limiting, Lambda authorizers for custom JWT authentication, and native integration with CloudWatch Logs for detailed logging. This combination meets all requirements: versioning, rate limiting, JWT authentication, logging, and support for different SLAs through usage plans."
         }
       },
       {
@@ -155,17 +155,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS CodePipeline + CodeBuild + CodeDeploy + SAM/CloudFormation + Lambda aliases para rollback",
-          "en": "AWS CodePipeline + CodeBuild + CodeDeploy + SAM/CloudFormation + Lambda aliases for rollback"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "CodePipeline automatiza o pipeline completo, CodeBuild executa testes automatizados, CodeDeploy gerencia deployments em múltiplos ambientes, SAM/CloudFormation permite infraestrutura como código para 50+ funções Lambda, e Lambda aliases permitem rollback instantâneo trocando entre versões. Esta é a solução completa e nativa AWS para CI/CD serverless.",
-          "en": "CodePipeline automates the complete pipeline, CodeBuild runs automated tests, CodeDeploy manages deployments to multiple environments, SAM/CloudFormation enables infrastructure as code for 50+ Lambda functions, and Lambda aliases enable instant rollback by switching between versions. This is the complete and native AWS solution for serverless CI/CD."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Deploy manual via console AWS",
           "en": "Manual deployment via AWS console"
         },
@@ -184,6 +173,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "GitHub Actions pode executar testes e builds, mas sem integração nativa com serviços AWS como CodeDeploy e Lambda aliases, você perderia recursos importantes como rollback rápido e gerenciamento de deployments em múltiplos ambientes. A integração nativa com serviços AWS oferece melhor experiência e recursos específicos para serverless.",
           "en": "GitHub Actions can run tests and builds, but without native integration with AWS services like CodeDeploy and Lambda aliases, you would lose important features like fast rollback and deployment management across multiple environments. Native integration with AWS services offers better experience and serverless-specific features."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS CodePipeline + CodeBuild + CodeDeploy + SAM/CloudFormation + Lambda aliases para rollback",
+          "en": "AWS CodePipeline + CodeBuild + CodeDeploy + SAM/CloudFormation + Lambda aliases for rollback"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "CodePipeline automatiza o pipeline completo, CodeBuild executa testes automatizados, CodeDeploy gerencia deployments em múltiplos ambientes, SAM/CloudFormation permite infraestrutura como código para 50+ funções Lambda, e Lambda aliases permitem rollback instantâneo trocando entre versões. Esta é a solução completa e nativa AWS para CI/CD serverless.",
+          "en": "CodePipeline automates the complete pipeline, CodeBuild runs automated tests, CodeDeploy manages deployments to multiple environments, SAM/CloudFormation enables infrastructure as code for 50+ Lambda functions, and Lambda aliases enable instant rollback by switching between versions. This is the complete and native AWS solution for serverless CI/CD."
         }
       },
       {
@@ -223,17 +223,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS X-Ray + CloudWatch Logs + CloudWatch Insights + Custom metrics",
-          "en": "AWS X-Ray + CloudWatch Logs + CloudWatch Insights + Custom metrics"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "X-Ray rastreia requisições através de múltiplos serviços (Lambda, API Gateway, DynamoDB, SQS) permitindo visualizar o fluxo completo e correlacionar requisições. CloudWatch Logs centraliza logs de todos os serviços, CloudWatch Insights permite queries complexas nos logs, e custom metrics fornecem visibilidade de negócio. Esta combinação oferece observabilidade completa.",
-          "en": "X-Ray traces requests across multiple services (Lambda, API Gateway, DynamoDB, SQS) allowing visualization of the complete flow and correlation of requests. CloudWatch Logs centralizes logs from all services, CloudWatch Insights allows complex queries on logs, and custom metrics provide business visibility. This combination offers complete observability."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas console.log em cada função",
           "en": "Only console.log in each function"
         },
@@ -263,6 +252,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Métricas básicas do CloudWatch fornecem dados agregados (invocações, erros, duração), mas não fornecem contexto suficiente para debugging de erros intermitentes. Não mostram o fluxo de execução, não correlacionam requisições entre serviços, e não permitem análise detalhada de logs. Para debugging, é necessário X-Ray e CloudWatch Logs/Insights.",
           "en": "Basic CloudWatch metrics provide aggregated data (invocations, errors, duration), but don't provide enough context for debugging intermittent errors. They don't show execution flow, don't correlate requests between services, and don't allow detailed log analysis. For debugging, X-Ray and CloudWatch Logs/Insights are needed."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS X-Ray + CloudWatch Logs + CloudWatch Insights + Custom metrics",
+          "en": "AWS X-Ray + CloudWatch Logs + CloudWatch Insights + Custom metrics"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "X-Ray rastreia requisições através de múltiplos serviços (Lambda, API Gateway, DynamoDB, SQS) permitindo visualizar o fluxo completo e correlacionar requisições. CloudWatch Logs centraliza logs de todos os serviços, CloudWatch Insights permite queries complexas nos logs, e custom metrics fornecem visibilidade de negócio. Esta combinação oferece observabilidade completa.",
+          "en": "X-Ray traces requests across multiple services (Lambda, API Gateway, DynamoDB, SQS) allowing visualization of the complete flow and correlation of requests. CloudWatch Logs centralizes logs from all services, CloudWatch Insights allows complex queries on logs, and custom metrics provide business visibility. This combination offers complete observability."
         }
       }
     ],
@@ -359,17 +359,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Kinesis Data Streams + Lambda + S3 + Glue + Athena + Dead Letter Queues para reprocessamento",
-          "en": "Kinesis Data Streams + Lambda + S3 + Glue + Athena + Dead Letter Queues for reprocessing"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Kinesis Data Streams processa dados em tempo real de múltiplas fontes, Lambda transforma e valida dados, S3 armazena dados para batch processing, Glue cataloga e transforma dados, Athena permite queries SQL em S3, e Dead Letter Queues garantem reprocessamento em caso de falha. Esta arquitetura é tolerante a falhas, suporta tempo real e batch, e permite reprocessamento.",
-          "en": "Kinesis Data Streams processes real-time data from multiple sources, Lambda transforms and validates data, S3 stores data for batch processing, Glue catalogs and transforms data, Athena allows SQL queries on S3, and Dead Letter Queues ensure reprocessing on failure. This architecture is fault-tolerant, supports real-time and batch, and allows reprocessing."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas S3 com processamento manual",
           "en": "Only S3 with manual processing"
         },
@@ -377,6 +366,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "S3 sozinho é apenas armazenamento, não processa dados em tempo real, não oferece transformação automática, não valida dados, e processamento manual não escala para 1TB diário. É necessário uma pipeline de processamento automatizada com serviços como Kinesis, Lambda e Glue para processar volumes grandes de dados.",
           "en": "S3 alone is just storage, doesn't process data in real-time, doesn't offer automatic transformation, doesn't validate data, and manual processing doesn't scale for 1TB daily. An automated processing pipeline with services like Kinesis, Lambda, and Glue is needed to process large data volumes."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Kinesis Data Streams + Lambda + S3 + Glue + Athena + Dead Letter Queues para reprocessamento",
+          "en": "Kinesis Data Streams + Lambda + S3 + Glue + Athena + Dead Letter Queues for reprocessing"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Kinesis Data Streams processa dados em tempo real de múltiplas fontes, Lambda transforma e valida dados, S3 armazena dados para batch processing, Glue cataloga e transforma dados, Athena permite queries SQL em S3, e Dead Letter Queues garantem reprocessamento em caso de falha. Esta arquitetura é tolerante a falhas, suporta tempo real e batch, e permite reprocessamento.",
+          "en": "Kinesis Data Streams processes real-time data from multiple sources, Lambda transforms and validates data, S3 stores data for batch processing, Glue catalogs and transforms data, Athena allows SQL queries on S3, and Dead Letter Queues ensure reprocessing on failure. This architecture is fault-tolerant, supports real-time and batch, and allows reprocessing."
         }
       },
       {
@@ -427,17 +427,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "ElastiCache Redis + CloudFront + DynamoDB TTL + Cache invalidation automática",
-          "en": "ElastiCache Redis + CloudFront + DynamoDB TTL + Automatic cache invalidation"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "ElastiCache Redis oferece cache em memória distribuído para dados dinâmicos (carrinho, sessões, catálogo). CloudFront cacheia conteúdo estático (imagens, descrições) globalmente em edge locations. DynamoDB TTL remove dados expirados automaticamente. Invalidação automática mantém dados atualizados quando preços/estoque mudam. Esta combinação oferece cache multi-camada eficiente.",
-          "en": "ElastiCache Redis provides distributed in-memory cache for dynamic data (cart, sessions, catalog). CloudFront caches static content (images, descriptions) globally at edge locations. DynamoDB TTL automatically removes expired data. Automatic invalidation keeps data updated when prices/stock change. This combination offers efficient multi-layer caching."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas cache local no navegador",
           "en": "Only local browser cache"
         },
@@ -456,6 +445,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "S3 é armazenamento de objetos, não um serviço de cache. S3 sozinho não oferece cache em memória para dados dinâmicos, não cacheia globalmente, e não oferece invalidação automática. Para cache de aplicações, é necessário ElastiCache para dados dinâmicos e CloudFront para conteúdo estático.",
           "en": "S3 is object storage, not a caching service. S3 alone doesn't offer in-memory cache for dynamic data, doesn't cache globally, and doesn't offer automatic invalidation. For application caching, ElastiCache is needed for dynamic data and CloudFront for static content."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "ElastiCache Redis + CloudFront + DynamoDB TTL + Cache invalidation automática",
+          "en": "ElastiCache Redis + CloudFront + DynamoDB TTL + Automatic cache invalidation"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "ElastiCache Redis oferece cache em memória distribuído para dados dinâmicos (carrinho, sessões, catálogo). CloudFront cacheia conteúdo estático (imagens, descrições) globalmente em edge locations. DynamoDB TTL remove dados expirados automaticamente. Invalidação automática mantém dados atualizados quando preços/estoque mudam. Esta combinação oferece cache multi-camada eficiente.",
+          "en": "ElastiCache Redis provides distributed in-memory cache for dynamic data (cart, sessions, catalog). CloudFront caches static content (images, descriptions) globally at edge locations. DynamoDB TTL automatically removes expired data. Automatic invalidation keeps data updated when prices/stock change. This combination offers efficient multi-layer caching."
         }
       },
       {
@@ -495,17 +495,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "EventBridge + SQS + Dead Letter Queues + Retry policies + Circuit breaker pattern",
-          "en": "EventBridge + SQS + Dead Letter Queues + Retry policies + Circuit breaker pattern"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "EventBridge roteia eventos entre serviços de forma desacoplada, SQS garante entrega com retry automático e permite que sistemas externos processem no seu próprio ritmo, Dead Letter Queues capturam mensagens que falharam após múltiplas tentativas para análise, retry policies configuram tentativas inteligentes, e circuit breaker previne cascata de falhas quando sistemas externos estão indisponíveis. Esta é a arquitetura mais robusta.",
-          "en": "EventBridge routes events between services in a decoupled way, SQS guarantees delivery with automatic retry and allows external systems to process at their own pace, Dead Letter Queues capture messages that failed after multiple attempts for analysis, retry policies configure intelligent attempts, and circuit breaker prevents cascade failures when external systems are unavailable. This is the most robust architecture."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Chamadas HTTP síncronas diretas",
           "en": "Direct synchronous HTTP calls"
         },
@@ -535,6 +524,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Webhooks são notificações HTTP push, mas não garantem entrega se o endpoint estiver indisponível. Se o sistema externo estiver offline, a notificação é perdida. Para garantir entrega eventual, é necessário usar SQS que armazena mensagens e tenta entregar até conseguir, com retry automático e Dead Letter Queues.",
           "en": "Webhooks are HTTP push notifications, but don't guarantee delivery if the endpoint is unavailable. If the external system is offline, the notification is lost. To guarantee eventual delivery, SQS is needed which stores messages and tries to deliver until successful, with automatic retry and Dead Letter Queues."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "EventBridge + SQS + Dead Letter Queues + Retry policies + Circuit breaker pattern",
+          "en": "EventBridge + SQS + Dead Letter Queues + Retry policies + Circuit breaker pattern"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "EventBridge roteia eventos entre serviços de forma desacoplada, SQS garante entrega com retry automático e permite que sistemas externos processem no seu próprio ritmo, Dead Letter Queues capturam mensagens que falharam após múltiplas tentativas para análise, retry policies configuram tentativas inteligentes, e circuit breaker previne cascata de falhas quando sistemas externos estão indisponíveis. Esta é a arquitetura mais robusta.",
+          "en": "EventBridge routes events between services in a decoupled way, SQS guarantees delivery with automatic retry and allows external systems to process at their own pace, Dead Letter Queues capture messages that failed after multiple attempts for analysis, retry policies configure intelligent attempts, and circuit breaker prevents cascade failures when external systems are unavailable. This is the most robust architecture."
         }
       }
     ],
@@ -631,17 +631,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS Organizations + Service Catalog + CloudFormation + CodePipeline + Blue/Green deployments + Cost allocation tags",
-          "en": "AWS Organizations + Service Catalog + CloudFormation + CodePipeline + Blue/Green deployments + Cost allocation tags"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "AWS Organizations gerencia múltiplas contas AWS com governança centralizada e políticas de segurança. Service Catalog padroniza recursos aprovados. CloudFormation permite infraestrutura como código. CodePipeline automatiza deployments. Blue/Green deployments garantem zero downtime. Cost allocation tags rastreiam custos por equipe/ambiente. Esta combinação oferece governança completa, automação e controle de custos.",
-          "en": "AWS Organizations manages multiple AWS accounts with centralized governance and security policies. Service Catalog standardizes approved resources. CloudFormation enables infrastructure as code. CodePipeline automates deployments. Blue/Green deployments ensure zero downtime. Cost allocation tags track costs per team/environment. This combination offers complete governance, automation, and cost control."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas contas AWS separadas sem governança",
           "en": "Only separate AWS accounts without governance"
         },
@@ -649,6 +638,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Contas AWS separadas sem governança são difíceis de gerenciar, não oferecem controle centralizado de custos, não garantem compliance, não padronizam recursos, e cada equipe pode criar recursos diferentes. AWS Organizations é necessário para governança centralizada, políticas de segurança, e controle de custos.",
           "en": "Separate AWS accounts without governance are hard to manage, don't offer centralized cost control, don't guarantee compliance, don't standardize resources, and each team can create different resources. AWS Organizations is needed for centralized governance, security policies, and cost control."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Organizations + Service Catalog + CloudFormation + CodePipeline + Blue/Green deployments + Cost allocation tags",
+          "en": "AWS Organizations + Service Catalog + CloudFormation + CodePipeline + Blue/Green deployments + Cost allocation tags"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "AWS Organizations gerencia múltiplas contas AWS com governança centralizada e políticas de segurança. Service Catalog padroniza recursos aprovados. CloudFormation permite infraestrutura como código. CodePipeline automatiza deployments. Blue/Green deployments garantem zero downtime. Cost allocation tags rastreiam custos por equipe/ambiente. Esta combinação oferece governança completa, automação e controle de custos.",
+          "en": "AWS Organizations manages multiple AWS accounts with centralized governance and security policies. Service Catalog standardizes approved resources. CloudFormation enables infrastructure as code. CodePipeline automates deployments. Blue/Green deployments ensure zero downtime. Cost allocation tags track costs per team/environment. This combination offers complete governance, automation, and cost control."
         }
       },
       {
@@ -710,17 +710,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "Usar Provisioned Concurrency para manter instâncias quentes durante picos",
-          "en": "Use Provisioned Concurrency to keep instances warm during peaks"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Provisioned Concurrency mantém instâncias Lambda pré-inicializadas e prontas, eliminando completamente cold starts. Para picos previsíveis às 9h e 18h, você pode escalar Provisioned Concurrency automaticamente usando Scheduled Scaling. Isso garante latência consistente abaixo de 100ms durante os picos.",
-          "en": "Provisioned Concurrency keeps Lambda instances pre-initialized and ready, completely eliminating cold starts. For predictable peaks at 9 AM and 6 PM, you can automatically scale Provisioned Concurrency using Scheduled Scaling. This guarantees consistent latency below 100ms during peaks."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Usar apenas On-Demand concurrency",
           "en": "Use only On-Demand concurrency"
         },
@@ -728,6 +717,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "On-Demand concurrency ainda sofre cold starts quando novas instâncias precisam ser inicializadas. Durante picos, se todas as instâncias quentes estiverem ocupadas, Lambda cria novas instâncias que causam cold starts de 500ms+. Para latência consistente, Provisioned Concurrency é necessário.",
           "en": "On-Demand concurrency still suffers cold starts when new instances need to be initialized. During peaks, if all warm instances are busy, Lambda creates new instances that cause 500ms+ cold starts. For consistent latency, Provisioned Concurrency is needed."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Usar Provisioned Concurrency para manter instâncias quentes durante picos",
+          "en": "Use Provisioned Concurrency to keep instances warm during peaks"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Provisioned Concurrency mantém instâncias Lambda pré-inicializadas e prontas, eliminando completamente cold starts. Para picos previsíveis às 9h e 18h, você pode escalar Provisioned Concurrency automaticamente usando Scheduled Scaling. Isso garante latência consistente abaixo de 100ms durante os picos.",
+          "en": "Provisioned Concurrency keeps Lambda instances pre-initialized and ready, completely eliminating cold starts. For predictable peaks at 9 AM and 6 PM, you can automatically scale Provisioned Concurrency using Scheduled Scaling. This guarantees consistent latency below 100ms during peaks."
         }
       },
       {
@@ -778,17 +778,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "Criar Global Secondary Index (GSI) com email como chave de partição e usar On-Demand billing",
-          "en": "Create Global Secondary Index (GSI) with email as partition key and use On-Demand billing"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "GSI com email como chave de partição permite consultas diretas por email sem scan, resolvendo o problema de throttling. On-Demand billing escala automaticamente eliminando preocupações com capacity planning. Esta combinação resolve tanto o problema de performance (consultas eficientes) quanto o problema de throttling (escalabilidade automática).",
-          "en": "GSI with email as partition key allows direct queries by email without scan, solving the throttling problem. On-Demand billing scales automatically eliminating capacity planning concerns. This combination solves both the performance problem (efficient queries) and the throttling problem (automatic scaling)."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Mudar a chave de partição para email",
           "en": "Change partition key to email"
         },
@@ -807,6 +796,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "LSI (Local Secondary Index) compartilha a mesma chave de partição da tabela principal. Se a chave de partição é userId, LSI não pode ter email como chave de partição. LSI só pode ter chave de ordenação diferente. Para consultas por email, é necessário GSI que pode ter chave de partição diferente.",
           "en": "LSI (Local Secondary Index) shares the same partition key as the main table. If the partition key is userId, LSI cannot have email as partition key. LSI can only have a different sort key. For email queries, GSI is needed which can have a different partition key."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Criar Global Secondary Index (GSI) com email como chave de partição e usar On-Demand billing",
+          "en": "Create Global Secondary Index (GSI) with email as partition key and use On-Demand billing"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "GSI com email como chave de partição permite consultas diretas por email sem scan, resolvendo o problema de throttling. On-Demand billing escala automaticamente eliminando preocupações com capacity planning. Esta combinação resolve tanto o problema de performance (consultas eficientes) quanto o problema de throttling (escalabilidade automática).",
+          "en": "GSI with email as partition key allows direct queries by email without scan, solving the throttling problem. On-Demand billing scales automatically eliminating capacity planning concerns. This combination solves both the performance problem (efficient queries) and the throttling problem (automatic scaling)."
         }
       }
     ],
@@ -835,17 +835,6 @@ export const developerAssociateQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Aumentar apenas o throttling limit",
-          "en": "Only increase throttling limit"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Aumentar apenas o throttling limit não resolve o problema de custos (mais requisições ainda chegam ao Lambda), não resolve o problema de requisições repetidas (cada requisição ainda executa Lambda), e não otimiza performance. É necessário habilitar cache para reduzir requisições ao Lambda e configurar throttling adequado para controlar tráfego.",
-          "en": "Increasing only the throttling limit doesn't solve the cost problem (more requests still reach Lambda), doesn't solve the repeated requests problem (each request still executes Lambda), and doesn't optimize performance. Cache needs to be enabled to reduce requests to Lambda and proper throttling needs to be configured to control traffic."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Habilitar API Gateway caching + configurar usage plans com throttling e burst limits",
           "en": "Enable API Gateway caching + configure usage plans with throttling and burst limits"
         },
@@ -853,6 +842,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "API Gateway caching serve respostas de cache para requisições repetidas, reduzindo drasticamente chamadas ao Lambda e custos. Usage plans com throttling e burst limits controlam tráfego por cliente, prevenindo erros 429 e garantindo que nenhum cliente sobrecarregue a API. Esta combinação resolve problemas de performance, custo e disponibilidade.",
           "en": "API Gateway caching serves cached responses for repeated requests, drastically reducing Lambda calls and costs. Usage plans with throttling and burst limits control traffic per client, preventing 429 errors and ensuring no client overloads the API. This combination solves performance, cost, and availability problems."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Aumentar apenas o throttling limit",
+          "en": "Only increase throttling limit"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Aumentar apenas o throttling limit não resolve o problema de custos (mais requisições ainda chegam ao Lambda), não resolve o problema de requisições repetidas (cada requisição ainda executa Lambda), e não otimiza performance. É necessário habilitar cache para reduzir requisições ao Lambda e configurar throttling adequado para controlar tráfego.",
+          "en": "Increasing only the throttling limit doesn't solve the cost problem (more requests still reach Lambda), doesn't solve the repeated requests problem (each request still executes Lambda), and doesn't optimize performance. Cache needs to be enabled to reduce requests to Lambda and proper throttling needs to be configured to control traffic."
         }
       },
       {
@@ -982,17 +982,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "Usar Lambda Layers para dependências compartilhadas e otimizar tamanho do pacote",
-          "en": "Use Lambda Layers for shared dependencies and optimize package size"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Lambda Layers permite separar dependências compartilhadas em um layer reutilizável e versionado. Cada função referencia o layer, reduzindo drasticamente o tamanho do pacote (apenas código específico da função). Layers são cacheados e reutilizados, acelerando deployments. Esta é a melhor prática para múltiplas funções com dependências compartilhadas.",
-          "en": "Lambda Layers allows separating shared dependencies into a reusable and versioned layer. Each function references the layer, drastically reducing package size (only function-specific code). Layers are cached and reused, speeding up deployments. This is best practice for multiple functions with shared dependencies."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Usar apenas runtime padrão sem dependências",
           "en": "Use only default runtime without dependencies"
         },
@@ -1000,6 +989,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "Runtime padrão não resolve o problema se as funções realmente precisam de bibliotecas específicas (SDKs, frameworks, utilitários). Muitas aplicações precisam de dependências como AWS SDK, bibliotecas de parsing, etc. O problema não é ter dependências, mas sim como gerenciá-las eficientemente com Layers.",
           "en": "Default runtime doesn't solve the problem if functions actually need specific libraries (SDKs, frameworks, utilities). Many applications need dependencies like AWS SDK, parsing libraries, etc. The problem isn't having dependencies, but how to manage them efficiently with Layers."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Usar Lambda Layers para dependências compartilhadas e otimizar tamanho do pacote",
+          "en": "Use Lambda Layers for shared dependencies and optimize package size"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Lambda Layers permite separar dependências compartilhadas em um layer reutilizável e versionado. Cada função referencia o layer, reduzindo drasticamente o tamanho do pacote (apenas código específico da função). Layers são cacheados e reutilizados, acelerando deployments. Esta é a melhor prática para múltiplas funções com dependências compartilhadas.",
+          "en": "Lambda Layers allows separating shared dependencies into a reusable and versioned layer. Each function references the layer, drastically reducing package size (only function-specific code). Layers are cached and reused, speeding up deployments. This is best practice for multiple functions with shared dependencies."
         }
       },
       {
@@ -1050,17 +1050,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "AWS Step Functions com Express Workflows para processamento paralelo e retry policies",
-          "en": "AWS Step Functions with Express Workflows for parallel processing and retry policies"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Step Functions oferece orquestração visual de workflows com suporte a estados paralelos (validação e pagamento podem rodar em paralelo), retry automático por etapa, tratamento de erros, visibilidade completa do progresso, e capacidade de reprocessar etapas falhas. Express Workflows processa alta throughput. Esta é a solução ideal para workflows complexos.",
-          "en": "Step Functions offers visual workflow orchestration with support for parallel states (validation and payment can run in parallel), automatic retry per step, error handling, complete progress visibility, and ability to reprocess failed steps. Express Workflows processes high throughput. This is the ideal solution for complex workflows."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas EventBridge",
           "en": "Only EventBridge"
         },
@@ -1079,6 +1068,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "EC2 com cron jobs não oferece orquestração de workflows, não gerencia estado, não oferece retry automático, não fornece visibilidade, requer gerenciamento de servidores, e não escala automaticamente. Para workflows complexos com múltiplas etapas, Step Functions oferece todas essas capacidades de forma gerenciada.",
           "en": "EC2 with cron jobs doesn't offer workflow orchestration, doesn't manage state, doesn't offer automatic retry, doesn't provide visibility, requires server management, and doesn't scale automatically. For complex workflows with multiple steps, Step Functions offers all these capabilities in a managed way."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Step Functions com Express Workflows para processamento paralelo e retry policies",
+          "en": "AWS Step Functions with Express Workflows for parallel processing and retry policies"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Step Functions oferece orquestração visual de workflows com suporte a estados paralelos (validação e pagamento podem rodar em paralelo), retry automático por etapa, tratamento de erros, visibilidade completa do progresso, e capacidade de reprocessar etapas falhas. Express Workflows processa alta throughput. Esta é a solução ideal para workflows complexos.",
+          "en": "Step Functions offers visual workflow orchestration with support for parallel states (validation and payment can run in parallel), automatic retry per step, error handling, complete progress visibility, and ability to reprocess failed steps. Express Workflows processes high throughput. This is the ideal solution for complex workflows."
         }
       }
     ],
@@ -1254,17 +1254,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "Mover RDS para público ou usar RDS Proxy para connection pooling + provisioned concurrency para manter ENIs quentes",
-          "en": "Move RDS to public or use RDS Proxy for connection pooling + provisioned concurrency to keep ENIs warm"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "RDS Proxy gerencia connection pooling, reduzindo número de conexões e melhorando performance. Provisioned concurrency mantém ENIs pré-criadas, eliminando cold starts de rede. Se segurança permitir, mover RDS para público elimina necessidade de ENIs. Esta combinação resolve problemas de latência e timeouts.",
-          "en": "RDS Proxy manages connection pooling, reducing number of connections and improving performance. Provisioned concurrency keeps ENIs pre-created, eliminating network cold starts. If security allows, moving RDS to public eliminates need for ENIs. This combination solves latency and timeout problems."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Usar apenas VPC sem otimizações",
           "en": "Use only VPC without optimizations"
         },
@@ -1272,6 +1261,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "VPC sem otimizações mantém o problema de criação lenta de ENIs, causando latência alta e timeouts. Cada cold start de rede pode levar 10-15 segundos para criar ENIs. Sem RDS Proxy ou provisioned concurrency, o problema de latência persiste. Otimizações são necessárias para resolver o problema.",
           "en": "VPC without optimizations maintains the slow ENI creation problem, causing high latency and timeouts. Each network cold start can take 10-15 seconds to create ENIs. Without RDS Proxy or provisioned concurrency, the latency problem persists. Optimizations are needed to solve the problem."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Mover RDS para público ou usar RDS Proxy para connection pooling + provisioned concurrency para manter ENIs quentes",
+          "en": "Move RDS to public or use RDS Proxy for connection pooling + provisioned concurrency to keep ENIs warm"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "RDS Proxy gerencia connection pooling, reduzindo número de conexões e melhorando performance. Provisioned concurrency mantém ENIs pré-criadas, eliminando cold starts de rede. Se segurança permitir, mover RDS para público elimina necessidade de ENIs. Esta combinação resolve problemas de latência e timeouts.",
+          "en": "RDS Proxy manages connection pooling, reducing number of connections and improving performance. Provisioned concurrency keeps ENIs pre-created, eliminating network cold starts. If security allows, moving RDS to public eliminates need for ENIs. This combination solves latency and timeout problems."
         }
       },
       {
@@ -1322,17 +1322,6 @@ export const developerAssociateQuestions = [
       },
       {
         title: {
-          "pt-BR": "CloudWatch PutMetricData API + CloudWatch Alarms + CloudWatch Dashboards",
-          "en": "CloudWatch PutMetricData API + CloudWatch Alarms + CloudWatch Dashboards"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "PutMetricData API permite publicar métricas customizadas do Lambda (transações/minuto, valor total, taxa de sucesso). CloudWatch Alarms monitora essas métricas e dispara alertas quando limites são excedidos. Dashboards visualizam métricas em tempo real. Esta combinação oferece rastreamento completo de métricas de negócio.",
-          "en": "PutMetricData API allows publishing custom metrics from Lambda (transactions/minute, total value, success rate). CloudWatch Alarms monitors these metrics and triggers alerts when thresholds are exceeded. Dashboards visualize metrics in real-time. This combination offers complete business metrics tracking."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Apenas console.log",
           "en": "Only console.log"
         },
@@ -1351,6 +1340,17 @@ export const developerAssociateQuestions = [
         explanation: {
           "pt-BR": "DynamoDB não é otimizado para métricas time-series: não oferece agregação automática, não permite alertas nativos, não é eficiente para queries de métricas ao longo do tempo, e não oferece dashboards. CloudWatch é o serviço específico para métricas time-series com agregação e alertas.",
           "en": "DynamoDB isn't optimized for time-series metrics: doesn't offer automatic aggregation, doesn't allow native alerts, isn't efficient for metrics queries over time, and doesn't offer dashboards. CloudWatch is the specific service for time-series metrics with aggregation and alerts."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "CloudWatch PutMetricData API + CloudWatch Alarms + CloudWatch Dashboards",
+          "en": "CloudWatch PutMetricData API + CloudWatch Alarms + CloudWatch Dashboards"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "PutMetricData API permite publicar métricas customizadas do Lambda (transações/minuto, valor total, taxa de sucesso). CloudWatch Alarms monitora essas métricas e dispara alertas quando limites são excedidos. Dashboards visualizam métricas em tempo real. Esta combinação oferece rastreamento completo de métricas de negócio.",
+          "en": "PutMetricData API allows publishing custom metrics from Lambda (transactions/minute, total value, success rate). CloudWatch Alarms monitors these metrics and triggers alerts when thresholds are exceeded. Dashboards visualize metrics in real-time. This combination offers complete business metrics tracking."
         }
       }
     ],

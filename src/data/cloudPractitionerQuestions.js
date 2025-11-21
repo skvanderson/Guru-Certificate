@@ -19,17 +19,6 @@ export const cloudPractitionerQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Configuração de patches de sistema operacional no servidor de banco de dados",
-          "en": "Configuring operating system patches on the database server"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "A configuração de patches do sistema operacional é responsabilidade do cliente na nuvem, não da AWS. No modelo de responsabilidade compartilhada, o cliente é responsável por gerenciar patches do sistema operacional, aplicações e dados.",
-          "en": "Configuring operating system patches is the customer's responsibility in the cloud, not AWS's. In the shared responsibility model, the customer is responsible for managing operating system patches, applications, and data."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Gerenciamento da infraestrutura física dos data centers",
           "en": "Managing the physical infrastructure of data centers"
         },
@@ -37,6 +26,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "A AWS é responsável pela segurança DA nuvem, incluindo a infraestrutura física dos data centers, hardware, software, rede e instalações. Esta é uma responsabilidade fundamental da AWS no modelo de responsabilidade compartilhada.",
           "en": "AWS is responsible for security OF the cloud, including the physical infrastructure of data centers, hardware, software, networking, and facilities. This is a fundamental AWS responsibility in the shared responsibility model."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Configuração de patches de sistema operacional no servidor de banco de dados",
+          "en": "Configuring operating system patches on the database server"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "A configuração de patches do sistema operacional é responsabilidade do cliente na nuvem, não da AWS. No modelo de responsabilidade compartilhada, o cliente é responsável por gerenciar patches do sistema operacional, aplicações e dados.",
+          "en": "Configuring operating system patches is the customer's responsibility in the cloud, not AWS's. In the shared responsibility model, the customer is responsible for managing operating system patches, applications, and data."
         }
       },
       {
@@ -166,17 +166,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "Usar o princípio do menor privilégio com políticas IAM específicas",
-          "en": "Use the principle of least privilege with specific IAM policies"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "O princípio do menor privilégio garante que usuários recebam apenas as permissões mínimas necessárias. Políticas IAM específicas permitem acesso granular apenas aos buckets S3 necessários, sem acesso a outros recursos AWS, seguindo as melhores práticas de segurança.",
-          "en": "The principle of least privilege ensures users receive only the minimum permissions necessary. Specific IAM policies allow granular access only to necessary S3 buckets, without access to other AWS resources, following security best practices."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Compartilhar as credenciais de root da conta",
           "en": "Share the root account credentials"
         },
@@ -184,6 +173,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Compartilhar credenciais de root é uma prática extremamente insegura. A conta root tem acesso total e irrestrito a todos os recursos AWS. Não há rastreabilidade de ações, não é possível revogar acesso individual, e viola completamente todas as práticas de segurança recomendadas pela AWS.",
           "en": "Sharing root account credentials is an extremely insecure practice. The root account has full and unrestricted access to all AWS resources. There's no traceability of actions, cannot revoke individual access, and completely violates all security practices recommended by AWS."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Usar o princípio do menor privilégio com políticas IAM específicas",
+          "en": "Use the principle of least privilege with specific IAM policies"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "O princípio do menor privilégio garante que usuários recebam apenas as permissões mínimas necessárias. Políticas IAM específicas permitem acesso granular apenas aos buckets S3 necessários, sem acesso a outros recursos AWS, seguindo as melhores práticas de segurança.",
+          "en": "The principle of least privilege ensures users receive only the minimum permissions necessary. Specific IAM policies allow granular access only to necessary S3 buckets, without access to other AWS resources, following security best practices."
         }
       },
       {
@@ -234,17 +234,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "AWS Lambda com API Gateway",
-          "en": "AWS Lambda with API Gateway"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "AWS Lambda com API Gateway é uma arquitetura completamente serverless que escala automaticamente de zero a milhares de requisições simultâneas sem qualquer gerenciamento de servidores. Durante o Black Friday, Lambda escala automaticamente processando cada requisição de forma independente.",
-          "en": "AWS Lambda with API Gateway is a completely serverless architecture that automatically scales from zero to thousands of simultaneous requests without any server management. During Black Friday, Lambda automatically scales processing each request independently."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Amazon ECS com Fargate",
           "en": "Amazon ECS with Fargate"
         },
@@ -263,6 +252,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Lightsail é uma solução simplificada para aplicações simples, mas não escala automaticamente e requer gerenciamento de servidores. Não é adequado para picos de tráfego como Black Friday, onde é necessária escalabilidade automática e serverless.",
           "en": "Lightsail is a simplified solution for simple applications, but doesn't scale automatically and requires server management. It's not suitable for traffic peaks like Black Friday, where automatic and serverless scalability is needed."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Lambda com API Gateway",
+          "en": "AWS Lambda with API Gateway"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "AWS Lambda com API Gateway é uma arquitetura completamente serverless que escala automaticamente de zero a milhares de requisições simultâneas sem qualquer gerenciamento de servidores. Durante o Black Friday, Lambda escala automaticamente processando cada requisição de forma independente.",
+          "en": "AWS Lambda with API Gateway is a completely serverless architecture that automatically scales from zero to thousands of simultaneous requests without any server management. During Black Friday, Lambda automatically scales processing each request independently."
         }
       }
     ],
@@ -291,17 +291,6 @@ export const cloudPractitionerQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Aumentar o tamanho da instância EC2",
-          "en": "Increase the EC2 instance size"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "Aumentar apenas o tamanho da instância melhora performance (CPU, memória), mas não melhora disponibilidade. A aplicação ainda estará em uma única instância em uma única Availability Zone, mantendo um ponto único de falha. Para 99.99% de disponibilidade, é necessária redundância em múltiplas AZs.",
-          "en": "Increasing only the instance size improves performance (CPU, memory), but doesn't improve availability. The application will still be on a single instance in a single Availability Zone, maintaining a single point of failure. For 99.99% availability, redundancy across multiple AZs is needed."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Distribuir a aplicação em múltiplas Availability Zones com Load Balancer",
           "en": "Distribute the application across multiple Availability Zones with Load Balancer"
         },
@@ -309,6 +298,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Distribuir em múltiplas AZs com Load Balancer oferece alta disponibilidade e tolerância a falhas. Se uma AZ falhar, o Load Balancer automaticamente redireciona o tráfego para instâncias em outras AZs, garantindo continuidade do serviço. Esta é a melhor prática para alcançar 99.99% de disponibilidade.",
           "en": "Distributing across multiple AZs with Load Balancer provides high availability and fault tolerance. If one AZ fails, the Load Balancer automatically redirects traffic to instances in other AZs, ensuring service continuity. This is the best practice to achieve 99.99% availability."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Aumentar o tamanho da instância EC2",
+          "en": "Increase the EC2 instance size"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "Aumentar apenas o tamanho da instância melhora performance (CPU, memória), mas não melhora disponibilidade. A aplicação ainda estará em uma única instância em uma única Availability Zone, mantendo um ponto único de falha. Para 99.99% de disponibilidade, é necessária redundância em múltiplas AZs.",
+          "en": "Increasing only the instance size improves performance (CPU, memory), but doesn't improve availability. The application will still be on a single instance in a single Availability Zone, maintaining a single point of failure. For 99.99% availability, redundancy across multiple AZs is needed."
         }
       },
       {
@@ -438,17 +438,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "AWS Direct Connect",
-          "en": "AWS Direct Connect"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "AWS Direct Connect oferece uma conexão de rede privada dedicada entre o data center on-premises e a AWS, com largura de banda garantida (1Gbps, 10Gbps ou 100Gbps), baixa latência consistente e maior segurança. Esta é a solução ideal para empresas que precisam de conectividade dedicada e segura.",
-          "en": "AWS Direct Connect offers a dedicated private network connection between on-premises data center and AWS, with guaranteed bandwidth (1Gbps, 10Gbps, or 100Gbps), consistent low latency, and greater security. This is the ideal solution for companies that need dedicated and secure connectivity."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Internet Gateway",
           "en": "Internet Gateway"
         },
@@ -456,6 +445,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Internet Gateway é um componente da VPC que permite comunicação entre instâncias na VPC e a internet. Ele não conecta redes on-premises à AWS e não oferece conexão dedicada ou largura de banda garantida.",
           "en": "Internet Gateway is a VPC component that allows communication between instances in the VPC and the internet. It doesn't connect on-premises networks to AWS and doesn't offer dedicated connection or guaranteed bandwidth."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Direct Connect",
+          "en": "AWS Direct Connect"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "AWS Direct Connect oferece uma conexão de rede privada dedicada entre o data center on-premises e a AWS, com largura de banda garantida (1Gbps, 10Gbps ou 100Gbps), baixa latência consistente e maior segurança. Esta é a solução ideal para empresas que precisam de conectividade dedicada e segura.",
+          "en": "AWS Direct Connect offers a dedicated private network connection between on-premises data center and AWS, with guaranteed bandwidth (1Gbps, 10Gbps, or 100Gbps), consistent low latency, and greater security. This is the ideal solution for companies that need dedicated and secure connectivity."
         }
       },
       {
@@ -506,17 +506,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "Amazon CloudWatch com alarmes",
-          "en": "Amazon CloudWatch with alarms"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Amazon CloudWatch coleta métricas de EC2 (incluindo CPU) e permite criar alarmes que notificam quando métricas excedem limites definidos. Você pode configurar um alarme para CPU > 80% por mais de 5 minutos e receber notificações via SNS, email ou outras ações.",
-          "en": "Amazon CloudWatch collects EC2 metrics (including CPU) and allows creating alarms that notify when metrics exceed defined thresholds. You can configure an alarm for CPU > 80% for more than 5 minutes and receive notifications via SNS, email, or other actions."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS Trusted Advisor",
           "en": "AWS Trusted Advisor"
         },
@@ -535,6 +524,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS Systems Manager é usado para gerenciar instâncias EC2 (patches, configurações, inventário), mas não é um serviço de monitoramento de métricas. Ele não monitora CPU em tempo real nem envia alertas quando métricas excedem limites.",
           "en": "AWS Systems Manager is used to manage EC2 instances (patches, configurations, inventory), but it's not a metric monitoring service. It doesn't monitor CPU in real-time or send alerts when metrics exceed thresholds."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Amazon CloudWatch com alarmes",
+          "en": "Amazon CloudWatch with alarms"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Amazon CloudWatch coleta métricas de EC2 (incluindo CPU) e permite criar alarmes que notificam quando métricas excedem limites definidos. Você pode configurar um alarme para CPU > 80% por mais de 5 minutos e receber notificações via SNS, email ou outras ações.",
+          "en": "Amazon CloudWatch collects EC2 metrics (including CPU) and allows creating alarms that notify when metrics exceed defined thresholds. You can configure an alarm for CPU > 80% for more than 5 minutes and receive notifications via SNS, email, or other actions."
         }
       }
     ],
@@ -563,17 +563,6 @@ export const cloudPractitionerQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "Amazon RDS MySQL",
-          "en": "Amazon RDS MySQL"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "RDS MySQL escala verticalmente (aumentando o tamanho da instância), não horizontalmente. Para lidar com milhões de produtos e milhares de consultas simultâneas, seria necessário múltiplas instâncias com complexidade de sincronização. DynamoDB escala horizontalmente automaticamente, sendo mais adequado para este caso.",
-          "en": "RDS MySQL scales vertically (increasing instance size), not horizontally. To handle millions of products and thousands of concurrent queries, multiple instances would be needed with synchronization complexity. DynamoDB scales horizontally automatically, being more suitable for this case."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Amazon DynamoDB",
           "en": "Amazon DynamoDB"
         },
@@ -581,6 +570,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Amazon DynamoDB é um banco de dados NoSQL gerenciado que escala horizontalmente automaticamente para lidar com milhões de itens e milhares de consultas simultâneas sem necessidade de provisionamento ou gerenciamento de servidores. É ideal para aplicações de e-commerce que precisam de alta performance e escalabilidade.",
           "en": "Amazon DynamoDB is a managed NoSQL database that automatically scales horizontally to handle millions of items and thousands of concurrent queries without needing to provision or manage servers. It's ideal for e-commerce applications that need high performance and scalability."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Amazon RDS MySQL",
+          "en": "Amazon RDS MySQL"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "RDS MySQL escala verticalmente (aumentando o tamanho da instância), não horizontalmente. Para lidar com milhões de produtos e milhares de consultas simultâneas, seria necessário múltiplas instâncias com complexidade de sincronização. DynamoDB escala horizontalmente automaticamente, sendo mais adequado para este caso.",
+          "en": "RDS MySQL scales vertically (increasing instance size), not horizontally. To handle millions of products and thousands of concurrent queries, multiple instances would be needed with synchronization complexity. DynamoDB scales horizontally automatically, being more suitable for this case."
         }
       },
       {
@@ -710,17 +710,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "AWS Well-Architected Framework",
-          "en": "AWS Well-Architected Framework"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "O AWS Well-Architected Framework fornece diretrizes abrangentes baseadas em cinco pilares: excelência operacional, segurança, confiabilidade, eficiência de performance e otimização de custos. É o framework oficial da AWS para construir e revisar arquiteturas que seguem as melhores práticas.",
-          "en": "The AWS Well-Architected Framework provides comprehensive guidelines based on five pillars: operational excellence, security, reliability, performance efficiency, and cost optimization. It's the official AWS framework for building and reviewing architectures that follow best practices."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS CloudFormation",
           "en": "AWS CloudFormation"
         },
@@ -728,6 +717,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS CloudFormation é uma ferramenta de infraestrutura como código que permite criar e gerenciar recursos AWS de forma programática, mas não é um framework de diretrizes arquiteturais. É usado para implementar infraestrutura, não para definir princípios arquiteturais.",
           "en": "AWS CloudFormation is an infrastructure as code tool that allows creating and managing AWS resources programmatically, but isn't an architectural guidelines framework. It's used to implement infrastructure, not to define architectural principles."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Well-Architected Framework",
+          "en": "AWS Well-Architected Framework"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "O AWS Well-Architected Framework fornece diretrizes abrangentes baseadas em cinco pilares: excelência operacional, segurança, confiabilidade, eficiência de performance e otimização de custos. É o framework oficial da AWS para construir e revisar arquiteturas que seguem as melhores práticas.",
+          "en": "The AWS Well-Architected Framework provides comprehensive guidelines based on five pillars: operational excellence, security, reliability, performance efficiency, and cost optimization. It's the official AWS framework for building and reviewing architectures that follow best practices."
         }
       },
       {
@@ -778,17 +778,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "S3 Lifecycle Policies",
-          "en": "S3 Lifecycle Policies"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "S3 Lifecycle Policies permitem automatizar a transição de objetos entre classes de armazenamento baseado em regras de tempo ou tags. Você pode configurar para mover objetos de Standard para Standard-IA após 30 dias, e para Glacier após 6 meses, otimizando custos automaticamente.",
-          "en": "S3 Lifecycle Policies allow automating the transition of objects between storage classes based on time rules or tags. You can configure to move objects from Standard to Standard-IA after 30 days, and to Glacier after 6 months, automatically optimizing costs."
-        }
-      },
-      {
-        title: {
           "pt-BR": "S3 Versioning",
           "en": "S3 Versioning"
         },
@@ -807,6 +796,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "S3 Cross-Region Replication replica objetos automaticamente entre regiões para disaster recovery e compliance, mas não muda classes de armazenamento baseado em tempo. Ele é usado para replicação geográfica, não para otimização de custos através de transições de classe.",
           "en": "S3 Cross-Region Replication automatically replicates objects between regions for disaster recovery and compliance, but doesn't change storage classes based on time. It's used for geographic replication, not for cost optimization through class transitions."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "S3 Lifecycle Policies",
+          "en": "S3 Lifecycle Policies"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "S3 Lifecycle Policies permitem automatizar a transição de objetos entre classes de armazenamento baseado em regras de tempo ou tags. Você pode configurar para mover objetos de Standard para Standard-IA após 30 dias, e para Glacier após 6 meses, otimizando custos automaticamente.",
+          "en": "S3 Lifecycle Policies allow automating the transition of objects between storage classes based on time rules or tags. You can configure to move objects from Standard to Standard-IA after 30 days, and to Glacier after 6 months, automatically optimizing costs."
         }
       }
     ],
@@ -835,17 +835,6 @@ export const cloudPractitionerQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS CloudWatch",
-          "en": "AWS CloudWatch"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "AWS CloudWatch monitora métricas e logs de aplicações e serviços AWS, mas não registra especificamente chamadas de API e eventos de conta para auditoria. CloudTrail é o serviço específico para auditoria de API calls e eventos de conta.",
-          "en": "AWS CloudWatch monitors metrics and logs from applications and AWS services, but doesn't specifically log API calls and account events for auditing. CloudTrail is the specific service for auditing API calls and account events."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS CloudTrail",
           "en": "AWS CloudTrail"
         },
@@ -853,6 +842,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS CloudTrail registra continuamente todas as chamadas de API feitas na conta AWS e eventos de conta, fornecendo um histórico completo de atividade para auditoria, compliance e segurança. É essencial para rastrear quem fez o quê, quando e onde na conta AWS.",
           "en": "AWS CloudTrail continuously logs all API calls made to the AWS account and account events, providing a complete history of activity for auditing, compliance, and security. It's essential for tracking who did what, when, and where in the AWS account."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS CloudWatch",
+          "en": "AWS CloudWatch"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "AWS CloudWatch monitora métricas e logs de aplicações e serviços AWS, mas não registra especificamente chamadas de API e eventos de conta para auditoria. CloudTrail é o serviço específico para auditoria de API calls e eventos de conta.",
+          "en": "AWS CloudWatch monitors metrics and logs from applications and AWS services, but doesn't specifically log API calls and account events for auditing. CloudTrail is the specific service for auditing API calls and account events."
         }
       },
       {
@@ -982,17 +982,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "Amazon CloudFront",
-          "en": "Amazon CloudFront"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Amazon CloudFront é a CDN global da AWS que entrega conteúdo estático e dinâmico de edge locations ao redor do mundo, reduzindo significativamente a latência para usuários globais. É ideal para entregar imagens, vídeos, CSS e outros arquivos estáticos com baixa latência.",
-          "en": "Amazon CloudFront is AWS's global CDN that delivers static and dynamic content from edge locations around the world, significantly reducing latency for global users. It's ideal for delivering images, videos, CSS, and other static files with low latency."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS Global Accelerator",
           "en": "AWS Global Accelerator"
         },
@@ -1000,6 +989,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS Global Accelerator melhora a performance e disponibilidade de aplicações usando a rede global da AWS, mas não é uma CDN. Ele otimiza o roteamento de tráfego para aplicações, não entrega conteúdo estático de cache. Para conteúdo estático, CloudFront é a solução.",
           "en": "AWS Global Accelerator improves application performance and availability using AWS's global network, but it's not a CDN. It optimizes traffic routing for applications, not static content delivery from cache. For static content, CloudFront is the solution."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Amazon CloudFront",
+          "en": "Amazon CloudFront"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Amazon CloudFront é a CDN global da AWS que entrega conteúdo estático e dinâmico de edge locations ao redor do mundo, reduzindo significativamente a latência para usuários globais. É ideal para entregar imagens, vídeos, CSS e outros arquivos estáticos com baixa latência.",
+          "en": "Amazon CloudFront is AWS's global CDN that delivers static and dynamic content from edge locations around the world, significantly reducing latency for global users. It's ideal for delivering images, videos, CSS, and other static files with low latency."
         }
       },
       {
@@ -1050,17 +1050,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "RDS Multi-AZ",
-          "en": "RDS Multi-AZ"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "RDS Multi-AZ cria uma réplica síncrona em outra Availability Zone com failover automático. Se a instância primária falhar, o RDS automaticamente promove a réplica para primária em menos de 60 segundos, garantindo alta disponibilidade sem perda de dados.",
-          "en": "RDS Multi-AZ creates a synchronous replica in another Availability Zone with automatic failover. If the primary instance fails, RDS automatically promotes the replica to primary in less than 60 seconds, ensuring high availability without data loss."
-        }
-      },
-      {
-        title: {
           "pt-BR": "RDS Read Replica",
           "en": "RDS Read Replica"
         },
@@ -1079,6 +1068,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "RDS Snapshot é um backup pontual que protege contra perda de dados, mas não oferece failover automático nem alta disponibilidade. Se a instância falhar, é necessário restaurar manualmente do snapshot, causando downtime significativo.",
           "en": "RDS Snapshot is a point-in-time backup that protects against data loss, but doesn't offer automatic failover or high availability. If the instance fails, it's necessary to manually restore from snapshot, causing significant downtime."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "RDS Multi-AZ",
+          "en": "RDS Multi-AZ"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "RDS Multi-AZ cria uma réplica síncrona em outra Availability Zone com failover automático. Se a instância primária falhar, o RDS automaticamente promove a réplica para primária em menos de 60 segundos, garantindo alta disponibilidade sem perda de dados.",
+          "en": "RDS Multi-AZ creates a synchronous replica in another Availability Zone with automatic failover. If the primary instance fails, RDS automatically promotes the replica to primary in less than 60 seconds, ensuring high availability without data loss."
         }
       }
     ],
@@ -1107,17 +1107,6 @@ export const cloudPractitionerQuestions = [
     alternatives: [
       {
         title: {
-          "pt-BR": "AWS Shield",
-          "en": "AWS Shield"
-        },
-        correct: false,
-        explanation: {
-          "pt-BR": "AWS Shield protege contra ataques DDoS (Distributed Denial of Service) na camada de rede e transporte, mas não protege contra ataques de aplicação como SQL injection e XSS. WAF é o serviço específico para proteger aplicações web contra ataques de aplicação.",
-          "en": "AWS Shield protects against DDoS (Distributed Denial of Service) attacks at network and transport layers, but doesn't protect against application attacks like SQL injection and XSS. WAF is the specific service for protecting web applications against application attacks."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS WAF (Web Application Firewall)",
           "en": "AWS WAF (Web Application Firewall)"
         },
@@ -1125,6 +1114,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS WAF protege aplicações web contra ataques comuns como SQL injection, cross-site scripting (XSS), e outros exploits de aplicação. Ele pode ser integrado com CloudFront, Application Load Balancer ou API Gateway para filtrar e bloquear requisições maliciosas antes que cheguem à aplicação.",
           "en": "AWS WAF protects web applications against common attacks like SQL injection, cross-site scripting (XSS), and other application exploits. It can be integrated with CloudFront, Application Load Balancer, or API Gateway to filter and block malicious requests before they reach the application."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Shield",
+          "en": "AWS Shield"
+        },
+        correct: false,
+        explanation: {
+          "pt-BR": "AWS Shield protege contra ataques DDoS (Distributed Denial of Service) na camada de rede e transporte, mas não protege contra ataques de aplicação como SQL injection e XSS. WAF é o serviço específico para proteger aplicações web contra ataques de aplicação.",
+          "en": "AWS Shield protects against DDoS (Distributed Denial of Service) attacks at network and transport layers, but doesn't protect against application attacks like SQL injection and XSS. WAF is the specific service for protecting web applications against application attacks."
         }
       },
       {
@@ -1254,17 +1254,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "Reserved Instances (1 ano, All Upfront)",
-          "en": "Reserved Instances (1 year, All Upfront)"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "Reserved Instances com pagamento All Upfront (1 ano) oferece até 75% de economia comparado a On-Demand. Ao fazer um compromisso de 1 ano e pagar tudo adiantado, você obtém o maior desconto possível. Esta é a melhor opção para cargas de trabalho previsíveis e contínuas.",
-          "en": "Reserved Instances with All Upfront payment (1 year) offers up to 75% savings compared to On-Demand. By committing to 1 year and paying everything upfront, you get the maximum discount possible. This is the best option for predictable and continuous workloads."
-        }
-      },
-      {
-        title: {
           "pt-BR": "Spot Instances",
           "en": "Spot Instances"
         },
@@ -1272,6 +1261,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "Spot Instances podem oferecer economia de até 90%, mas podem ser interrompidas a qualquer momento quando a AWS precisar da capacidade. Para uma carga de trabalho contínua que precisa de confiabilidade, Spot Instances não são adequadas devido ao risco de interrupção.",
           "en": "Spot Instances can offer up to 90% savings, but can be interrupted at any time when AWS needs the capacity. For a continuous workload that needs reliability, Spot Instances are not suitable due to the risk of interruption."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "Reserved Instances (1 ano, All Upfront)",
+          "en": "Reserved Instances (1 year, All Upfront)"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "Reserved Instances com pagamento All Upfront (1 ano) oferece até 75% de economia comparado a On-Demand. Ao fazer um compromisso de 1 ano e pagar tudo adiantado, você obtém o maior desconto possível. Esta é a melhor opção para cargas de trabalho previsíveis e contínuas.",
+          "en": "Reserved Instances with All Upfront payment (1 year) offers up to 75% savings compared to On-Demand. By committing to 1 year and paying everything upfront, you get the maximum discount possible. This is the best option for predictable and continuous workloads."
         }
       },
       {
@@ -1322,17 +1322,6 @@ export const cloudPractitionerQuestions = [
       },
       {
         title: {
-          "pt-BR": "AWS Free Tier",
-          "en": "AWS Free Tier"
-        },
-        correct: true,
-        explanation: {
-          "pt-BR": "AWS Free Tier oferece acesso gratuito a muitos serviços AWS por 12 meses após criar uma conta, incluindo instâncias EC2 (750 horas/mês), S3 (5GB), Lambda (1M requisições/mês), e muitos outros serviços com limites específicos. É ideal para desenvolvedores que querem testar AWS sem custo.",
-          "en": "AWS Free Tier offers free access to many AWS services for 12 months after creating an account, including EC2 instances (750 hours/month), S3 (5GB), Lambda (1M requests/month), and many other services with specific limits. It's ideal for developers who want to test AWS at no cost."
-        }
-      },
-      {
-        title: {
           "pt-BR": "AWS Credits",
           "en": "AWS Credits"
         },
@@ -1351,6 +1340,17 @@ export const cloudPractitionerQuestions = [
         explanation: {
           "pt-BR": "AWS Activate é um programa específico para startups que oferece créditos, suporte e recursos, mas não é o programa geral de acesso gratuito para novos desenvolvedores. Free Tier é o programa universal que qualquer desenvolvedor pode usar ao criar uma conta AWS.",
           "en": "AWS Activate is a specific program for startups that offers credits, support, and resources, but isn't the general free access program for new developers. Free Tier is the universal program that any developer can use when creating an AWS account."
+        }
+      },
+      {
+        title: {
+          "pt-BR": "AWS Free Tier",
+          "en": "AWS Free Tier"
+        },
+        correct: true,
+        explanation: {
+          "pt-BR": "AWS Free Tier oferece acesso gratuito a muitos serviços AWS por 12 meses após criar uma conta, incluindo instâncias EC2 (750 horas/mês), S3 (5GB), Lambda (1M requisições/mês), e muitos outros serviços com limites específicos. É ideal para desenvolvedores que querem testar AWS sem custo.",
+          "en": "AWS Free Tier offers free access to many AWS services for 12 months after creating an account, including EC2 instances (750 hours/month), S3 (5GB), Lambda (1M requests/month), and many other services with specific limits. It's ideal for developers who want to test AWS at no cost."
         }
       }
     ],

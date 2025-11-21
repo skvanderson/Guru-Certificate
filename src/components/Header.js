@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getCurrentUser, logoutUser } from '../services/userService';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -60,6 +61,10 @@ const NavItem = styled.li`
     padding: var(--spacing-2) var(--spacing-3);
     border-radius: var(--radius-md);
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 1;
     
     &:hover {
       background-color: var(--aws-blue-light);
@@ -93,6 +98,42 @@ const NavItem = styled.li`
         color: white !important;
       }
     }
+  }
+`;
+
+const UserInfo = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  color: var(--aws-white);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--aws-blue-light);
+    color: var(--aws-orange);
+  }
+`;
+
+const LogoutButton = styled.button`
+  background-color: var(--aws-red);
+  color: var(--aws-white);
+  border: none;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  
+  &:hover {
+    background-color: #B91C1C;
+    transform: translateY(-1px);
   }
 `;
 
@@ -148,8 +189,15 @@ const MobileMenu = styled.div`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const location = useLocation();
+
+  // Atualizar usuário quando a rota mudar (para refletir login/logout)
+  React.useEffect(() => {
+    setCurrentUser(getCurrentUser());
+  }, [location.pathname]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -157,6 +205,13 @@ const Header = () => {
 
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    logoutUser();
+    setCurrentUser(null);
+    navigate('/');
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -184,14 +239,34 @@ const Header = () => {
           </NavItem>
           <NavItem>
             <Link to="/materiais" className={isActive('/materiais') ? 'active' : ''}>
-              MATERIAIS
+              HANDS ON
             </Link>
           </NavItem>
           <NavItem>
-            <Link to="/simulados" className="cta-button">
-              🚀 COMEÇAR AGORA
+            <Link to="/ranking" className={isActive('/ranking') ? 'active' : ''}>
+              RANKING
             </Link>
           </NavItem>
+          {currentUser ? (
+            <>
+              <NavItem>
+                <UserInfo to="/perfil" className={isActive('/perfil') ? 'active' : ''}>
+                  {currentUser.username.toUpperCase()}
+                </UserInfo>
+              </NavItem>
+              <NavItem>
+                <LogoutButton onClick={handleLogout}>
+                  Sair
+                </LogoutButton>
+              </NavItem>
+            </>
+          ) : (
+            <NavItem>
+              <Link to="/cadastro" className="cta-button">
+                CADASTRO
+              </Link>
+            </NavItem>
+          )}
         </NavMenu>
         
         <MobileMenuButton onClick={toggleMobileMenu}>
@@ -218,14 +293,62 @@ const Header = () => {
           </li>
           <li>
             <Link to="/materiais" onClick={() => setIsMobileMenuOpen(false)}>
-              MATERIAIS
+              HANDS ON
             </Link>
           </li>
           <li>
-            <Link to="/simulados" onClick={() => setIsMobileMenuOpen(false)}>
-              🚀 COMEÇAR AGORA
+            <Link to="/ranking" onClick={() => setIsMobileMenuOpen(false)}>
+              RANKING
             </Link>
           </li>
+          {currentUser ? (
+            <>
+              <li>
+                <Link 
+                  to="/perfil" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    color: 'var(--aws-white)',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    padding: 'var(--spacing-3)',
+                    borderRadius: 'var(--radius-md)',
+                    display: 'block',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                >
+                  {currentUser.username.toUpperCase()}
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    background: 'var(--aws-red)',
+                    color: 'var(--aws-white)',
+                    border: 'none',
+                    padding: 'var(--spacing-3)',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    fontSize: 'var(--font-size-base)'
+                  }}
+                >
+                  Sair
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/cadastro" onClick={() => setIsMobileMenuOpen(false)}>
+                CADASTRO
+              </Link>
+            </li>
+          )}
         </ul>
       </MobileMenu>
     </HeaderContainer>

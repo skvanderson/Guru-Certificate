@@ -10,9 +10,13 @@ import About from './pages/About';
 import Simulados from './pages/Simulados';
 import Cursos from './pages/Cursos';
 import Materials from './pages/Materials';
+import Tutorial from './pages/hands-on/Tutorial';
 import CloudPractitioner from './pages/simulados/CloudPractitioner';
 import SolutionsArchitect from './pages/simulados/SolutionsArchitect';
 import DeveloperAssociate from './pages/simulados/DeveloperAssociate';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+import Ranking from './pages/Ranking';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -38,9 +42,13 @@ function App() {
             <Route path="/simulados" element={<Simulados />} />
             <Route path="/cursos" element={<Cursos />} />
             <Route path="/materiais" element={<Materials />} />
+            <Route path="/hands-on/tutorial/:id" element={<Tutorial />} />
             <Route path="/simulado/cloud-practitioner" element={<CloudPractitioner />} />
             <Route path="/simulado/solutions-architect" element={<SolutionsArchitect />} />
             <Route path="/simulado/developer-associate" element={<DeveloperAssociate />} />
+            <Route path="/cadastro" element={<Register />} />
+            <Route path="/perfil" element={<Profile />} />
+            <Route path="/ranking" element={<Ranking />} />
           </Routes>
         </MainContent>
         <Footer />

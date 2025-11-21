@@ -74,12 +74,12 @@ const NavigationButtons = ({ backPath = null, showHome = true, showBack = true }
     <NavigationContainer>
       {showBack && (
         <NavButton onClick={handleBack}>
-          ← Voltar
+          Voltar
         </NavButton>
       )}
       {showHome && (
         <HomeButton onClick={handleHome}>
-          🏠 Home
+          Home
         </HomeButton>
       )}
     </NavigationContainer>
