@@ -147,7 +147,7 @@ const Register = () => {
           throw new Error('Por favor, informe usuário e senha');
         }
         
-        const user = loginUser(username.trim(), password);
+        loginUser(username.trim(), password);
         setSuccess('Login realizado com sucesso!');
         setTimeout(() => {
           navigate('/perfil');
@@ -170,7 +170,7 @@ const Register = () => {
           throw new Error('As senhas não coincidem');
         }
         
-        const user = registerUser(username.trim(), email.trim(), password);
+        registerUser(username.trim(), email.trim(), password);
         setSuccess('Cadastro realizado com sucesso!');
         setTimeout(() => {
           navigate('/perfil');

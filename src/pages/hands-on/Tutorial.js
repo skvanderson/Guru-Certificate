@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../../components/NavigationButtons';
 import { tutorials } from '../../data/tutorialsData';
@@ -231,7 +231,6 @@ const WarningText = styled.div`
 
 const Tutorial = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const tutorial = tutorials.find(t => t.id === parseInt(id));
 
   if (!tutorial) {
