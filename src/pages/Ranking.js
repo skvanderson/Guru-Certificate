@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../components/NavigationButtons';
 import { getCurrentUser, getRanking } from '../services/userService';
@@ -176,20 +175,14 @@ const getExamTypeName = (type) => {
 };
 
 const Ranking = () => {
-  const navigate = useNavigate();
   const [currentUser] = useState(getCurrentUser());
   const [filter, setFilter] = useState(null); // null = todos, 'cloud-practitioner', etc.
   const [ranking, setRanking] = useState([]);
 
   useEffect(() => {
-    if (!currentUser) {
-      navigate('/cadastro');
-      return;
-    }
-    
     const rankingData = getRanking(filter);
     setRanking(rankingData);
-  }, [filter, currentUser, navigate]);
+  }, [filter]);
 
   const getCurrentUserPosition = () => {
     if (!currentUser) return null;
