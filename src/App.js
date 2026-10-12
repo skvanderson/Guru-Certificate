@@ -11,7 +11,11 @@ import Simulados from './pages/Simulados';
 import Cursos from './pages/Cursos';
 import Materials from './pages/Materials';
 import Tutorial from './pages/hands-on/Tutorial';
+import Flashcards from './pages/Flashcards';
+import FlashcardSession from './pages/flashcards/FlashcardSession';
 import CloudPractitioner from './pages/simulados/CloudPractitioner';
+import CloudPractitionerDomains from './pages/simulados/CloudPractitionerDomains';
+import CloudPractitionerDomainSession from './pages/simulados/CloudPractitionerDomainSession';
 import SolutionsArchitect from './pages/simulados/SolutionsArchitect';
 import DeveloperAssociate from './pages/simulados/DeveloperAssociate';
 import Register from './pages/Register';
@@ -43,7 +47,11 @@ function App() {
             <Route path="/cursos" element={<Cursos />} />
             <Route path="/materiais" element={<Materials />} />
             <Route path="/hands-on/tutorial/:id" element={<Tutorial />} />
+            <Route path="/flashcards" element={<Flashcards />} />
+            <Route path="/flashcards/:examType" element={<FlashcardSession />} />
             <Route path="/simulado/cloud-practitioner" element={<CloudPractitioner />} />
+            <Route path="/simulado/cloud-practitioner/dominios" element={<CloudPractitionerDomains />} />
+            <Route path="/simulado/cloud-practitioner/dominio/:domainId" element={<CloudPractitionerDomainSession />} />
             <Route path="/simulado/solutions-architect" element={<SolutionsArchitect />} />
             <Route path="/simulado/developer-associate" element={<DeveloperAssociate />} />
             <Route path="/cadastro" element={<Register />} />

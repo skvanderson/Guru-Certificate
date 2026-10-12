@@ -368,18 +368,16 @@ const SolutionsArchitect = () => {
     const percentage = (correctAnswers / totalQuestions) * 100;
     const passed = percentage >= 70;
 
-    // Identificar questões erradas e seus tópicos
+    // Identificar questões erradas ou não respondidas e seus tópicos
     const wrongQuestionIds = [];
     const topics = new Set();
-    
-    Object.keys(answeredQuestions).forEach(questionIndex => {
+
+    solutionsArchitectQuestions.forEach((question, questionIndex) => {
       if (!answeredQuestions[questionIndex]) {
-        const questionId = solutionsArchitectQuestions[parseInt(questionIndex)].id;
-        wrongQuestionIds.push(questionId);
-        
+        wrongQuestionIds.push(question.id);
+
         // Extrair tópico do título
-        const question = solutionsArchitectQuestions[parseInt(questionIndex)];
-        if (question && question.title && question.title['pt-BR']) {
+        if (question.title && question.title['pt-BR']) {
           const topic = question.title['pt-BR'].split(' - ')[0] || question.title['pt-BR'];
           topics.add(topic);
         }
@@ -408,7 +406,6 @@ const SolutionsArchitect = () => {
     }
     
     setIsFinished(true);
-    setShowModal(true);
   }, [answeredQuestions]);
 
   // Timer effect
@@ -497,9 +494,9 @@ const SolutionsArchitect = () => {
             {currentQ.description[language] || currentQ.description['pt-BR']}
           </QuestionDescription>
           
-          {currentQ.question[language] && (
+          {(currentQ.question[language] || currentQ.question['pt-BR']) && (
             <QuestionText>
-              {currentQ.question[language]}
+              {currentQ.question[language] || currentQ.question['pt-BR']}
             </QuestionText>
           )}
 
@@ -548,9 +545,9 @@ const SolutionsArchitect = () => {
                     <h4>📚 Explicação:</h4>
                     {!isCorrect && (
                       <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
-                        {language === 'pt-BR' 
+                        {language === 'pt-BR'
                           ? `A resposta correta é: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
-                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['en']}"`
+                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
                         }
                       </p>
                     )}

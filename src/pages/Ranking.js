@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import NavigationButtons from '../components/NavigationButtons';
 import { getCurrentUser, getRanking } from '../services/userService';
+import Reveal from '../components/Reveal';
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const Container = styled.div`
   min-height: calc(100vh - 80px);
@@ -90,7 +102,8 @@ const RankingRow = styled.div`
   transition: all 0.2s ease;
   background: ${props => props.highlight ? 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)' : 'var(--aws-white)'};
   border: ${props => props.highlight ? '2px solid var(--aws-orange)' : '1px solid var(--aws-gray-200)'};
-  
+  animation: ${fadeInUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+
   &:hover {
     background: ${props => props.highlight ? 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)' : 'var(--aws-gray-50)'};
     transform: translateX(4px);
@@ -203,16 +216,16 @@ const Ranking = () => {
 
   const getCurrentUserScore = () => {
     if (!currentUser) return null;
-    
+
     if (filter) {
-      const userEntry = ranking.find(entry => 
+      const userEntry = ranking.find(entry =>
         entry.userId === currentUser.id && entry.examType === filter
       );
-      return userEntry ? userEntry.totalCorrect : null;
+      return userEntry ? userEntry.bestPercentage : null;
     } else {
       const userEntries = ranking.filter(entry => entry.userId === currentUser.id);
       if (userEntries.length === 0) return null;
-      return userEntries.reduce((sum, e) => sum + e.totalCorrect, 0);
+      return Math.max(...userEntries.map(e => e.bestPercentage));
     }
   };
 
@@ -224,15 +237,18 @@ const Ranking = () => {
       <Content>
         <NavigationButtons />
         
-        <Header>
-          <Title>Ranking</Title>
-          <Subtitle>
-            Veja sua posição e compare com outros estudantes
-          </Subtitle>
-        </Header>
+        <Reveal>
+          <Header>
+            <Title>Ranking</Title>
+            <Subtitle>
+              Veja sua posição e compare com outros estudantes
+            </Subtitle>
+          </Header>
+        </Reveal>
 
         {currentUser && userPosition && (
           <div style={{
+            animation: `${fadeInUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1)`,
             background: 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)',
             padding: 'var(--spacing-6)',
             borderRadius: 'var(--radius-xl)',
@@ -249,7 +265,7 @@ const Ranking = () => {
               {filter && ` em ${getExamTypeName(filter)}`}
             </p>
             <p style={{ color: 'var(--aws-gray-600)', margin: 'var(--spacing-2) 0 0 0' }}>
-              {userScore} acertos
+              {userScore}% de aproveitamento
             </p>
           </div>
         )}
@@ -292,13 +308,14 @@ const Ranking = () => {
               <div>Posição</div>
               <div>Usuário</div>
               <div>Trilha</div>
-              <div style={{ textAlign: 'right' }}>Acertos</div>
+              <div style={{ textAlign: 'right' }}>Aproveitamento</div>
             </TableHeader>
-            
-            {ranking.map((entry) => (
-              <RankingRow 
+
+            {ranking.map((entry, index) => (
+              <RankingRow
                 key={`${entry.userId}_${entry.examType}`}
                 highlight={currentUser && entry.userId === currentUser.id}
+                style={{ animationDelay: `${Math.min(index * 0.04, 0.4)}s` }}
               >
                 <Position position={entry.position}>
                   {entry.position}º
@@ -307,7 +324,7 @@ const Ranking = () => {
                   {entry.username}
                 </Username>
                 <ExamType>{getExamTypeName(entry.examType)}</ExamType>
-                <Score>{entry.totalCorrect} acertos</Score>
+                <Score>{entry.bestPercentage}%</Score>
               </RankingRow>
             ))}
           </RankingTable>

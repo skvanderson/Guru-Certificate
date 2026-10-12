@@ -233,6 +233,11 @@ const Header = () => {
             </Link>
           </NavItem>
           <NavItem>
+            <Link to="/flashcards" className={isActive('/flashcards') ? 'active' : ''}>
+              FLASH CARDS
+            </Link>
+          </NavItem>
+          <NavItem>
             <Link to="/cursos" className={isActive('/cursos') ? 'active' : ''}>
               CURSOS
             </Link>
@@ -284,6 +289,11 @@ const Header = () => {
           <li>
             <Link to="/simulados" onClick={() => setIsMobileMenuOpen(false)}>
               SIMULADOS
+            </Link>
+          </li>
+          <li>
+            <Link to="/flashcards" onClick={() => setIsMobileMenuOpen(false)}>
+              FLASH CARDS
             </Link>
           </li>
           <li>

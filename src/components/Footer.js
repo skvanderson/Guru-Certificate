@@ -81,7 +81,7 @@ const Footer = () => {
         
         
         <Copyright>
-          <p>&copy; 2024 Guru Certificate. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Guru Certificate. Todos os direitos reservados.</p>
         </Copyright>
       </FooterContent>
     </FooterContainer>

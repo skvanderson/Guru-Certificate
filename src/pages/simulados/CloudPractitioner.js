@@ -287,7 +287,7 @@ const CloudPractitioner = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [answeredQuestions, setAnsweredQuestions] = useState({});
   const [lockedQuestions, setLockedQuestions] = useState({}); // Questões bloqueadas após seleção
-  const [timeLeft, setTimeLeft] = useState(2400); // 40 minutes in seconds (20 questions × 2 minutes)
+  const [timeLeft, setTimeLeft] = useState(5400); // 90 minutes in seconds, same duration as the real CLF-C02 exam (65 questions)
   const [language, setLanguage] = useState('pt-BR');
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({});
@@ -368,18 +368,16 @@ const CloudPractitioner = () => {
     const percentage = (correctAnswers / totalQuestions) * 100;
     const passed = percentage >= 70;
 
-    // Identificar questões erradas e seus tópicos
+    // Identificar questões erradas ou não respondidas e seus tópicos
     const wrongQuestionIds = [];
     const topics = new Set();
-    
-    Object.keys(answeredQuestions).forEach(questionIndex => {
+
+    cloudPractitionerQuestions.forEach((question, questionIndex) => {
       if (!answeredQuestions[questionIndex]) {
-        const questionId = cloudPractitionerQuestions[parseInt(questionIndex)].id;
-        wrongQuestionIds.push(questionId);
-        
+        wrongQuestionIds.push(question.id);
+
         // Extrair tópico do título
-        const question = cloudPractitionerQuestions[parseInt(questionIndex)];
-        if (question && question.title && question.title['pt-BR']) {
+        if (question.title && question.title['pt-BR']) {
           // Pegar a primeira parte do título antes do hífen como tópico
           const topic = question.title['pt-BR'].split(' - ')[0] || question.title['pt-BR'];
           topics.add(topic);
@@ -409,7 +407,6 @@ const CloudPractitioner = () => {
     }
     
     setIsFinished(true);
-    setShowModal(true);
   }, [answeredQuestions]);
 
   // Timer effect
@@ -498,9 +495,9 @@ const CloudPractitioner = () => {
             {currentQ.description[language] || currentQ.description['pt-BR']}
           </QuestionDescription>
           
-          {currentQ.question[language] && (
+          {(currentQ.question[language] || currentQ.question['pt-BR']) && (
             <QuestionText>
-              {currentQ.question[language]}
+              {currentQ.question[language] || currentQ.question['pt-BR']}
             </QuestionText>
           )}
 
@@ -549,9 +546,9 @@ const CloudPractitioner = () => {
                     <h4>📚 Explicação:</h4>
                     {!isCorrect && (
                       <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
-                        {language === 'pt-BR' 
+                        {language === 'pt-BR'
                           ? `A resposta correta é: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
-                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['en']}"`
+                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
                         }
                       </p>
                     )}

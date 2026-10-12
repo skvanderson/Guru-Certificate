@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../components/NavigationButtons';
+import Reveal from '../components/Reveal';
 
 const SimuladosContainer = styled.div`
   min-height: calc(100vh - 160px);
@@ -51,13 +52,18 @@ const SimuladoCard = styled.div`
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
   box-shadow: var(--shadow-lg);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: 2px solid transparent;
-  
+  height: 100%;
+
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
     border-color: var(--aws-orange);
+
+    .badge img {
+      transform: scale(1.08) rotate(-3deg);
+    }
   }
 `;
 
@@ -76,6 +82,7 @@ const CardHeader = styled.div`
       width: 100%;
       height: auto;
       object-fit: contain;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
   }
   
@@ -121,22 +128,35 @@ const CardFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+
   @media (max-width: 480px) {
     flex-direction: column;
-    gap: var(--spacing-4);
+    align-items: stretch;
+    gap: var(--spacing-3);
   }
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+`;
+
 const StartButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
   background-color: var(--aws-orange);
   color: var(--aws-white);
   text-decoration: none;
   padding: var(--spacing-3) var(--spacing-6);
   border-radius: var(--radius-lg);
   font-weight: 600;
+  white-space: nowrap;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: var(--aws-orange-dark);
     transform: translateY(-1px);
@@ -158,22 +178,25 @@ const Simulados = () => {
     <SimuladosContainer>
       <Content>
         <NavigationButtons />
-        <Header>
-          <h1>Simulados</h1>
-          <p>
-            Selecione um dos simulados abaixo para começar sua jornada de preparação 
-            para as certificações AWS. Nossos simulados são baseados em questões reais 
-            dos exames oficiais.
-          </p>
-        </Header>
-        
+        <Reveal>
+          <Header>
+            <h1>Simulados</h1>
+            <p>
+              Selecione um dos simulados abaixo para começar sua jornada de preparação
+              para as certificações AWS. Nossos simulados são baseados em questões reais
+              dos exames oficiais.
+            </p>
+          </Header>
+        </Reveal>
+
         <SimuladosGrid>
+          <Reveal delay="0s">
           <SimuladoCard>
             <CardHeader>
               <div className="badge">
                 <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
               </div>
-              <h3>Cloud Practitioner CLF-02</h3>
+              <h3>Cloud Practitioner CLF-C02</h3>
             </CardHeader>
             <CardContent>
               <p>
@@ -181,26 +204,36 @@ const Simulados = () => {
                 que desejam entender os fundamentos da nuvem AWS.
               </p>
               <ul className="features">
-                <li>20 questões baseadas no exame oficial</li>
-                <li>Tempo limite de 40 minutos</li>
+                <li>65 questões baseadas no exame oficial</li>
+                <li>Tempo limite de 90 minutos</li>
                 <li>Explicações detalhadas das respostas</li>
                 <li>Suporte a português e inglês</li>
               </ul>
             </CardContent>
             <CardFooter>
-              <StartButton to="/simulado/cloud-practitioner">
-                Iniciar Simulado
-              </StartButton>
+              <ActionButtons>
+                <StartButton to="/simulado/cloud-practitioner">
+                  Iniciar Simulado
+                </StartButton>
+                <StartButton to="/flashcards/cloud-practitioner">
+                  📚 Flash Cards
+                </StartButton>
+                <StartButton to="/simulado/cloud-practitioner/dominios">
+                  🎯 Praticar por Domínio
+                </StartButton>
+              </ActionButtons>
               <Difficulty>Iniciante</Difficulty>
             </CardFooter>
           </SimuladoCard>
-          
+          </Reveal>
+
+          <Reveal delay="0.1s">
           <SimuladoCard>
             <CardHeader>
               <div className="badge">
                 <img src="/assets/images/badges/aws-certified-solutions-architect-associate.png" alt="AWS Solutions Architect Associate Badge" />
               </div>
-              <h3>Solutions Architect - SSA</h3>
+              <h3>Solutions Architect - SAA-C03</h3>
             </CardHeader>
             <CardContent>
               <p>
@@ -215,19 +248,26 @@ const Simulados = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <StartButton to="/simulado/solutions-architect">
-                Iniciar Simulado
-              </StartButton>
+              <ActionButtons>
+                <StartButton to="/simulado/solutions-architect">
+                  Iniciar Simulado
+                </StartButton>
+                <StartButton to="/flashcards/solutions-architect">
+                  📚 Flash Cards
+                </StartButton>
+              </ActionButtons>
               <Difficulty>Intermediário</Difficulty>
             </CardFooter>
           </SimuladoCard>
-          
+          </Reveal>
+
+          <Reveal delay="0.2s">
           <SimuladoCard>
             <CardHeader>
               <div className="badge">
                 <img src="/assets/images/badges/aws-certified-developer-associate.png" alt="AWS Developer Associate Badge" />
               </div>
-              <h3>Developer Associate - DVA</h3>
+              <h3>Developer Associate - DVA-C02</h3>
             </CardHeader>
             <CardContent>
               <p>
@@ -242,12 +282,18 @@ const Simulados = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <StartButton to="/simulado/developer-associate">
-                Iniciar Simulado
-              </StartButton>
+              <ActionButtons>
+                <StartButton to="/simulado/developer-associate">
+                  Iniciar Simulado
+                </StartButton>
+                <StartButton to="/flashcards/developer-associate">
+                  📚 Flash Cards
+                </StartButton>
+              </ActionButtons>
               <Difficulty>Intermediário</Difficulty>
             </CardFooter>
           </SimuladoCard>
+          </Reveal>
         </SimuladosGrid>
       </Content>
     </SimuladosContainer>

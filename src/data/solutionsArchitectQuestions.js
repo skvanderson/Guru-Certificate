@@ -19,46 +19,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "ALB distribuindo para instâncias em múltiplas AZs com Auto Scaling",
-          "en": "ALB distributing to instances across multiple AZs with Auto Scaling"
+          "pt-BR": "Auto Scaling group abrangendo múltiplas AZs atrás de um Application Load Balancer",
+          "en": "Auto Scaling group spanning multiple AZs behind an Application Load Balancer"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Distribuição multi-AZ com balanceamento e escala automática reduz ponto único de falha e melhora disponibilidade.",
-          "en": "Multi-AZ distribution with load balancing and auto scaling reduces single points of failure and improves availability."
+          "pt-BR": "Com instâncias distribuídas em várias AZs, o ALB deixa de enviar tráfego para os targets da AZ afetada e o Auto Scaling repõe capacidade nas AZs saudáveis, mantendo o serviço no ar.",
+          "en": "With instances spread across several AZs, the ALB stops sending traffic to targets in the failed AZ and Auto Scaling replaces capacity in the healthy AZs, keeping the service online."
         }
       },
       {
         "title": {
-          "pt-BR": "Uma instância grande em uma única AZ",
-          "en": "One large instance in a single AZ"
+          "pt-BR": "Auto Scaling group em uma única AZ atrás de um ALB configurado com subnets em duas AZs",
+          "en": "Auto Scaling group in a single AZ behind an ALB configured with subnets in two AZs"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Mantém ponto único de falha dentro da AZ.",
-          "en": "Keeps a single point of failure within the AZ."
+          "pt-BR": "Ter os nós do ALB em duas AZs não adianta se todos os targets estão em uma só AZ: se ela falhar, o ALB fica sem nenhum target saudável e a aplicação para.",
+          "en": "Having ALB nodes in two AZs does not help if all targets live in one AZ: if that AZ fails, the ALB has no healthy targets left and the application goes down."
         }
       },
       {
         "title": {
-          "pt-BR": "Somente backup diário sem redundância ativa",
-          "en": "Daily backup only without active redundancy"
+          "pt-BR": "Instância EC2 única com auto recovery via alarme de CloudWatch StatusCheckFailed_System",
+          "en": "Single EC2 instance with auto recovery via a CloudWatch StatusCheckFailed_System alarm"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Backup ajuda recuperação, mas não garante continuidade imediata de serviço.",
-          "en": "Backup helps recovery, but does not guarantee immediate service continuity."
+          "pt-BR": "O auto recovery move a instância para outro hardware dentro da MESMA AZ; ele trata falhas de host, não a perda de uma Availability Zone inteira.",
+          "en": "Auto recovery moves the instance to other hardware within the SAME AZ; it handles host failures, not the loss of an entire Availability Zone."
         }
       },
       {
         "title": {
-          "pt-BR": "CloudFront sem redundância de origem",
-          "en": "CloudFront without origin redundancy"
+          "pt-BR": "Auto Scaling group com mínimo e máximo 1 abrangendo duas AZs, sem load balancer",
+          "en": "Auto Scaling group with min and max of 1 spanning two AZs, without a load balancer"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "CDN não substitui arquitetura resiliente na camada de origem.",
-          "en": "CDN does not replace resilient origin-layer architecture."
+          "pt-BR": "O ASG relança a instância na outra AZ, mas há indisponibilidade durante o boot e o endpoint (IP) muda sem um balanceador na frente; não há capacidade ativa já rodando na outra AZ.",
+          "en": "The ASG relaunches the instance in the other AZ, but there is downtime while it boots and the endpoint (IP) changes without a load balancer in front; no active capacity is already running in the other AZ."
         }
       }
     ],
@@ -87,46 +87,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "RDS Single-AZ com snapshots automáticos",
-          "en": "RDS Single-AZ with automated snapshots"
+          "pt-BR": "RDS Single-AZ com backups automáticos e restauração point-in-time",
+          "en": "RDS Single-AZ with automated backups and point-in-time restore"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Snapshots ajudam recuperação, mas não entregam failover automático entre zonas.",
-          "en": "Snapshots help recovery, but do not provide automatic cross-AZ failover."
+          "pt-BR": "A restauração point-in-time cria uma NOVA instância e exige ação manual e troca de endpoint; não existe failover automático entre AZs.",
+          "en": "Point-in-time restore creates a NEW instance and requires manual action and an endpoint change; there is no automatic cross-AZ failover."
         }
       },
       {
         "title": {
-          "pt-BR": "RDS Multi-AZ",
-          "en": "RDS Multi-AZ"
+          "pt-BR": "RDS Multi-AZ com instância standby síncrona em outra AZ",
+          "en": "RDS Multi-AZ with a synchronous standby instance in another AZ"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Multi-AZ mantém standby sincronizado e failover automático para alta disponibilidade.",
-          "en": "Multi-AZ keeps synchronized standby and automatic failover for high availability."
+          "pt-BR": "No Multi-AZ, o RDS replica de forma síncrona para uma standby em outra AZ e, em caso de falha, faz failover automático atualizando o registro DNS do mesmo endpoint.",
+          "en": "With Multi-AZ, RDS synchronously replicates to a standby in another AZ and, on failure, fails over automatically by updating the DNS record of the same endpoint."
         }
       },
       {
         "title": {
-          "pt-BR": "Aurora Global Database",
-          "en": "Aurora Global Database"
+          "pt-BR": "RDS Single-AZ com Read Replica na mesma região em outra AZ",
+          "en": "RDS Single-AZ with an in-Region Read Replica in another AZ"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Aurora Global Database é voltado a failover multi-região, não é a resposta direta para failover de AZ nesta pergunta.",
-          "en": "Aurora Global Database is aimed at multi-region failover, not the direct answer for AZ failover in this question."
+          "pt-BR": "Uma Read Replica do RDS usa replicação assíncrona e precisa ser promovida manualmente (com novo endpoint); ela escala leitura, mas não fornece failover automático.",
+          "en": "An RDS Read Replica uses asynchronous replication and must be promoted manually (with a new endpoint); it scales reads but does not provide automatic failover."
         }
       },
       {
         "title": {
-          "pt-BR": "Cross-Region Read Replica com failover manual",
-          "en": "Cross-Region Read Replica with manual failover"
+          "pt-BR": "RDS com Read Replica cross-Region promovida manualmente em desastre",
+          "en": "RDS with a cross-Region Read Replica promoted manually during a disaster"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Isso melhora resiliência regional, mas ainda depende de intervenção e não é a menor latência de recuperação para falha de AZ.",
-          "en": "This improves regional resilience, but it still depends on intervention and is not the fastest recovery for AZ failure."
+          "pt-BR": "É uma estratégia de DR regional: a promoção é manual, a replicação é assíncrona e a aplicação precisa ser redirecionada para outra região, o que não atende failover automático de AZ.",
+          "en": "This is a regional DR strategy: promotion is manual, replication is asynchronous, and the application must be redirected to another Region, which does not meet automatic AZ failover."
         }
       }
     ],
@@ -155,46 +155,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Aumentar somente CPU do writer",
-          "en": "Only increase writer CPU"
+          "pt-BR": "Escalar verticalmente a instância writer para uma classe maior",
+          "en": "Vertically scale the writer instance to a larger instance class"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Ajuda temporariamente, mas não resolve escala horizontal de leitura.",
-          "en": "It helps temporarily, but does not solve horizontal read scaling."
+          "pt-BR": "Scale up aumenta a capacidade de um único nó, tem limite de tamanho e exige modificação da instância; não distribui as leituras horizontalmente, e a escrita nem é o gargalo.",
+          "en": "Scaling up increases a single node's capacity, has a size ceiling, and requires modifying the instance; it does not spread reads horizontally, and writes are not the bottleneck."
         }
       },
       {
         "title": {
-          "pt-BR": "Adicionar Amazon ElastiCache para consultas quentes sem mudar o banco",
-          "en": "Add Amazon ElastiCache for hot queries without changing the database"
+          "pt-BR": "Habilitar RDS Multi-AZ e direcionar as leituras para a instância standby",
+          "en": "Enable RDS Multi-AZ and route read queries to the standby instance"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Cache reduz latência, mas não substitui a necessidade de leitura escalável no próprio banco relacional.",
-          "en": "Cache reduces latency, but it does not replace the need for scalable reads in the relational database itself."
+          "pt-BR": "Em uma implantação Multi-AZ de instância, a standby não aceita conexões de leitura; ela existe apenas para failover, então não adiciona capacidade de leitura.",
+          "en": "In a Multi-AZ DB instance deployment, the standby does not accept read connections; it exists only for failover, so it adds no read capacity."
         }
       },
       {
         "title": {
-          "pt-BR": "Criar Read Replicas e direcionar consultas de leitura",
-          "en": "Create Read Replicas and route read queries"
+          "pt-BR": "Criar Read Replicas e direcionar as consultas de leitura para elas",
+          "en": "Create Read Replicas and route read queries to them"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Read Replicas ampliam capacidade de leitura sem impactar o nó primário de escrita.",
-          "en": "Read Replicas increase read capacity without impacting the primary write node."
+          "pt-BR": "Read Replicas recebem cópia assíncrona dos dados e atendem consultas de leitura, escalando horizontalmente a leitura sem sobrecarregar o writer.",
+          "en": "Read Replicas receive an asynchronous copy of the data and serve read queries, scaling reads horizontally without overloading the writer."
         }
       },
       {
         "title": {
-          "pt-BR": "Desativar índices",
-          "en": "Disable indexes"
+          "pt-BR": "Migrar o volume do writer para io2 com mais IOPS provisionadas",
+          "en": "Move the writer's volume to io2 with more provisioned IOPS"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Remover índices tende a degradar leituras.",
-          "en": "Removing indexes tends to degrade reads."
+          "pt-BR": "Mais IOPS ajuda apenas se o gargalo for I/O de disco, e continua sendo um único nó atendendo todas as leituras; não há escala horizontal de leitura.",
+          "en": "More IOPS helps only if the bottleneck is disk I/O, and it is still a single node serving all reads; there is no horizontal read scaling."
         }
       }
     ],
@@ -223,46 +223,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "S3 + CloudTrail",
-          "en": "S3 + CloudTrail"
+          "pt-BR": "S3 com Transfer Acceleration habilitado no bucket da região primária",
+          "en": "S3 with Transfer Acceleration enabled on the primary-region bucket"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "CloudTrail audita eventos, não otimiza entrega global de conteúdo.",
-          "en": "CloudTrail audits events, it does not optimize global content delivery."
+          "pt-BR": "Transfer Acceleration otimiza transferências de longa distância (principalmente uploads) pela rede da AWS, mas não faz cache: toda requisição ainda é atendida pelo bucket na região primária.",
+          "en": "Transfer Acceleration optimizes long-distance transfers (mainly uploads) over the AWS network, but it does not cache: every request is still served by the bucket in the primary Region."
         }
       },
       {
         "title": {
-          "pt-BR": "EBS + Route 53",
-          "en": "EBS + Route 53"
+          "pt-BR": "S3 Cross-Region Replication para um bucket em uma segunda região",
+          "en": "S3 Cross-Region Replication to a bucket in a second Region"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "EBS não é armazenamento de distribuição web global.",
-          "en": "EBS is not a global web distribution storage layer."
+          "pt-BR": "A CRR copia objetos para outra região, mas usuários de outros continentes continuam distantes, e seria preciso lógica extra de roteamento; não é uma rede de entrega global com cache.",
+          "en": "CRR copies objects to another Region, but users on other continents are still far away and extra routing logic is needed; it is not a global caching delivery network."
         }
       },
       {
         "title": {
-          "pt-BR": "NAT Gateway + SQS",
-          "en": "NAT Gateway + SQS"
+          "pt-BR": "AWS Global Accelerator com o bucket S3 registrado como endpoint",
+          "en": "AWS Global Accelerator with the S3 bucket registered as an endpoint"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Não é um padrão de aceleração de conteúdo estático para usuários finais.",
-          "en": "This is not a static content acceleration pattern for end users."
+          "pt-BR": "Global Accelerator aceita como endpoints ALB, NLB, instâncias EC2 e Elastic IPs; um bucket S3 não pode ser registrado diretamente, e o serviço não faz cache de conteúdo.",
+          "en": "Global Accelerator accepts ALBs, NLBs, EC2 instances, and Elastic IPs as endpoints; an S3 bucket cannot be registered directly, and the service does not cache content."
         }
       },
       {
         "title": {
-          "pt-BR": "S3 como origem com CloudFront",
-          "en": "S3 origin with CloudFront"
+          "pt-BR": "S3 como origem de uma distribuição Amazon CloudFront",
+          "en": "S3 as the origin of an Amazon CloudFront distribution"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "CloudFront usa edge locations para reduzir latência global e aliviar origem S3.",
-          "en": "CloudFront uses edge locations to reduce global latency and offload S3 origin."
+          "pt-BR": "CloudFront faz cache do conteúdo estático em edge locations próximas aos usuários, reduzindo a latência global e a carga sobre a origem S3.",
+          "en": "CloudFront caches static content at edge locations close to users, reducing global latency and load on the S3 origin."
         }
       }
     ],
@@ -291,46 +291,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Fila SQS entre produtor e consumidor",
-          "en": "SQS queue between producer and consumer"
+          "pt-BR": "Fila Amazon SQS entre produtor e consumidor, com consumo por polling",
+          "en": "Amazon SQS queue between producer and consumer, with polling consumption"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "SQS desacopla ritmo de produção e consumo, aumentando resiliência e estabilidade.",
-          "en": "SQS decouples production and consumption rates, increasing resilience and stability."
+          "pt-BR": "O produtor apenas grava na fila, que retém as mensagens (por padrão 4 dias, até 14) enquanto o consumidor está fora; o consumidor processa no próprio ritmo, absorvendo picos.",
+          "en": "The producer only writes to the queue, which retains messages (4 days by default, up to 14) while the consumer is down; the consumer processes at its own pace, absorbing spikes."
         }
       },
       {
         "title": {
-          "pt-BR": "Chamada síncrona obrigatória entre serviços",
-          "en": "Mandatory synchronous service call"
+          "pt-BR": "Tópico Amazon SNS com o consumidor inscrito via endpoint HTTP/S",
+          "en": "Amazon SNS topic with the consumer subscribed via an HTTP/S endpoint"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Síncrono aumenta acoplamento e propagação de falhas.",
-          "en": "Synchronous calls increase coupling and failure propagation."
+          "pt-BR": "SNS é push: entrega na taxa do produtor e, se o endpoint estiver fora, faz apenas retentativas limitadas pela política de entrega antes de descartar a mensagem ou enviá-la para DLQ; não funciona como buffer.",
+          "en": "SNS is push-based: it delivers at the producer's rate and, if the endpoint is down, only retries as limited by the delivery policy before dropping the message or sending it to a DLQ; it does not act as a buffer."
         }
       },
       {
         "title": {
-          "pt-BR": "Salvar eventos em arquivo local",
-          "en": "Store events in local file"
+          "pt-BR": "Invocação síncrona (RequestResponse) da Lambda consumidora pelo produtor",
+          "en": "Synchronous (RequestResponse) invocation of the consumer Lambda by the producer"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Não é solução distribuída confiável para arquitetura em nuvem.",
-          "en": "It is not a reliable distributed cloud-architecture solution."
+          "pt-BR": "Na invocação síncrona o produtor espera a resposta e recebe diretamente erros ou throttling; em picos ou falhas do consumidor, o produtor também falha.",
+          "en": "With synchronous invocation the producer waits for the response and directly receives errors or throttling; during spikes or consumer failures, the producer fails too."
         }
       },
       {
         "title": {
-          "pt-BR": "Aumentar timeout de todas as APIs",
-          "en": "Increase timeout for all APIs"
+          "pt-BR": "Application Load Balancer na frente dos consumidores com health checks",
+          "en": "Application Load Balancer in front of the consumers with health checks"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Timeout maior não resolve desacoplamento estrutural.",
-          "en": "Longer timeout does not solve structural decoupling."
+          "pt-BR": "O ALB distribui requisições entre consumidores saudáveis, mas não armazena nada: se todos estiverem indisponíveis ou saturados, o produtor recebe erro 5xx.",
+          "en": "The ALB distributes requests across healthy consumers but stores nothing: if all of them are unavailable or saturated, the producer gets a 5xx error."
         }
       }
     ],
@@ -359,46 +359,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Backup e restore manual",
-          "en": "Backup and manual restore"
+          "pt-BR": "Backup and restore com AWS Backup copiando os backups para outra região",
+          "en": "Backup and restore with AWS Backup copying backups to another Region"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Costuma ter RTO mais alto por depender de restauração completa.",
-          "en": "Usually has higher RTO due to full restoration dependency."
+          "pt-BR": "Os dados ficam protegidos em outra região, mas toda a infraestrutura precisa ser recriada e restaurada no desastre; o RTO tende a ser de horas e o RPO depende da frequência dos backups.",
+          "en": "Data is protected in another Region, but the entire infrastructure must be recreated and restored during a disaster; RTO tends to be hours and RPO depends on backup frequency."
         }
       },
       {
         "title": {
-          "pt-BR": "Multi-site ativo-ativo ou standby quente com failover automatizado",
-          "en": "Active-active multi-site or warm standby with automated failover"
+          "pt-BR": "Warm standby ou multi-site ativo-ativo em outra região com failover automatizado",
+          "en": "Warm standby or active-active multi-site in another Region with automated failover"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Estratégias com ambiente já operacional e failover automatizado entregam menor RTO/RPO.",
-          "en": "Strategies with pre-operational environment and automated failover deliver lower RTO/RPO."
+          "pt-BR": "Com o ambiente já rodando na região secundária, dados replicados continuamente e failover automatizado, o RTO fica em minutos (ou quase zero) e o RPO é mínimo.",
+          "en": "With the environment already running in the secondary Region, continuously replicated data, and automated failover, RTO stays in minutes (or near zero) and RPO is minimal."
         }
       },
       {
         "title": {
-          "pt-BR": "Pilot light sem automação de failover",
-          "en": "Pilot light without failover automation"
+          "pt-BR": "Pilot light em outra região com servidores de aplicação provisionados manualmente",
+          "en": "Pilot light in another Region with application servers provisioned manually"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Pode reduzir custo, mas pode não cumprir tempos mais agressivos.",
-          "en": "It may reduce cost, but may not meet aggressive timing goals."
+          "pt-BR": "No pilot light só o núcleo (ex.: banco replicado) fica ativo; provisionar e escalar a camada de aplicação manualmente no desastre aumenta o RTO além do alvo de minutos.",
+          "en": "In pilot light only the core (e.g., the replicated database) stays active; manually provisioning and scaling the application tier during a disaster pushes RTO beyond the minute-level target."
         }
       },
       {
         "title": {
-          "pt-BR": "Somente snapshots semanais",
-          "en": "Weekly snapshots only"
+          "pt-BR": "Implantação Multi-AZ na mesma região com failover automático entre AZs",
+          "en": "Multi-AZ deployment in the same Region with automatic failover between AZs"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Não atende requisito crítico de perda mínima e retomada rápida.",
-          "en": "It does not meet critical minimal-loss and fast-recovery requirements."
+          "pt-BR": "Multi-AZ protege contra falha de uma AZ, mas todos os recursos continuam na mesma região; em um desastre regional, não há ambiente para assumir.",
+          "en": "Multi-AZ protects against the failure of one AZ, but all resources remain in the same Region; in a regional disaster, there is no environment to take over."
         }
       }
     ],
@@ -427,46 +427,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS IAM",
-          "en": "AWS IAM"
+          "pt-BR": "AWS Shield Standard na borda da AWS",
+          "en": "AWS Shield Standard at the AWS edge"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "IAM controla identidades, não bloqueio direto de padrões HTTP maliciosos.",
-          "en": "IAM controls identities, not direct blocking of malicious HTTP patterns."
+          "pt-BR": "Shield Standard mitiga ataques DDoS de camadas 3 e 4 (ex.: SYN/UDP floods); ele não inspeciona o conteúdo das requisições HTTP em busca de SQLi ou XSS.",
+          "en": "Shield Standard mitigates layer 3 and 4 DDoS attacks (e.g., SYN/UDP floods); it does not inspect HTTP request content for SQLi or XSS."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS Budgets",
-          "en": "AWS Budgets"
+          "pt-BR": "Amazon GuardDuty com detecção de ameaças",
+          "en": "Amazon GuardDuty with threat detection"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Budgets monitora custo, não segurança de tráfego web.",
-          "en": "Budgets monitors costs, not web traffic security."
+          "pt-BR": "GuardDuty analisa fontes como CloudTrail, VPC Flow Logs e DNS logs para gerar findings; ele detecta, mas não fica inline bloqueando requisições HTTP maliciosas.",
+          "en": "GuardDuty analyzes sources such as CloudTrail, VPC Flow Logs, and DNS logs to generate findings; it detects but does not sit inline blocking malicious HTTP requests."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS WAF",
-          "en": "AWS WAF"
+          "pt-BR": "AWS WAF associado ao CloudFront ou ALB",
+          "en": "AWS WAF associated with CloudFront or ALB"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "WAF aplica regras gerenciadas/customizadas para bloquear vetores comuns de ataque web.",
-          "en": "WAF applies managed/custom rules to block common web attack vectors."
+          "pt-BR": "WAF inspeciona requisições HTTP/S na camada 7 e aplica regras gerenciadas e customizadas (como os conjuntos de SQLi e XSS) para bloquear esses ataques.",
+          "en": "WAF inspects HTTP/S requests at layer 7 and applies managed and custom rules (such as the SQLi and XSS rule sets) to block these attacks."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon SQS",
-          "en": "Amazon SQS"
+          "pt-BR": "Security groups e network ACLs restritivos",
+          "en": "Restrictive security groups and network ACLs"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "SQS é fila de mensagens, não firewall de aplicação web.",
-          "en": "SQS is a messaging queue, not a web application firewall."
+          "pt-BR": "Security groups e NACLs filtram por IP, protocolo e porta (camadas 3/4); não conseguem analisar o payload HTTP para identificar SQLi ou XSS.",
+          "en": "Security groups and NACLs filter by IP, protocol, and port (layers 3/4); they cannot analyze the HTTP payload to identify SQLi or XSS."
         }
       }
     ],
@@ -495,35 +495,35 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS Systems Manager",
-          "en": "AWS Systems Manager"
+          "pt-BR": "AWS Config com agregador multi-conta",
+          "en": "AWS Config with a multi-account aggregator"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Systems Manager gerencia operações de recursos, não estrutura de organizações.",
-          "en": "Systems Manager manages resource operations, not organizational account structure."
+          "pt-BR": "Config avalia e agrega a conformidade de recursos entre contas, mas é detectivo: não cria a estrutura de contas, não aplica SCPs preventivas e não consolida faturamento.",
+          "en": "Config evaluates and aggregates resource compliance across accounts, but it is detective: it does not create the account structure, enforce preventive SCPs, or consolidate billing."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon Inspector",
-          "en": "Amazon Inspector"
+          "pt-BR": "AWS Resource Access Manager",
+          "en": "AWS Resource Access Manager"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Inspector é scanner de vulnerabilidades.",
-          "en": "Inspector is a vulnerability scanner."
+          "pt-BR": "RAM compartilha recursos (ex.: subnets, Transit Gateways) entre contas; não define hierarquia de contas, políticas centrais nem faturamento consolidado.",
+          "en": "RAM shares resources (e.g., subnets, Transit Gateways) across accounts; it does not define an account hierarchy, central policies, or consolidated billing."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS IAM Identity Center sozinho",
-          "en": "AWS IAM Identity Center alone"
+          "pt-BR": "AWS IAM Identity Center",
+          "en": "AWS IAM Identity Center"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Ajuda acesso centralizado, mas não substitui governança estrutural de contas.",
-          "en": "It helps centralized access but does not replace structural account governance."
+          "pt-BR": "Identity Center centraliza o acesso SSO dos usuários às contas, mas não organiza contas em OUs, não aplica SCPs e não consolida faturamento (ele inclusive depende do Organizations para uso multi-conta).",
+          "en": "Identity Center centralizes user SSO access to accounts, but it does not organize accounts into OUs, apply SCPs, or consolidate billing (it actually relies on Organizations for multi-account use)."
         }
       },
       {
@@ -533,8 +533,8 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Organizations permite OU, SCPs e billing consolidado para governança multi-conta.",
-          "en": "Organizations enables OUs, SCPs, and consolidated billing for multi-account governance."
+          "pt-BR": "Organizations agrupa contas em OUs, aplica Service Control Policies de forma centralizada e oferece faturamento consolidado, cobrindo os três requisitos.",
+          "en": "Organizations groups accounts into OUs, centrally applies Service Control Policies, and provides consolidated billing, covering all three requirements."
         }
       }
     ],
@@ -568,41 +568,41 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Direct Connect oferece enlace dedicado, com desempenho mais previsível que VPN sobre internet pública.",
-          "en": "Direct Connect provides a dedicated link with more predictable performance than VPN over public internet."
+          "pt-BR": "Direct Connect estabelece um enlace de rede dedicado e privado entre o data center e a AWS, com largura de banda contratada e latência mais consistente que a internet.",
+          "en": "Direct Connect establishes a dedicated, private network link between the data center and AWS, with committed bandwidth and more consistent latency than the internet."
         }
       },
       {
         "title": {
-          "pt-BR": "VPC Peering",
-          "en": "VPC Peering"
+          "pt-BR": "AWS Site-to-Site VPN",
+          "en": "AWS Site-to-Site VPN"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Peering conecta VPCs, não data center on-premises com enlace dedicado.",
-          "en": "Peering connects VPCs, not on-prem data centers with dedicated circuits."
+          "pt-BR": "A VPN Site-to-Site cria túneis IPsec criptografados, mas trafega pela internet pública; cada túnel tem limite de throughput e a latência varia com a internet.",
+          "en": "Site-to-Site VPN creates encrypted IPsec tunnels, but it travels over the public internet; each tunnel has a throughput limit and latency varies with internet conditions."
         }
       },
       {
         "title": {
-          "pt-BR": "CloudFront",
-          "en": "CloudFront"
+          "pt-BR": "Accelerated Site-to-Site VPN com Global Accelerator",
+          "en": "Accelerated Site-to-Site VPN with Global Accelerator"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "CloudFront é CDN, não conectividade de rede privada híbrida.",
-          "en": "CloudFront is CDN, not private hybrid network connectivity."
+          "pt-BR": "A aceleração leva o tráfego para a rede global da AWS no edge mais próximo, o que melhora o desempenho, mas o trecho até o edge ainda é internet pública; não é um circuito dedicado.",
+          "en": "Acceleration moves traffic onto the AWS global network at the nearest edge, which improves performance, but the segment to the edge is still the public internet; it is not a dedicated circuit."
         }
       },
       {
         "title": {
-          "pt-BR": "Elastic Load Balancing",
-          "en": "Elastic Load Balancing"
+          "pt-BR": "AWS Client VPN",
+          "en": "AWS Client VPN"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "ELB distribui tráfego de aplicação, não estabelece circuito dedicado.",
-          "en": "ELB distributes application traffic, it does not establish dedicated circuits."
+          "pt-BR": "Client VPN é para acesso remoto de usuários individuais (clientes OpenVPN) à VPC, não para integração site-a-site com banda estável entre data center e AWS.",
+          "en": "Client VPN is for remote access by individual users (OpenVPN clients) to the VPC, not for site-to-site integration with stable bandwidth between a data center and AWS."
         }
       }
     ],
@@ -631,13 +631,13 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Amazon EC2",
-          "en": "Amazon EC2"
+          "pt-BR": "Amazon Redshift (cluster provisionado) com Redshift Spectrum",
+          "en": "Amazon Redshift (provisioned cluster) with Redshift Spectrum"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Exigiria gestão de infraestrutura para algo que pode ser serverless.",
-          "en": "It would require infrastructure management for a use case that can be serverless."
+          "pt-BR": "Spectrum consulta dados no S3, mas exige um cluster Redshift provisionado e ativo para executar as queries, contrariando o requisito de não manter cluster permanente.",
+          "en": "Spectrum queries data in S3, but it requires a provisioned, running Redshift cluster to execute queries, which contradicts the requirement of no permanent cluster."
         }
       },
       {
@@ -647,30 +647,30 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Athena consulta dados em S3 via SQL serverless, sem gerenciar infraestrutura.",
-          "en": "Athena queries S3 data via serverless SQL without infrastructure management."
+          "pt-BR": "Athena é serverless: consulta dados diretamente no S3 com SQL padrão, usando o Glue Data Catalog como metastore, e cobra pelo volume de dados escaneado.",
+          "en": "Athena is serverless: it queries data directly in S3 with standard SQL, using the Glue Data Catalog as its metastore, and charges per amount of data scanned."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon RDS",
-          "en": "Amazon RDS"
+          "pt-BR": "Cluster Amazon EMR com Trino (Presto)",
+          "en": "Amazon EMR cluster with Trino (Presto)"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "RDS não é ideal para analytics ad hoc direto em data lake S3.",
-          "en": "RDS is not ideal for ad-hoc analytics directly over S3 data lake."
+          "pt-BR": "Trino no EMR executa SQL sobre S3, mas exige provisionar, dimensionar e gerenciar um cluster, justamente o que o cenário quer evitar.",
+          "en": "Trino on EMR runs SQL over S3, but it requires provisioning, sizing, and managing a cluster, which is exactly what the scenario wants to avoid."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS IAM",
-          "en": "AWS IAM"
+          "pt-BR": "AWS Glue Data Catalog com crawlers",
+          "en": "AWS Glue Data Catalog with crawlers"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "IAM trata permissões, não execução de consultas analíticas.",
-          "en": "IAM handles permissions, not analytical query execution."
+          "pt-BR": "Crawlers descobrem o schema e registram tabelas no Data Catalog, mas o catálogo guarda apenas metadados; ele não executa consultas SQL por conta própria.",
+          "en": "Crawlers discover schemas and register tables in the Data Catalog, but the catalog only stores metadata; it does not execute SQL queries on its own."
         }
       }
     ],
@@ -699,46 +699,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS Artifact",
-          "en": "AWS Artifact"
+          "pt-BR": "AWS X-Ray",
+          "en": "AWS X-Ray"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Artifact fornece documentação de compliance.",
-          "en": "Artifact provides compliance documentation."
+          "pt-BR": "X-Ray coleta traces e gera service maps para analisar latência entre componentes, mas os alarmes por limite de métrica são criados e disparados no CloudWatch.",
+          "en": "X-Ray collects traces and builds service maps to analyze latency between components, but threshold-based metric alarms are created and triggered in CloudWatch."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS Trusted Advisor",
-          "en": "AWS Trusted Advisor"
+          "pt-BR": "AWS CloudTrail",
+          "en": "AWS CloudTrail"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Advisor dá recomendações periódicas, não monitoramento operacional contínuo.",
-          "en": "Trusted Advisor gives periodic recommendations, not continuous operational monitoring."
+          "pt-BR": "CloudTrail registra chamadas de API feitas na conta (quem fez o quê e quando) para auditoria; não mede latência nem taxa de erro da aplicação.",
+          "en": "CloudTrail records API calls made in the account (who did what and when) for auditing; it does not measure application latency or error rates."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS CloudWatch",
-          "en": "AWS CloudWatch"
+          "pt-BR": "Amazon CloudWatch",
+          "en": "Amazon CloudWatch"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "CloudWatch agrega métricas/logs e permite alarmes acionáveis.",
-          "en": "CloudWatch aggregates metrics/logs and enables actionable alarms."
+          "pt-BR": "CloudWatch coleta métricas como latência e erros 5xx e permite alarmes com thresholds que disparam notificações (SNS) ou ações automáticas.",
+          "en": "CloudWatch collects metrics such as latency and 5xx errors and supports threshold alarms that trigger notifications (SNS) or automated actions."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS Organizations",
-          "en": "AWS Organizations"
+          "pt-BR": "Amazon EventBridge",
+          "en": "Amazon EventBridge"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Organizations governa contas, não métricas de aplicação em tempo real.",
-          "en": "Organizations governs accounts, not real-time application metrics."
+          "pt-BR": "EventBridge roteia eventos entre serviços com base em regras, mas não calcula métricas nem avalia limites de latência; ele pode apenas reagir a mudanças de estado de alarmes do CloudWatch.",
+          "en": "EventBridge routes events between services based on rules, but it does not compute metrics or evaluate latency thresholds; it can only react to CloudWatch alarm state changes."
         }
       }
     ],
@@ -767,35 +767,35 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS Batch",
-          "en": "AWS Batch"
+          "pt-BR": "Amazon Data Lifecycle Manager",
+          "en": "Amazon Data Lifecycle Manager"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Batch é orquestração de jobs computacionais, não política de backup corporativa.",
-          "en": "Batch orchestrates compute jobs, not enterprise backup policy."
+          "pt-BR": "DLM automatiza a criação e retenção de snapshots EBS e AMIs, mas não cobre outros serviços como RDS, DynamoDB ou EFS nem oferece uma política central única multi-serviço.",
+          "en": "DLM automates creation and retention of EBS snapshots and AMIs, but it does not cover other services such as RDS, DynamoDB, or EFS, nor provide a single central multi-service policy."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon ECR",
-          "en": "Amazon ECR"
+          "pt-BR": "Regras de S3 Lifecycle",
+          "en": "S3 Lifecycle rules"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "ECR é registro de imagens de container.",
-          "en": "ECR is a container image registry."
+          "pt-BR": "Lifecycle rules movem objetos entre classes de armazenamento e expiram versões, mas atuam apenas em buckets S3 e não fazem backup de outros serviços.",
+          "en": "Lifecycle rules transition objects between storage classes and expire versions, but they only act on S3 buckets and do not back up other services."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS WAF",
-          "en": "AWS WAF"
+          "pt-BR": "AWS Elastic Disaster Recovery",
+          "en": "AWS Elastic Disaster Recovery"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "WAF é proteção de camada web, não backup.",
-          "en": "WAF is web-layer protection, not backup."
+          "pt-BR": "Elastic Disaster Recovery replica continuamente servidores para recuperação rápida em desastre, mas não é uma ferramenta de políticas de backup e retenção padronizadas entre serviços.",
+          "en": "Elastic Disaster Recovery continuously replicates servers for fast disaster recovery, but it is not a tool for standardized backup and retention policies across services."
         }
       },
       {
@@ -805,8 +805,8 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "AWS Backup centraliza políticas, agendamento e retenção em vários serviços e contas.",
-          "en": "AWS Backup centralizes policies, scheduling, and retention across services and accounts."
+          "pt-BR": "AWS Backup centraliza backup plans com agendamento e retenção para vários serviços (EBS, RDS, DynamoDB, EFS etc.) e, integrado ao Organizations, aplica backup policies em múltiplas contas.",
+          "en": "AWS Backup centralizes backup plans with scheduling and retention for many services (EBS, RDS, DynamoDB, EFS, etc.) and, integrated with Organizations, applies backup policies across multiple accounts."
         }
       }
     ],
@@ -840,41 +840,41 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Roteamento por latência no Route 53 direciona usuários para região com melhor tempo de resposta.",
-          "en": "Latency-based routing in Route 53 directs users to the region with best response time."
+          "pt-BR": "O roteamento por latência responde com o registro da região que tem a menor latência medida pela AWS entre a rede do usuário e as regiões configuradas.",
+          "en": "Latency-based routing answers with the record for the Region with the lowest latency measured by AWS between the user's network and the configured Regions."
         }
       },
       {
         "title": {
-          "pt-BR": "Route 53 com política weighted routing",
+          "pt-BR": "Route 53 com política de roteamento weighted",
           "en": "Route 53 with weighted routing policy"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Weighted routing distribui tráfego, mas não escolhe automaticamente a região de menor latência por usuário.",
-          "en": "Weighted routing distributes traffic, but it does not automatically pick the lowest-latency region per user."
+          "pt-BR": "Weighted distribui as respostas conforme pesos fixos definidos pelo administrador (ex.: 70/30), sem considerar a latência de cada usuário até cada região.",
+          "en": "Weighted routing distributes answers according to fixed weights set by the administrator (e.g., 70/30), without considering each user's latency to each Region."
         }
       },
       {
         "title": {
-          "pt-BR": "Route 53 com política geolocation",
-          "en": "Route 53 with geolocation policy"
+          "pt-BR": "Route 53 com política de roteamento geolocation",
+          "en": "Route 53 with geolocation routing policy"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Geolocation roteia por localização, mas o enunciado pede escolha por latência observada.",
-          "en": "Geolocation routes by location, but the question asks for selection by observed latency."
+          "pt-BR": "Geolocation escolhe o registro pela localização de origem da consulta DNS (país/continente), definida por regras fixas; a região mapeada nem sempre é a de menor latência.",
+          "en": "Geolocation selects the record by the DNS query's origin location (country/continent) based on fixed rules; the mapped Region is not always the lowest-latency one."
         }
       },
       {
         "title": {
-          "pt-BR": "CloudFront origin failover sem política de DNS",
-          "en": "CloudFront origin failover without DNS policy"
+          "pt-BR": "Route 53 com política de roteamento multivalue answer",
+          "en": "Route 53 with multivalue answer routing policy"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Pode ajudar disponibilidade de origem, mas não substitui roteamento DNS por latência.",
-          "en": "It can help origin availability, but it does not replace latency-based DNS routing."
+          "pt-BR": "Multivalue answer retorna até oito registros saudáveis escolhidos aleatoriamente; melhora disponibilidade, mas não seleciona o endpoint pela latência do usuário.",
+          "en": "Multivalue answer returns up to eight healthy records chosen at random; it improves availability but does not select the endpoint by user latency."
         }
       }
     ],
@@ -903,13 +903,13 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS Systems Manager Parameter Store sem KMS",
-          "en": "AWS Systems Manager Parameter Store without KMS"
+          "pt-BR": "AWS Secrets Manager",
+          "en": "AWS Secrets Manager"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Pode armazenar parâmetros, mas não substitui gestão central de chaves de criptografia.",
-          "en": "It can store parameters, but does not replace centralized encryption key management."
+          "pt-BR": "Secrets Manager armazena e rotaciona segredos como credenciais de banco e API keys (criptografando-os com KMS), mas não é o serviço de chaves usado pelos demais serviços AWS para criptografia em repouso.",
+          "en": "Secrets Manager stores and rotates secrets such as database credentials and API keys (encrypting them with KMS), but it is not the key service used by other AWS services for encryption at rest."
         }
       },
       {
@@ -919,30 +919,30 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "KMS é o serviço padrão para criação, rotação e controle de chaves criptográficas gerenciadas.",
-          "en": "KMS is the standard service for creating, rotating, and controlling managed encryption keys."
+          "pt-BR": "KMS cria, rotaciona e controla o uso de chaves via key policies, com integração nativa a S3, EBS, RDS, DynamoDB e outros serviços para criptografia em repouso.",
+          "en": "KMS creates, rotates, and controls key usage via key policies, with native integration with S3, EBS, RDS, DynamoDB, and other services for encryption at rest."
         }
       },
       {
         "title": {
-          "pt-BR": "CloudWatch Logs",
-          "en": "CloudWatch Logs"
+          "pt-BR": "AWS Certificate Manager",
+          "en": "AWS Certificate Manager"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "CloudWatch Logs é observabilidade, não gestão de chaves.",
-          "en": "CloudWatch Logs is observability, not key management."
+          "pt-BR": "ACM provisiona e renova certificados TLS para criptografia em trânsito (ex.: ALB, CloudFront); não gerencia chaves de criptografia de dados em repouso.",
+          "en": "ACM provisions and renews TLS certificates for encryption in transit (e.g., ALB, CloudFront); it does not manage keys for encrypting data at rest."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon Athena",
-          "en": "Amazon Athena"
+          "pt-BR": "AWS CloudHSM",
+          "en": "AWS CloudHSM"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Athena é consulta SQL em S3, não gestão de criptografia.",
-          "en": "Athena is SQL querying on S3, not encryption management."
+          "pt-BR": "CloudHSM fornece HSMs dedicados e gerenciados pelo cliente; os serviços AWS não se integram diretamente a ele para criptografia em repouso (só via custom key store do KMS), e a operação fica a cargo do cliente.",
+          "en": "CloudHSM provides dedicated, customer-managed HSMs; AWS services do not integrate with it directly for encryption at rest (only via a KMS custom key store), and operations are the customer's responsibility."
         }
       }
     ],
@@ -971,24 +971,24 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Amazon DynamoDB",
-          "en": "Amazon DynamoDB"
+          "pt-BR": "Amazon Aurora MySQL-Compatible",
+          "en": "Amazon Aurora MySQL-Compatible"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Mudança para NoSQL exigiria adaptação significativa de modelo e código.",
-          "en": "Switching to NoSQL would require significant model and code changes."
+          "pt-BR": "É gerenciado, mas troca o engine de PostgreSQL para MySQL, exigindo adaptar SQL, tipos de dados, funções e drivers da aplicação.",
+          "en": "It is managed, but it changes the engine from PostgreSQL to MySQL, requiring changes to the application's SQL, data types, functions, and drivers."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon ElastiCache",
-          "en": "Amazon ElastiCache"
+          "pt-BR": "PostgreSQL autogerenciado em Amazon EC2",
+          "en": "Self-managed PostgreSQL on Amazon EC2"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "ElastiCache é camada de cache, não banco transacional primário.",
-          "en": "ElastiCache is a caching layer, not a primary transactional database."
+          "pt-BR": "Mantém o mesmo engine e quase nenhuma mudança de código, mas patching, backups, alta disponibilidade e sistema operacional ficam por conta da equipe; não é operação gerenciada.",
+          "en": "It keeps the same engine and almost no code changes, but patching, backups, high availability, and the operating system are the team's responsibility; it is not managed operations."
         }
       },
       {
@@ -998,19 +998,19 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "RDS PostgreSQL preserva engine e reduz esforço operacional com serviço gerenciado.",
-          "en": "RDS PostgreSQL preserves engine compatibility and reduces operational effort with managed service."
+          "pt-BR": "Mantém o mesmo engine PostgreSQL (drivers, SQL e extensões suportadas) e a AWS assume backups, patching e alta disponibilidade, unindo mínima mudança de código e operação gerenciada.",
+          "en": "It keeps the same PostgreSQL engine (drivers, SQL, and supported extensions) while AWS handles backups, patching, and high availability, combining minimal code changes with managed operations."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon OpenSearch",
-          "en": "Amazon OpenSearch"
+          "pt-BR": "Amazon Redshift",
+          "en": "Amazon Redshift"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "OpenSearch é busca/analytics, não substituto direto para PostgreSQL transacional.",
-          "en": "OpenSearch is search/analytics, not a direct replacement for transactional PostgreSQL."
+          "pt-BR": "Apesar de ter origem no PostgreSQL, Redshift é um data warehouse colunar para OLAP, com diferenças de SQL e sem foco em transações OLTP; exigiria reescrever partes da aplicação.",
+          "en": "Although derived from PostgreSQL, Redshift is a columnar data warehouse for OLAP, with SQL differences and no focus on OLTP transactions; it would require rewriting parts of the application."
         }
       }
     ],
@@ -1039,46 +1039,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Somente On-Demand para toda a base",
-          "en": "Only On-Demand for the entire baseline"
+          "pt-BR": "On-Demand com Auto Scaling ajustando a capacidade",
+          "en": "On-Demand with Auto Scaling adjusting capacity"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "On-Demand oferece flexibilidade, mas costuma ser mais caro para carga previsível constante.",
-          "en": "On-Demand offers flexibility but is usually costlier for steady predictable workloads."
+          "pt-BR": "Auto Scaling ajuda cargas variáveis, mas aqui o uso é estável 24x7: a capacidade praticamente não muda e tudo continua sendo cobrado pelo preço On-Demand, sem desconto.",
+          "en": "Auto Scaling helps variable workloads, but here usage is steady 24x7: capacity barely changes and everything is still billed at On-Demand prices, with no discount."
         }
       },
       {
         "title": {
-          "pt-BR": "Spot para 100% da carga crítica",
-          "en": "Spot for 100% of critical workload"
+          "pt-BR": "Spot Instances diversificadas para 100% da carga",
+          "en": "Diversified Spot Instances for 100% of the workload"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Spot pode ser interrompida e não é ideal como única base de carga crítica.",
-          "en": "Spot can be interrupted and is not ideal as sole baseline for critical load."
+          "pt-BR": "Spot tem o maior desconto, mas a AWS pode interromper instâncias com aviso de dois minutos; usar Spot para toda a carga contínua arrisca perder capacidade.",
+          "en": "Spot has the largest discount, but AWS can interrupt instances with a two-minute notice; using Spot for the entire continuous workload risks losing capacity."
         }
       },
       {
         "title": {
-          "pt-BR": "Desligar instâncias aleatoriamente para economizar",
-          "en": "Randomly stop instances to save cost"
+          "pt-BR": "Dedicated Hosts On-Demand para toda a carga",
+          "en": "On-Demand Dedicated Hosts for the entire workload"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Estratégia sem previsibilidade operacional e com alto risco de indisponibilidade.",
-          "en": "A strategy with no operational predictability and high availability risk."
+          "pt-BR": "Dedicated Hosts atendem requisitos de licenciamento por socket/core ou compliance, mas sob demanda custam mais que instâncias compartilhadas e não reduzem o custo da carga.",
+          "en": "Dedicated Hosts address per-socket/per-core licensing or compliance requirements, but On-Demand they cost more than shared instances and do not reduce workload cost."
         }
       },
       {
         "title": {
-          "pt-BR": "Savings Plans ou Reserved para baseline previsível",
-          "en": "Savings Plans or Reserved for predictable baseline"
+          "pt-BR": "Savings Plans ou Reserved Instances para o baseline previsível",
+          "en": "Savings Plans or Reserved Instances for the predictable baseline"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Compromissos de uso reduzem custo da carga estável mantendo provisionamento adequado.",
-          "en": "Usage commitments reduce cost of stable workload while maintaining proper provisioning."
+          "pt-BR": "Com compromisso de 1 ou 3 anos, Savings Plans e RIs oferecem desconto significativo sobre On-Demand sem risco de interrupção, ideal para carga estável 24x7.",
+          "en": "With a 1- or 3-year commitment, Savings Plans and RIs provide significant discounts over On-Demand with no interruption risk, ideal for steady 24x7 workloads."
         }
       }
     ],
@@ -1094,7 +1094,7 @@ export const solutionsArchitectQuestions = [
       "en": "Well-Architected - Reliability Pillar"
     },
     "description": {
-      "pt-BR": "Uma revisão arquitetural precisa focar recuperação automática, tolerância a falhas e testes de resiliência.",
+      "pt-BR": "Uma revisão arquitetural precisa focar em recuperação automática, tolerância a falhas e testes de resiliência.",
       "en": "An architecture review must focus on automatic recovery, fault tolerance, and resilience testing."
     },
     "question": {
@@ -1112,19 +1112,19 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "O pilar de confiabilidade aborda recuperação de falhas, escalabilidade e continuidade operacional.",
-          "en": "The reliability pillar addresses failure recovery, scalability, and operational continuity."
+          "pt-BR": "O pilar de confiabilidade cobre recuperação automática de falhas, arquitetura tolerante a falhas e testes de resiliência (como game days e fault injection).",
+          "en": "The reliability pillar covers automatic failure recovery, fault-tolerant architecture, and resilience testing (such as game days and fault injection)."
         }
       },
       {
         "title": {
-          "pt-BR": "Otimização de custos",
-          "en": "Cost Optimization"
+          "pt-BR": "Eficiência de performance",
+          "en": "Performance Efficiency"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "É importante, mas não é o foco principal de tolerância a falhas.",
-          "en": "Important, but not the primary focus for fault tolerance."
+          "pt-BR": "Esse pilar trata de selecionar e ajustar recursos para atender à demanda com eficiência (tipos de instância, cache, escala); não é focado em recuperação de falhas.",
+          "en": "This pillar is about selecting and tuning resources to meet demand efficiently (instance types, caching, scaling); it is not focused on failure recovery."
         }
       },
       {
@@ -1134,19 +1134,19 @@ export const solutionsArchitectQuestions = [
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Relaciona-se a processos e operação, porém a pergunta enfatiza resiliência/falhas.",
-          "en": "It relates to processes and operations, but the question emphasizes resilience/failures."
+          "pt-BR": "Foca em processos de operação: runbooks, observabilidade, deploys em pequenas mudanças e melhoria contínua; recuperação automática e tolerância a falhas são o núcleo de outro pilar.",
+          "en": "It focuses on operating processes: runbooks, observability, small incremental deployments, and continuous improvement; automatic recovery and fault tolerance are the core of another pillar."
         }
       },
       {
         "title": {
-          "pt-BR": "Sustentabilidade",
-          "en": "Sustainability"
+          "pt-BR": "Segurança",
+          "en": "Security"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Não é a principal dimensão para o cenário apresentado.",
-          "en": "It is not the primary dimension for the presented scenario."
+          "pt-BR": "Trata de identidade, detecção, proteção de infraestrutura e de dados e resposta a incidentes de segurança, e não de tolerância a falhas da carga de trabalho.",
+          "en": "It addresses identity, detection, infrastructure and data protection, and security incident response, not workload fault tolerance."
         }
       }
     ],
@@ -1175,13 +1175,13 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "Amazon ECS",
-          "en": "Amazon ECS"
+          "pt-BR": "Amazon ECS com AWS Fargate",
+          "en": "Amazon ECS with AWS Fargate"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "ECS é orquestrador de containers da AWS, mas não Kubernetes nativo.",
-          "en": "ECS is AWS container orchestrator, but not native Kubernetes."
+          "pt-BR": "ECS é um orquestrador de containers gerenciado e proprietário da AWS; não expõe a API do Kubernetes nem executa manifests e ferramentas do ecossistema Kubernetes.",
+          "en": "ECS is a managed, AWS-proprietary container orchestrator; it does not expose the Kubernetes API or run Kubernetes manifests and ecosystem tooling."
         }
       },
       {
@@ -1191,30 +1191,30 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "EKS oferece Kubernetes gerenciado com integração de serviços AWS.",
-          "en": "EKS provides managed Kubernetes with AWS service integration."
+          "pt-BR": "EKS oferece control plane Kubernetes gerenciado e altamente disponível, com integração a IAM, VPC, ELB e Auto Scaling.",
+          "en": "EKS provides a managed, highly available Kubernetes control plane, integrated with IAM, VPC, ELB, and Auto Scaling."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS Lambda",
-          "en": "AWS Lambda"
+          "pt-BR": "AWS App Runner",
+          "en": "AWS App Runner"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Lambda é execução serverless de funções, não cluster Kubernetes.",
-          "en": "Lambda is serverless function execution, not a Kubernetes cluster."
+          "pt-BR": "App Runner executa aplicações web em containers sem gerenciar infraestrutura, mas não oferece um cluster nem a API do Kubernetes.",
+          "en": "App Runner runs containerized web applications without managing infrastructure, but it does not provide a cluster or the Kubernetes API."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon S3",
-          "en": "Amazon S3"
+          "pt-BR": "Kubernetes autogerenciado em EC2 com kOps",
+          "en": "Self-managed Kubernetes on EC2 with kOps"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "S3 é armazenamento de objetos.",
-          "en": "S3 is object storage."
+          "pt-BR": "É Kubernetes de fato, mas o control plane (etcd, API server, upgrades) é operado pela própria equipe; não é um serviço gerenciado.",
+          "en": "It is real Kubernetes, but the control plane (etcd, API server, upgrades) is operated by the team itself; it is not a managed service."
         }
       }
     ],
@@ -1243,46 +1243,46 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "CloudWatch sozinho",
-          "en": "CloudWatch alone"
+          "pt-BR": "Alarme do CloudWatch notificando a equipe via SNS para trocar o DNS",
+          "en": "CloudWatch alarm notifying the team via SNS to change DNS"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Monitora, mas não executa roteamento DNS de failover por si só.",
-          "en": "It monitors, but does not perform DNS failover routing by itself."
+          "pt-BR": "Detecta a falha, mas a troca de registro DNS fica manual e depende de alguém agir, o que aumenta o tempo de indisponibilidade; não há redirecionamento automático.",
+          "en": "It detects the failure, but the DNS record change is manual and depends on someone acting, which increases downtime; there is no automatic redirection."
         }
       },
       {
         "title": {
-          "pt-BR": "IAM role rotation",
-          "en": "IAM role rotation"
+          "pt-BR": "Route 53 com política weighted 100/0 sem health checks",
+          "en": "Route 53 with a 100/0 weighted policy without health checks"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Sem relação com roteamento/failover de tráfego de usuários.",
-          "en": "Unrelated to user traffic routing/failover."
+          "pt-BR": "Sem health checks associados, o Route 53 continua respondendo com o registro de peso 100 mesmo com o primário fora; seria preciso alterar os pesos manualmente.",
+          "en": "Without associated health checks, Route 53 keeps answering with the weight-100 record even when the primary is down; the weights would have to be changed manually."
         }
       },
       {
         "title": {
-          "pt-BR": "Route 53 com health checks e política de failover",
-          "en": "Route 53 with health checks and failover policy"
+          "pt-BR": "Route 53 com health checks e política de failover primário/secundário",
+          "en": "Route 53 with health checks and primary/secondary failover policy"
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Route 53 pode monitorar endpoints e alternar DNS automaticamente quando detectar indisponibilidade.",
-          "en": "Route 53 can monitor endpoints and automatically switch DNS when unavailability is detected."
+          "pt-BR": "O Route 53 monitora o endpoint primário com health checks e, quando ele fica unhealthy, passa a responder automaticamente com o registro secundário.",
+          "en": "Route 53 monitors the primary endpoint with health checks and, when it becomes unhealthy, automatically starts answering with the secondary record."
         }
       },
       {
         "title": {
-          "pt-BR": "EBS snapshot",
-          "en": "EBS snapshot"
+          "pt-BR": "Route 53 com política simple retornando os IPs dos dois ambientes",
+          "en": "Route 53 with a simple policy returning the IPs of both environments"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Snapshot não executa failover de rota para aplicação online.",
-          "en": "Snapshot does not perform route failover for online applications."
+          "pt-BR": "A política simple não suporta health checks: devolve todos os valores em ordem aleatória, então clientes continuam recebendo o IP do primário indisponível.",
+          "en": "The simple policy does not support health checks: it returns all values in random order, so clients keep receiving the unavailable primary's IP."
         }
       }
     ],
@@ -1311,35 +1311,35 @@ export const solutionsArchitectQuestions = [
     "alternatives": [
       {
         "title": {
-          "pt-BR": "AWS Glue",
-          "en": "AWS Glue"
+          "pt-BR": "AWS WAF com regras rate-based",
+          "en": "AWS WAF with rate-based rules"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Glue é serviço de ETL e catálogo de dados.",
-          "en": "Glue is an ETL and data catalog service."
+          "pt-BR": "Regras rate-based ajudam contra floods HTTP de camada 7, mas o WAF não mitiga ataques volumétricos de camadas 3/4; o serviço gerenciado dedicado a DDoS é outro.",
+          "en": "Rate-based rules help against layer-7 HTTP floods, but WAF does not mitigate layer 3/4 volumetric attacks; the managed service dedicated to DDoS is a different one."
         }
       },
       {
         "title": {
-          "pt-BR": "Amazon SES",
-          "en": "Amazon SES"
+          "pt-BR": "Amazon GuardDuty",
+          "en": "Amazon GuardDuty"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "SES é envio de e-mail, não proteção contra DDoS.",
-          "en": "SES is an email service, not DDoS protection."
+          "pt-BR": "GuardDuty detecta ameaças analisando logs (CloudTrail, VPC Flow Logs, DNS) e gera findings, mas não absorve nem mitiga tráfego de ataque na borda.",
+          "en": "GuardDuty detects threats by analyzing logs (CloudTrail, VPC Flow Logs, DNS) and generates findings, but it does not absorb or mitigate attack traffic at the edge."
         }
       },
       {
         "title": {
-          "pt-BR": "AWS Backup",
-          "en": "AWS Backup"
+          "pt-BR": "AWS Network Firewall",
+          "en": "AWS Network Firewall"
         },
         "correct": false,
         "explanation": {
-          "pt-BR": "Backup trata retenção e recuperação, não mitigação de ataque de borda.",
-          "en": "Backup handles retention and recovery, not edge attack mitigation."
+          "pt-BR": "Network Firewall é um firewall stateful implantado dentro da VPC para inspeção e filtragem de tráfego; não atua nas edge locations da AWS para mitigar DDoS.",
+          "en": "Network Firewall is a stateful firewall deployed inside the VPC for traffic inspection and filtering; it does not operate at AWS edge locations to mitigate DDoS."
         }
       },
       {
@@ -1349,8 +1349,8 @@ export const solutionsArchitectQuestions = [
         },
         "correct": true,
         "explanation": {
-          "pt-BR": "Shield oferece proteção gerenciada contra DDoS para recursos expostos na AWS.",
-          "en": "Shield provides managed DDoS protection for exposed AWS resources."
+          "pt-BR": "Shield oferece proteção gerenciada contra DDoS integrada à borda (CloudFront, Route 53, Global Accelerator): o Standard é automático e o Advanced adiciona detecção avançada e suporte do Shield Response Team.",
+          "en": "Shield provides managed DDoS protection integrated at the edge (CloudFront, Route 53, Global Accelerator): Standard is automatic and Advanced adds enhanced detection and Shield Response Team support."
         }
       }
     ],

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../components/NavigationButtons';
+import Reveal from '../components/Reveal';
 
 const HandsOnContainer = styled.div`
   min-height: calc(100vh - 160px);
@@ -61,15 +62,20 @@ const ProjectCard = styled.div`
   padding: var(--spacing-6);
   box-shadow: var(--shadow-md);
   border: 2px solid var(--aws-gray-200);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  
+  height: 100%;
+
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-lg);
     border-color: var(--aws-orange);
+
+    .number {
+      transform: scale(1.1) rotate(-6deg);
+    }
   }
 `;
 
@@ -85,6 +91,7 @@ const ProjectNumber = styled.div`
   font-weight: 700;
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
 const ProjectTitle = styled.h2`
@@ -118,6 +125,52 @@ const ServiceTag = styled.span`
   font-size: var(--font-size-sm);
   font-weight: 600;
   border: 1px solid var(--aws-gray-300);
+`;
+
+const SessionTabs = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+  flex-wrap: wrap;
+`;
+
+const SessionTabButton = styled.button`
+  padding: var(--spacing-3) var(--spacing-6);
+  background-color: ${props => props.active ? 'var(--aws-orange)' : 'var(--aws-white)'};
+  color: ${props => props.active ? 'var(--aws-white)' : 'var(--aws-gray-700)'};
+  border: 2px solid ${props => props.active ? 'var(--aws-orange)' : 'var(--aws-gray-300)'};
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${props => props.active ? 'var(--aws-orange-dark)' : 'var(--aws-gray-50)'};
+    transform: translateY(-2px);
+  }
+`;
+
+const EmptySessionState = styled.div`
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-4);
+  margin-top: var(--spacing-8);
+  background-color: var(--aws-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+
+  h3 {
+    color: var(--aws-blue);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-3);
+  }
+
+  p {
+    color: var(--aws-gray-600);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
 `;
 
 const projects = [
@@ -165,7 +218,7 @@ const projects = [
   },
   {
     number: 7,
-    title: 'Implementar um Servidor de E-mail com Amazon SES',
+    title: 'Enviar E-mails em Escala com Amazon SES',
     description: 'Exploração do Amazon Simple Email Service (SES) para configurar um servidor de e-mail e enviar e-mails em grande escala de forma segura e confiável.',
     services: ['SES']
   },
@@ -191,6 +244,7 @@ const projects = [
 
 const Materials = () => {
   const navigate = useNavigate();
+  const [activeSession, setActiveSession] = useState('projetos');
 
   const handleCardClick = (projectNumber) => {
     navigate(`/hands-on/tutorial/${projectNumber}`);
@@ -200,31 +254,60 @@ const Materials = () => {
     <HandsOnContainer>
       <Content>
         <NavigationButtons />
-        
-        <Header>
-          <Title>Hands On - Projetos Práticos AWS</Title>
-          <Subtitle>
-            10 Projetos Práticos Divertidos para Aprender AWS
-          </Subtitle>
-        </Header>
 
-        <ProjectsGrid>
-          {projects.map((project) => (
-            <ProjectCard 
-              key={project.number}
-              onClick={() => handleCardClick(project.number)}
-            >
-              <ProjectNumber>{project.number}</ProjectNumber>
-              <ProjectTitle>{project.title}</ProjectTitle>
-              <ProjectDescription>{project.description}</ProjectDescription>
-              <ServicesList>
-                {project.services.map((service, index) => (
-                  <ServiceTag key={index}>{service}</ServiceTag>
-                ))}
-              </ServicesList>
-            </ProjectCard>
-          ))}
-        </ProjectsGrid>
+        <Reveal>
+          <Header>
+            <Title>Hands On - Projetos Práticos AWS</Title>
+            <Subtitle>
+              Escolha uma sessão para começar a praticar
+            </Subtitle>
+          </Header>
+        </Reveal>
+
+        <SessionTabs>
+          <SessionTabButton
+            active={activeSession === 'projetos'}
+            onClick={() => setActiveSession('projetos')}
+          >
+            10 Projetos Práticos Divertidos para Aprender AWS
+          </SessionTabButton>
+          <SessionTabButton
+            active={activeSession === 'tutoriais'}
+            onClick={() => setActiveSession('tutoriais')}
+          >
+            Tutoriais
+          </SessionTabButton>
+        </SessionTabs>
+
+        {activeSession === 'projetos' ? (
+          <ProjectsGrid>
+            {projects.map((project, index) => (
+              <Reveal key={project.number} delay={`${(index % 3) * 0.08}s`}>
+                <ProjectCard
+                  onClick={() => handleCardClick(project.number)}
+                >
+                  <ProjectNumber className="number">{project.number}</ProjectNumber>
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectDescription>{project.description}</ProjectDescription>
+                  <ServicesList>
+                    {project.services.map((service, serviceIndex) => (
+                      <ServiceTag key={serviceIndex}>{service}</ServiceTag>
+                    ))}
+                  </ServicesList>
+                </ProjectCard>
+              </Reveal>
+            ))}
+          </ProjectsGrid>
+        ) : (
+          <Reveal>
+            <EmptySessionState>
+              <h3>Conteúdo em breve</h3>
+              <p>
+                Esta sessão vai reunir o conteúdo do AWS re/Start. Volte em breve para conferir.
+              </p>
+            </EmptySessionState>
+          </Reveal>
+        )}
       </Content>
     </HandsOnContainer>
   );

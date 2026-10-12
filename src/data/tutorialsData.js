@@ -440,17 +440,19 @@ export const tutorials = [
           {
             type: 'code',
             value: `// Node.js
-const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const params = {
         TableName: 'BlogPosts',
         Limit: 10
     };
-    
+
     try {
-        const result = await dynamodb.scan(params).promise();
+        const result = await dynamodb.send(new ScanCommand(params));
         return {
             statusCode: 200,
             headers: {
@@ -466,6 +468,11 @@ exports.handler = async (event) => {
         };
     }
 };`
+          },
+          {
+            type: 'warning',
+            title: 'Nota',
+            text: 'A partir do Node.js 18.x, o runtime do Lambda não inclui mais o AWS SDK v2. Este tutorial usa o AWS SDK v3 modular (@aws-sdk/client-dynamodb e @aws-sdk/lib-dynamodb), que já vem embutido no runtime Node.js 20.x, sem necessidade de instalar dependências ou adicionar camadas (layers).'
           },
           'Ou em Python:',
           {
@@ -510,26 +517,28 @@ def lambda_handler(event, context):
           {
             type: 'code',
             value: `// Node.js
-const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const { v4: uuidv4 } = require('uuid');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
+const { randomUUID } = require('crypto');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const body = JSON.parse(event.body);
-    
+
     const params = {
         TableName: 'BlogPosts',
         Item: {
-            postId: uuidv4(),
+            postId: randomUUID(),
             title: body.title,
             content: body.content,
             author: body.author,
             createdAt: Date.now()
         }
     };
-    
+
     try {
-        await dynamodb.put(params).promise();
+        await dynamodb.send(new PutCommand(params));
         return {
             statusCode: 201,
             headers: {
@@ -546,7 +555,6 @@ exports.handler = async (event) => {
     }
 };`
           },
-          'Nota: Para usar uuid, você precisará adicionar a dependência. No Lambda, use o pacote crypto nativo ou instale via camada.',
           'Configure a mesma role de execução da função anterior.'
         ]
       },
@@ -571,11 +579,11 @@ exports.handler = async (event) => {
       {
         title: 'Criar recursos e métodos na API',
         content: [
-          'No painel da API, clique em "Actions" > "Create Resource".',
+          'No painel da API, clique no botão "Create resource".',
           'Nome do recurso: posts',
-          'Clique em "Create Resource".',
-          'Com o recurso /posts selecionado, clique em "Actions" > "Create Method".',
-          'Selecione "GET" e clique no checkmark.',
+          'Clique em "Create resource".',
+          'Com o recurso /posts selecionado, clique no botão "Create method".',
+          'Selecione "GET" como método.',
           'Configure:',
           {
             type: 'list',
@@ -593,15 +601,15 @@ exports.handler = async (event) => {
         title: 'Habilitar CORS',
         content: [
           'Selecione o recurso /posts.',
-          'Clique em "Actions" > "Enable CORS".',
-          'Deixe as configurações padrão e clique em "Enable CORS and replace existing CORS headers".',
-          'Confirme a substituição.'
+          'Clique no botão "Enable CORS" na tela do recurso.',
+          'Deixe as configurações padrão e clique em "Save".',
+          'Confirme a substituição, se solicitado.'
         ]
       },
       {
         title: 'Implantar a API',
         content: [
-          'Clique em "Actions" > "Deploy API".',
+          'Clique no botão "Deploy API" no topo da tela.',
           'Configure:',
           {
             type: 'list',
@@ -893,36 +901,41 @@ Amplify.configure(awsconfig);`
           'Substitua o código por um exemplo básico:',
           {
             type: 'code',
-            value: `# Python
+            value: `# Python (formato de evento/resposta do Amazon Lex V2)
 def lambda_handler(event, context):
-    intent_name = event['currentIntent']['name']
-    slots = event['currentIntent']['slots']
-    
+    intent_name = event['sessionState']['intent']['name']
+    slots = event['sessionState']['intent']['slots']
+
+    def slot_value(slot_name):
+        slot = slots.get(slot_name)
+        if slot and slot.get('value'):
+            return slot['value'].get('interpretedValue')
+        return None
+
     if intent_name == 'OrderPizza':
-        pizza_type = slots.get('PizzaType')
-        pizza_size = slots.get('PizzaSize')
-        
-        response = {
-            'dialogAction': {
-                'type': 'Close',
-                'fulfillmentState': 'Fulfilled',
-                'message': {
-                    'contentType': 'PlainText',
-                    'content': f'Seu pedido de {pizza_size} {pizza_type} foi registrado!'
-                }
-            }
-        }
-        return response
-    
+        pizza_type = slot_value('PizzaType')
+        pizza_size = slot_value('PizzaSize')
+
+        message = f'Seu pedido de {pizza_size} {pizza_type} foi registrado!'
+    else:
+        message = 'Desculpe, não entendi.'
+
     return {
-        'dialogAction': {
-            'type': 'Close',
-            'fulfillmentState': 'Fulfilled',
-            'message': {
-                'contentType': 'PlainText',
-                'content': 'Desculpe, não entendi.'
+        'sessionState': {
+            'dialogAction': {
+                'type': 'Close'
+            },
+            'intent': {
+                'name': intent_name,
+                'state': 'Fulfilled'
             }
-        }
+        },
+        'messages': [
+            {
+                'contentType': 'PlainText',
+                'content': message
+            }
+        ]
     }`
           }
         ]
@@ -1120,7 +1133,6 @@ def lambda_handler(event, context):
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
       - echo Build started on \`date\`
   build:
     commands:
@@ -1459,8 +1471,8 @@ artifacts:
           'Após conectar, atualize os pacotes:',
           {
             type: 'code',
-            value: `# Para Amazon Linux
-sudo yum update -y
+            value: `# Para Amazon Linux 2023 (dnf é o gerenciador de pacotes recomendado; yum ainda funciona como alias)
+sudo dnf update -y
 
 # Para Ubuntu
 sudo apt update && sudo apt upgrade -y`
@@ -1473,13 +1485,13 @@ sudo apt update && sudo apt upgrade -y`
           'Instale o Apache ou Nginx:',
           {
             type: 'code',
-            value: `# Apache (Amazon Linux)
-sudo yum install httpd -y
+            value: `# Apache (Amazon Linux 2023 - dnf é o gerenciador recomendado; yum ainda funciona como alias)
+sudo dnf install httpd -y
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
 # Ou Nginx
-sudo yum install nginx -y
+sudo dnf install nginx -y
 sudo systemctl start nginx
 sudo systemctl enable nginx`
           },
@@ -1496,6 +1508,7 @@ sudo systemctl enable apache2`
       {
         title: 'Fazer deploy da aplicação',
         content: [
+          'O diretório de deploy e o usuário/grupo das permissões dependem do servidor web escolhido no passo anterior.',
           'Há várias formas de fazer deploy:',
           {
             type: 'list',
@@ -1505,11 +1518,11 @@ sudo systemctl enable apache2`
               'Docker (se sua app usar containers)'
             ]
           },
-          'Exemplo com Git:',
+          'Se você instalou Apache, exemplo com Git:',
           {
             type: 'code',
             value: `# Instalar Git
-sudo yum install git -y
+sudo dnf install git -y
 
 # Clonar repositório
 cd /var/www/html
@@ -1518,10 +1531,28 @@ sudo git clone https://github.com/seu-usuario/seu-repo.git
 # Ou copiar arquivos via SCP (do seu computador local)
 scp -i meu-keypair.pem -r ./meu-app/* ec2-user@SEU-IP:/var/www/html/`
           },
-          'Ajuste as permissões:',
+          'Ajuste as permissões (Apache):',
           {
             type: 'code',
             value: 'sudo chown -R apache:apache /var/www/html'
+          },
+          'Se você instalou Nginx, o diretório padrão é diferente:',
+          {
+            type: 'code',
+            value: `# Instalar Git
+sudo dnf install git -y
+
+# Clonar repositório
+cd /usr/share/nginx/html
+sudo git clone https://github.com/seu-usuario/seu-repo.git
+
+# Ou copiar arquivos via SCP (do seu computador local)
+scp -i meu-keypair.pem -r ./meu-app/* ec2-user@SEU-IP:/usr/share/nginx/html/`
+          },
+          'Ajuste as permissões (Nginx):',
+          {
+            type: 'code',
+            value: 'sudo chown -R nginx:nginx /usr/share/nginx/html'
           }
         ]
       },
@@ -1567,7 +1598,7 @@ scp -i meu-keypair.pem -r ./meu-app/* ec2-user@SEU-IP:/var/www/html/`
   },
   {
     id: 7,
-    title: 'Implementar um Servidor de E-mail com Amazon SES',
+    title: 'Enviar E-mails em Escala com Amazon SES',
     difficulty: 'Intermediário',
     estimatedTime: '45-60 minutos',
     services: ['SES'],
@@ -1575,8 +1606,7 @@ scp -i meu-keypair.pem -r ./meu-app/* ec2-user@SEU-IP:/var/www/html/`
     prerequisites: [
       'Conta AWS ativa',
       'Domínio próprio (opcional, mas recomendado)',
-      'Conhecimento básico de programação (Python, Node.js, etc.)',
-      'Instância EC2 (opcional, mas terá custos que consumirão créditos)'
+      'Conhecimento básico de programação (Python, Node.js, etc.)'
     ],
     steps: [
       {
@@ -1853,17 +1883,19 @@ def lambda_handler(event, context):
           'Código Node.js:',
           {
             type: 'code',
-            value: `const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+            value: `const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     try {
         const params = {
             TableName: 'Users'
         };
-        
-        const result = await dynamodb.scan(params).promise();
-        
+
+        const result = await dynamodb.send(new ScanCommand(params));
+
         return {
             statusCode: 200,
             headers: {
@@ -1883,6 +1915,11 @@ exports.handler = async (event) => {
     }
 };`
           },
+          {
+            type: 'warning',
+            title: 'Nota',
+            text: 'A partir do Node.js 18.x, o runtime do Lambda não inclui mais o AWS SDK v2. As funções deste tutorial usam o AWS SDK v3 modular (@aws-sdk/client-dynamodb e @aws-sdk/lib-dynamodb), que já vem embutido no runtime Node.js 20.x, sem necessidade de instalar dependências ou adicionar camadas (layers).'
+          },
           'Configure a role com permissões DynamoDB.'
         ]
       },
@@ -1892,12 +1929,14 @@ exports.handler = async (event) => {
           'Crie função "getUserById":',
           {
             type: 'code',
-            value: `const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+            value: `const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, GetCommand } = require('@aws-sdk/lib-dynamodb');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const userId = event.pathParameters.userId;
-    
+
     try {
         const params = {
             TableName: 'Users',
@@ -1905,9 +1944,9 @@ exports.handler = async (event) => {
                 userId: userId
             }
         };
-        
-        const result = await dynamodb.get(params).promise();
-        
+
+        const result = await dynamodb.send(new GetCommand(params));
+
         if (!result.Item) {
             return {
                 statusCode: 404,
@@ -1942,27 +1981,29 @@ exports.handler = async (event) => {
           'Crie função "createUser":',
           {
             type: 'code',
-            value: `const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const { v4: uuidv4 } = require('uuid');
+            value: `const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
+const { randomUUID } = require('crypto');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const body = JSON.parse(event.body);
-    
+
     const user = {
-        userId: uuidv4(),
+        userId: randomUUID(),
         name: body.name,
         email: body.email,
         createdAt: new Date().toISOString()
     };
-    
+
     try {
         const params = {
             TableName: 'Users',
             Item: user
         };
-        
-        await dynamodb.put(params).promise();
+
+        await dynamodb.send(new PutCommand(params));
         
         return {
             statusCode: 201,
@@ -1988,13 +2029,15 @@ exports.handler = async (event) => {
           'Crie função "updateUser":',
           {
             type: 'code',
-            value: `const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+            value: `const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const userId = event.pathParameters.userId;
     const body = JSON.parse(event.body);
-    
+
     try {
         const params = {
             TableName: 'Users',
@@ -2009,8 +2052,8 @@ exports.handler = async (event) => {
             },
             ReturnValues: 'ALL_NEW'
         };
-        
-        const result = await dynamodb.update(params).promise();
+
+        const result = await dynamodb.send(new UpdateCommand(params));
         
         return {
             statusCode: 200,
@@ -2036,19 +2079,21 @@ exports.handler = async (event) => {
           'Crie função "deleteUser":',
           {
             type: 'code',
-            value: `const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+            value: `const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     const userId = event.pathParameters.userId;
-    
+
     try {
         const params = {
             TableName: 'Users',
             Key: { userId: userId }
         };
-        
-        await dynamodb.delete(params).promise();
+
+        await dynamodb.send(new DeleteCommand(params));
         
         return {
             statusCode: 200,
@@ -2092,7 +2137,7 @@ exports.handler = async (event) => {
           {
             type: 'list',
             items: [
-              'Actions > Create Resource',
+              'Clique no botão "Create resource"',
               'Resource Name: users',
               'Resource Path: /users',
               'Enable API Gateway CORS: Sim'
@@ -2121,16 +2166,16 @@ exports.handler = async (event) => {
         title: 'Habilitar CORS',
         content: [
           'Selecione o recurso /users.',
-          'Actions > Enable CORS.',
+          'Clique no botão "Enable CORS" na tela do recurso.',
           'Deixe as configurações padrão.',
-          'Clique em "Enable CORS and replace existing CORS headers".',
+          'Clique em "Save".',
           'Repita para /users/{userId}.'
         ]
       },
       {
         title: 'Implantar a API',
         content: [
-          'Actions > Deploy API.',
+          'Clique no botão "Deploy API" no topo da tela.',
           'Configure:',
           {
             type: 'list',
@@ -2253,7 +2298,7 @@ curl -X DELETE https://sua-api-url/prod/users/USER_ID`
             type: 'list',
             items: [
               'Cluster identifier: analytics-cluster',
-              'Node type: dc2.large (menor custo)',
+              'Node type: ra3.xlplus (família recomendada atualmente pela AWS para clusters provisionados, com armazenamento gerenciado separado do compute)',
               'Number of nodes: 1',
               'Master username: admin',
               'Master password: (crie uma senha forte)',
@@ -2289,10 +2334,20 @@ curl -X DELETE https://sua-api-url/prod/users/USER_ID`
               'Ou use um cliente externo como DBeaver'
             ]
           },
-          'String de conexão:',
+          'String de conexão (cluster provisionado):',
           {
             type: 'code',
             value: 'host=seu-cluster.regiao.redshift.amazonaws.com\nport=5439\ndatabase=analytics\nuser=admin\npassword=sua-senha'
+          },
+          'String de conexão (Redshift Serverless, baseada no workgroup):',
+          {
+            type: 'code',
+            value: 'host=workgroup-name.account-id.regiao.redshift-serverless.amazonaws.com\nport=5439\ndatabase=analytics\nuser=admin\npassword=sua-senha'
+          },
+          {
+            type: 'warning',
+            title: 'Nota',
+            text: 'Use o endpoint no formato "workgroup-name.account-id.regiao.redshift-serverless.amazonaws.com" se você criou um Workgroup Serverless (Opção 1). Use o endpoint no formato "seu-cluster.regiao.redshift.amazonaws.com" apenas se você criou um cluster provisionado (Opção 2).'
           }
         ]
       },
@@ -2482,7 +2537,8 @@ GROUP BY mes, produto;`
               'Faça upload para s3://meu-bucket-raw/input/',
               'Estrutura recomendada: s3://bucket/input/ano/mes/dia/arquivo.csv'
             ]
-          }
+          },
+          'O arquivo vendas.csv deve conter, entre outras, as colunas: id_venda, data, produto, quantidade, preco_unitario (essas duas últimas são usadas no script ETL mais adiante).'
         ]
       },
       {
@@ -2659,7 +2715,7 @@ job.commit()`
           {
             type: 'list',
             items: [
-              'Worker type: G.1X (2 vCPU, 8 GB RAM) - menor custo',
+              'Worker type: G.1X (4 vCPU, 16 GB RAM) - menor custo',
               'Number of workers: 2 (ajuste conforme necessário - custos serão cobertos pelos créditos)',
               'Job timeout: 60 minutos'
             ]

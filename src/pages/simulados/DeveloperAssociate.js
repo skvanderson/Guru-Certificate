@@ -292,21 +292,19 @@ const DeveloperAssociate = () => {
   const finishExam = useCallback(() => {
     const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
     const totalQuestions = developerAssociateQuestions.length;
-    const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+    const percentage = (correctAnswers / totalQuestions) * 100;
     const passed = percentage >= 70;
 
-    // Identificar questões erradas e seus tópicos
+    // Identificar questões erradas ou não respondidas e seus tópicos
     const wrongQuestionIds = [];
     const topics = new Set();
-    
-    Object.keys(answeredQuestions).forEach(questionIndex => {
+
+    developerAssociateQuestions.forEach((question, questionIndex) => {
       if (!answeredQuestions[questionIndex]) {
-        const questionId = developerAssociateQuestions[parseInt(questionIndex)].id;
-        wrongQuestionIds.push(questionId);
-        
+        wrongQuestionIds.push(question.id);
+
         // Extrair tópico do título
-        const question = developerAssociateQuestions[parseInt(questionIndex)];
-        if (question && question.title && question.title['pt-BR']) {
+        if (question.title && question.title['pt-BR']) {
           const topic = question.title['pt-BR'].split(' - ')[0] || question.title['pt-BR'];
           topics.add(topic);
         }
@@ -316,7 +314,7 @@ const DeveloperAssociate = () => {
     const result = {
       correct: correctAnswers,
       total: totalQuestions,
-      percentage,
+      percentage: percentage.toFixed(1),
       passed,
       wrongQuestions: wrongQuestionIds,
       topics: Array.from(topics)
@@ -339,17 +337,10 @@ const DeveloperAssociate = () => {
 
   useEffect(() => {
     if (timeLeft > 0 && !isFinished) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            finishExam();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && !isFinished) {
+      finishExam();
     }
   }, [timeLeft, isFinished, finishExam]);
 
@@ -496,9 +487,9 @@ const DeveloperAssociate = () => {
             {currentQ.description[language] || currentQ.description['pt-BR']}
           </QuestionDescription>
           
-          {currentQ.question[language] && (
+          {(currentQ.question[language] || currentQ.question['pt-BR']) && (
             <QuestionText>
-              {currentQ.question[language]}
+              {currentQ.question[language] || currentQ.question['pt-BR']}
             </QuestionText>
           )}
 
@@ -547,9 +538,9 @@ const DeveloperAssociate = () => {
                     <h4>📚 Explicação:</h4>
                     {!isCorrect && (
                       <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
-                        {language === 'pt-BR' 
+                        {language === 'pt-BR'
                           ? `A resposta correta é: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
-                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['en']}"`
+                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
                         }
                       </p>
                     )}
@@ -588,11 +579,11 @@ const DeveloperAssociate = () => {
       </Content>
 
       {showModal && (
-        <Modal>
-          <ModalContent>
+        <Modal onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
             <h2>{modalContent.title}</h2>
             <p>{modalContent.message}</p>
-            <Button onClick={closeModal}>OK</Button>
+            <Button className="primary" onClick={closeModal}>Fechar</Button>
           </ModalContent>
         </Modal>
       )}

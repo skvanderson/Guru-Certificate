@@ -440,7 +440,7 @@ const Profile = () => {
               </StatCard>
               
               <StatCard>
-                <StatLabel>Média de Acertos</StatLabel>
+                <StatLabel>Aproveitamento Médio</StatLabel>
                 <StatValue>{statistics.averagePercentage}%</StatValue>
               </StatCard>
             </StatsGrid>

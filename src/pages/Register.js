@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { registerUser, loginUser } from '../services/userService';
+import NavigationButtons from '../components/NavigationButtons';
 
 const Container = styled.div`
   min-height: calc(100vh - 80px);
@@ -12,6 +13,17 @@ const Container = styled.div`
   background: linear-gradient(135deg, var(--aws-blue) 0%, var(--aws-blue-light) 100%);
 `;
 
+const cardIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
 const Card = styled.div`
   background: var(--aws-white);
   border-radius: var(--radius-xl);
@@ -19,6 +31,7 @@ const Card = styled.div`
   max-width: 450px;
   width: 100%;
   box-shadow: var(--shadow-xl);
+  animation: ${cardIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
 const Title = styled.h1`
@@ -52,18 +65,47 @@ const Label = styled.label`
   font-size: var(--font-size-sm);
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+`;
+
 const Input = styled.input`
+  width: 100%;
   padding: var(--spacing-3) var(--spacing-4);
-  border: 2px solid var(--aws-gray-300);
+  border: 2px solid ${props => props.$hasError ? '#DC2626' : 'var(--aws-gray-300)'};
   border-radius: var(--radius-lg);
   font-size: var(--font-size-base);
   transition: all 0.2s ease;
-  
+
   &:focus {
     outline: none;
     border-color: var(--aws-blue);
     box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
   }
+`;
+
+const ToggleVisibilityButton = styled.button`
+  position: absolute;
+  right: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--aws-gray-600);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 0 var(--spacing-2);
+
+  &:hover {
+    color: var(--aws-blue);
+  }
+`;
+
+const HelperText = styled.span`
+  font-size: var(--font-size-sm);
+  color: ${props => props.color || 'var(--aws-gray-600)'};
 `;
 
 const Button = styled.button`
@@ -123,6 +165,9 @@ const ToggleText = styled.p`
   }
 `;
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const USERNAME_REGEX = /^[A-Za-z0-9_.-]{3,20}$/;
+
 const Register = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
@@ -130,9 +175,14 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword;
+  const passwordsMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,7 +196,7 @@ const Register = () => {
         if (!username.trim() || !password.trim()) {
           throw new Error('Por favor, informe usuário e senha');
         }
-        
+
         loginUser(username.trim(), password);
         setSuccess('Login realizado com sucesso!');
         setTimeout(() => {
@@ -157,19 +207,23 @@ const Register = () => {
         if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
           throw new Error('Por favor, preencha todos os campos');
         }
-        
-        if (!email.includes('@')) {
+
+        if (!USERNAME_REGEX.test(username.trim())) {
+          throw new Error('O usuário deve ter entre 3 e 20 caracteres, sem espaços ou acentos (use letras, números, "_", "." ou "-")');
+        }
+
+        if (!EMAIL_REGEX.test(email.trim())) {
           throw new Error('Por favor, informe um email válido');
         }
-        
+
         if (password.length < 6) {
           throw new Error('A senha deve ter pelo menos 6 caracteres');
         }
-        
+
         if (password !== confirmPassword) {
           throw new Error('As senhas não coincidem');
         }
-        
+
         registerUser(username.trim(), email.trim(), password);
         setSuccess('Cadastro realizado com sucesso!');
         setTimeout(() => {
@@ -186,34 +240,44 @@ const Register = () => {
   return (
     <Container>
       <Card>
+        <NavigationButtons />
         <Title>{isLogin ? 'Login' : 'Cadastro'}</Title>
         <Subtitle>
-          {isLogin 
+          {isLogin
             ? 'Entre para acompanhar seu progresso e ver seu ranking'
             : 'Crie sua conta para salvar seus resultados e acompanhar seu progresso'
           }
         </Subtitle>
 
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {success && <SuccessMessage>{success}</SuccessMessage>}
+        {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
+        {success && <SuccessMessage role="status">{success}</SuccessMessage>}
 
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} noValidate>
           <FormGroup>
-            <Label>Usuário</Label>
+            <Label htmlFor="username">Usuário</Label>
             <Input
+              id="username"
+              name="username"
               type="text"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Digite seu usuário"
               required
             />
+            {!isLogin && (
+              <HelperText>3 a 20 caracteres, sem espaços ou acentos</HelperText>
+            )}
           </FormGroup>
 
           {!isLogin && (
             <FormGroup>
-              <Label>Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
+                id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Digite seu email"
@@ -223,26 +287,57 @@ const Register = () => {
           )}
 
           <FormGroup>
-            <Label>Senha</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={isLogin ? "Digite sua senha" : "Digite sua senha (mín. 6 caracteres)"}
-              required
-            />
+            <Label htmlFor="password">Senha</Label>
+            <InputWrapper>
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete={isLogin ? 'current-password' : 'new-password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={isLogin ? "Digite sua senha" : "Digite sua senha (mín. 6 caracteres)"}
+                required
+              />
+              <ToggleVisibilityButton
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showPassword ? 'Ocultar' : 'Mostrar'}
+              </ToggleVisibilityButton>
+            </InputWrapper>
           </FormGroup>
 
           {!isLogin && (
             <FormGroup>
-              <Label>Confirmar Senha</Label>
-              <Input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirme sua senha"
-                required
-              />
+              <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+              <InputWrapper>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirme sua senha"
+                  $hasError={passwordsMismatch}
+                  required
+                />
+                <ToggleVisibilityButton
+                  type="button"
+                  onClick={() => setShowConfirmPassword(prev => !prev)}
+                  aria-label={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                >
+                  {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
+                </ToggleVisibilityButton>
+              </InputWrapper>
+              {passwordsMismatch && (
+                <HelperText color="#DC2626">As senhas não coincidem</HelperText>
+              )}
+              {passwordsMatch && (
+                <HelperText color="#059669">As senhas coincidem</HelperText>
+              )}
             </FormGroup>
           )}
 

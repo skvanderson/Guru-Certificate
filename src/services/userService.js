@@ -221,20 +221,28 @@ export const getRanking = (examType = null) => {
     }
   });
   
-  // Converter para array e ordenar por total de acertos
+  // Converter para array e ordenar pelo melhor aproveitamento (bestPercentage)
+  // Usar totalCorrect apenas como critério de desempate
   // Se examType foi especificado, ordenar apenas dentro daquela trilha
   // Se não, ordenar todas as trilhas juntas
+  const byPerformance = (a, b) => {
+    if (b.bestPercentage !== a.bestPercentage) {
+      return b.bestPercentage - a.bestPercentage;
+    }
+    return b.totalCorrect - a.totalCorrect;
+  };
+
   const ranking = Object.values(userScores)
     .sort((a, b) => {
-      // Se examType foi especificado, ordenar apenas por acertos
+      // Se examType foi especificado, ordenar apenas por desempenho
       if (examType) {
-        return b.totalCorrect - a.totalCorrect;
+        return byPerformance(a, b);
       }
-      // Se não, ordenar primeiro por examType, depois por acertos
+      // Se não, ordenar primeiro por examType, depois por desempenho
       if (a.examType !== b.examType) {
         return a.examType.localeCompare(b.examType);
       }
-      return b.totalCorrect - a.totalCorrect;
+      return byPerformance(a, b);
     })
     .map((entry, index) => {
       // Calcular posição considerando apenas a trilha específica
@@ -248,8 +256,8 @@ export const getRanking = (examType = null) => {
         // Se mostrando todas as trilhas, calcular posição dentro de cada trilha
         const sameTrilha = Object.values(userScores)
           .filter(e => e.examType === entry.examType)
-          .sort((a, b) => b.totalCorrect - a.totalCorrect);
-        const positionInTrilha = sameTrilha.findIndex(e => 
+          .sort(byPerformance);
+        const positionInTrilha = sameTrilha.findIndex(e =>
           e.userId === entry.userId && e.examType === entry.examType
         ) + 1;
         return {
