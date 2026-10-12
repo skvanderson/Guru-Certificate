@@ -1,259 +1,227 @@
-# Guru Certificate - Plataforma de Simulados AWS
+﻿# Guru Certificate — Plataforma de Estudos AWS
 
-Uma plataforma moderna e responsiva para simulados de certificações AWS, desenvolvida com React e seguindo o design system da AWS.
+Plataforma de preparação para certificações AWS com simulados, flashcards e projetos práticos. Desenvolvida em React, com interface responsiva e identidade visual inspirada na AWS.
 
-## 🚀 Características
+## Funcionalidades
 
-- **Design Moderno**: Interface baseada no design system da AWS com cores oficiais
-- **Totalmente Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
-- **Simulados Interativos**: Questões baseadas nos exames oficiais AWS
-- **Suporte Multilíngue**: Português e Inglês
-- **Timer Integrado**: Controle de tempo para simular condições reais de exame
-- **Feedback Personalizado**: Explicações detalhadas para cada alternativa selecionada
-- **Navegação Intuitiva**: Interface limpa e fácil de usar
-- **Sistema de Autenticação**: Cadastro e login de usuários
-- **Perfil do Usuário**: Acompanhamento de progresso e estatísticas detalhadas
-- **Sistema de Ranking**: Compare seu desempenho com outros estudantes
-- **Hands-On Práticos**: Tutoriais passo a passo para aprender AWS na prática
+- Simulados de Cloud Practitioner, Solutions Architect Associate e Developer Associate, com questões e explicações em português e inglês.
+- Prática de Cloud Practitioner organizada por domínio.
+- Flashcards bilíngues para revisão nas três trilhas.
+- Cadastro e login locais, perfil com histórico e estatísticas dos simulados.
+- Ranking público, com filtros por certificação e classificação por desempenho.
+- Catálogo de cursos, trilhas de formação e recursos de treinamento.
+- Projetos hands-on com instruções, exemplos de código e referências.
+- Páginas renovadas, navegação para flashcards e animações de entrada ao rolar a página.
 
-## 🛠️ Tecnologias Utilizadas
+## Simulados
 
-- **React 18**: Framework JavaScript moderno
-- **React Router**: Navegação entre páginas
-- **Styled Components**: CSS-in-JS para estilização
-- **AWS Design System**: Cores e componentes baseados no padrão AWS
-- **Responsive Design**: Mobile-first approach
-- **LocalStorage**: Armazenamento local de dados do usuário
+| Trilha | Referência da trilha | Questões na plataforma | Tempo limite |
+| --- | --- | --- | --- |
+| Cloud Practitioner | CLF-C02 | 65 | 90 minutos |
+| Solutions Architect Associate | SAA-C03 | 20 | 40 minutos |
+| Developer Associate | DVA-C02 | 20 | 40 minutos |
 
-## 📱 Páginas Disponíveis
+Os bancos de questões abordam cenários de uso de serviços AWS. Os simulados oferecem:
 
-- **Home**: Página inicial com apresentação da plataforma
-- **Contribuintes**: Informações sobre a equipe e missão
-- **Simulados**: Lista de simulados disponíveis
-- **Cursos**: Cursos e trilhas de aprendizado
-- **Materiais**: Recursos de estudo para download
-- **Hands-On**: Tutoriais práticos passo a passo
-- **Cadastro/Login**: Sistema de autenticação de usuários
-- **Perfil**: Estatísticas detalhadas e histórico de simulados
-- **Ranking**: Classificação dos melhores desempenhos
-- **Simulados Interativos**: Cloud Practitioner, Solutions Architect e Developer Associate
+- Alternância entre português e inglês.
+- Contagem regressiva e encerramento ao esgotar o tempo.
+- Navegação entre questões, com resposta obrigatória para avançar.
+- Feedback imediato, indicação da alternativa correta e explicações.
+- Bloqueio da resposta após a seleção.
+- Resultado final com percentual de acertos; o critério interno de aprovação é 70%.
+- Registro do resultado no perfil quando há um usuário conectado.
+- Restrições de interação implementadas pelo componente `ExamProtection`.
 
-## 🎯 Simulados Disponíveis
+Os percentuais exibidos são métricas de estudo da plataforma, sem equivalência com a pontuação oficial dos exames AWS.
 
-### AWS Cloud Practitioner (CLF-02)
-- 20 questões baseadas no exame oficial
-- Tempo limite: 40 minutos (2 minutos por questão)
-- Nível: Iniciante
-- Suporte a português e inglês
-- Feedback personalizado para cada alternativa
-- Salvamento automático de resultados
+### Cloud Practitioner por domínio
 
-### AWS Solutions Architect Associate (SAA)
-- 20 questões baseadas no exame oficial
-- Tempo limite: 40 minutos (2 minutos por questão)
-- Nível: Intermediário
-- Foco em arquitetura de soluções escaláveis e seguras
-- Feedback personalizado para cada alternativa
-- Salvamento automático de resultados
+Além do simulado completo, é possível estudar as questões de cada domínio separadamente:
 
-### AWS Developer Associate (DVA)
-- 20 questões baseadas no exame oficial
-- Tempo limite: 40 minutos (2 minutos por questão)
-- Nível: Intermediário
-- Foco em desenvolvimento serverless e CI/CD
-- Feedback personalizado para cada alternativa
-- Salvamento automático de resultados
+| Domínio | Peso indicado no catálogo |
+| --- | --- |
+| Conceitos de Nuvem | 24% |
+| Segurança e Conformidade | 30% |
+| Tecnologia e Serviços na Nuvem | 34% |
+| Faturamento, Precificação e Suporte | 12% |
 
-## 👤 Sistema de Usuários
+A prática utiliza as questões do banco de Cloud Practitioner filtradas pelo domínio, com alternância de idioma, feedback imediato, resumo de acertos e opção de reiniciar. Essas sessões não possuem cronômetro e não são registradas no histórico ou no ranking.
 
-### Cadastro e Login
-- Cadastro rápido com validação de dados
-- Login seguro com autenticação
-- Sessão persistente com LocalStorage
-- Logout e gerenciamento de conta
+## Flashcards
 
-### Perfil do Usuário
-- **Estatísticas Gerais**: Total de simulados, acertos, erros e média de desempenho
-- **Estatísticas por Certificação**: Desempenho detalhado por tipo de exame
-- **Assuntos para Revisar**: Lista dos tópicos que mais precisam de atenção
-- **Análise Detalhada**: Histórico completo de cada simulado realizado
-- **Análise Personalizada**: Recomendações baseadas no desempenho
-- **Questões Erradas**: Revisão das questões que foram respondidas incorretamente
+Cada trilha possui **20 cartões**, totalizando **60 flashcards**:
 
-### Sistema de Ranking
-- Ranking geral e por certificação
-- Filtros por tipo de exame (Cloud Practitioner, Developer Associate, Solutions Architect)
-- Posição do usuário destacada
-- Visualização de acertos e desempenho
-- Atualização em tempo real
+- Cloud Practitioner.
+- Solutions Architect Associate.
+- Developer Associate.
 
-## 🎓 Hands-On Práticos
+A sessão permite virar o cartão por clique, toque, Enter ou espaço, alternar entre português e inglês, navegar, pular cartões e embaralhar a ordem. Após revelar a resposta, o estudante pode marcar **Já Sabia** ou **Preciso Revisar**.
 
-A plataforma inclui tutoriais práticos passo a passo para aprender AWS na prática:
+Ao concluir, a sessão mostra a quantidade de cartões em cada avaliação e permite embaralhar e repetir. As avaliações ficam apenas no estado da sessão; não são salvas no perfil.
 
-1. **Como Criar uma Conta AWS** - Guia completo para iniciantes
-2. **Criar um Site Estático com S3 e CloudFront** - Hospedagem de sites estáticos
-3. **Aplicação de Blog com Lambda e DynamoDB** - Arquitetura serverless
-4. **Implantar App Serverless com Amplify** - Deploy completo
-5. **Bot de Conversação com Lex e Lambda** - Chatbots inteligentes
-6. **Pipeline de CI/CD com CodePipeline** - Automação de deploy
-7. **Hospedar App Web em EC2** - Servidores virtuais
-8. **Servidor de E-mail com SES** - Envio de emails
-9. **API RESTful com API Gateway e Lambda** - APIs serverless
-10. **Análise de Dados com Redshift** - Data warehouse
-11. **Pipeline de Dados com Glue e S3** - ETL e processamento
+## Usuários, perfil e ranking
 
-Cada tutorial inclui:
-- Dificuldade e tempo estimado
-- Pré-requisitos necessários
-- Informações sobre Free Tier e créditos AWS
-- Passo a passo detalhado
-- Código de exemplo
-- Referências e documentação oficial
+O cadastro valida duplicidade de nome de usuário ou e-mail e exige senha com pelo menos seis caracteres. O login usa nome de usuário e senha; a sessão permanece no navegador até o logout ou a remoção dos dados locais.
 
-## 🚀 Como Executar
+O perfil reúne histórico de simulados, estatísticas gerais e por certificação, questões erradas e assuntos para revisar.
 
-### Pré-requisitos
-- Node.js 16+ instalado
-- npm ou yarn
+O ranking pode ser consultado sem login. A classificação ocorre **dentro de cada certificação**, pelo maior percentual obtido pelo usuário (`bestPercentage`). Em caso de empate, o total acumulado de acertos (`totalCorrect`) é usado como desempate. A visualização geral reúne as trilhas e preserva a posição dentro de cada uma.
 
-### Instalação
+### Persistência local
+
+A implementação atual funciona no navegador, sem backend de autenticação ou banco de dados remoto. Usuários, sessão e resultados são armazenados em `localStorage`, nas chaves:
+
+- `guru_certificate_users`
+- `guru_certificate_current_user`
+- `guru_certificate_results`
+
+O histórico e o ranking refletem os dados desse navegador e não são sincronizados entre dispositivos. As senhas também são armazenadas localmente em texto simples; a autenticação atual é demonstrativa e precisa de uma implementação de backend adequada para uso com contas reais em produção.
+
+## Cursos e hands-on
+
+A página de cursos apresenta oportunidades de formação, links para Escola da Nuvem e Campinho Digital, além de recursos do AWS Skill Builder, Cloud Quest e microcredenciais.
+
+A página de materiais reúne **10 projetos práticos** e um guia para criar uma conta AWS:
+
+1. Criar uma conta AWS.
+2. Hospedar um site estático com S3 e CloudFront.
+3. Construir um blog com Lambda e DynamoDB.
+4. Implantar um aplicativo serverless com Amplify.
+5. Criar um bot com Lex e Lambda.
+6. Configurar um pipeline de CI/CD com CodePipeline.
+7. Hospedar um aplicativo web em EC2.
+8. Enviar e-mails com SES.
+9. Criar uma API RESTful com API Gateway e Lambda.
+10. Realizar análise de dados com Redshift.
+11. Implementar um pipeline de dados com Glue e S3.
+
+Os tutoriais incluem dificuldade, tempo estimado, pré-requisitos, orientações sobre custos e créditos, etapas práticas e referências. A aba adicional de tutoriais do AWS re/Start está indicada como **conteúdo em breve**.
+
+## Tecnologias
+
+- React 18 e React DOM.
+- React Router 6.
+- Styled Components 5.
+- Create React App, com `react-scripts` 5.
+- CSS com variáveis de cores, espaçamento e tipografia.
+- `IntersectionObserver` para animações do componente `Reveal`.
+- `localStorage` para persistência local.
+
+## Executar localmente
+
+É necessário ter Node.js e npm instalados, em versões compatíveis com as dependências do projeto.
+
 ```bash
-# Clone o repositório
-git clone <url-do-repositorio>
+git clone https://github.com/skvanderson/Guru-Certificate.git
 cd Guru-Certificate
-
-# Instale as dependências
-npm install
-
-# Execute o projeto
+npm ci
 npm start
 ```
 
-O projeto estará disponível em `http://localhost:3000`
+A aplicação fica disponível em `http://localhost:3000`.
 
-### Build para Produção
+### Comandos
+
 ```bash
+# Servidor de desenvolvimento
+npm start
+
+# Build de produção, gerado na pasta build/
 npm run build
+
+# Executar o runner de testes
+npm test
 ```
 
-## 🎨 Design System AWS
+Se `react-scripts` não for encontrado, instale as dependências com `npm ci` antes de executar os comandos.
 
-O projeto utiliza as cores oficiais da AWS:
-- **AWS Orange**: #FF9900
-- **AWS Blue**: #232F3E
-- **AWS Green**: #00A651
-- **AWS Red**: #D13212
+O arquivo `vercel.json` configura o build estático, o redirecionamento das rotas para `index.html`, cabeçalhos HTTP e cache dos arquivos estáticos.
 
-## 📱 Responsividade
+## Rotas principais
 
-- **Desktop**: Layout completo com sidebar e navegação horizontal
-- **Tablet**: Layout adaptado com navegação otimizada
-- **Mobile**: Menu hambúrguer e layout vertical
+| Caminho | Conteúdo |
+| --- | --- |
+| `/` | Página inicial |
+| `/contribuintes` | Equipe e apresentação do projeto |
+| `/quem-somos` | Redirecionamento para contribuintes |
+| `/simulados` | Catálogo de simulados |
+| `/simulado/cloud-practitioner` | Simulado completo de Cloud Practitioner |
+| `/simulado/cloud-practitioner/dominios` | Catálogo de domínios |
+| `/simulado/cloud-practitioner/dominio/:domainId` | Prática por domínio |
+| `/simulado/solutions-architect` | Simulado de Solutions Architect |
+| `/simulado/developer-associate` | Simulado de Developer Associate |
+| `/flashcards` | Catálogo de flashcards |
+| `/flashcards/:examType` | Sessão de flashcards |
+| `/cursos` | Cursos e trilhas de formação |
+| `/materiais` | Projetos hands-on |
+| `/hands-on/tutorial/:id` | Tutorial prático |
+| `/cadastro` | Cadastro e login |
+| `/perfil` | Perfil e histórico |
+| `/ranking` | Ranking por certificação |
 
-## 🔧 Estrutura do Projeto
+Nos flashcards, `examType` pode ser `cloud-practitioner`, `solutions-architect` ou `developer-associate`. Na prática por domínio, `domainId` pode ser `cloud-concepts`, `security-compliance`, `cloud-technology-services` ou `billing-pricing-support`.
 
-```
+## Estrutura do projeto
+
+```text
 src/
-├── components/          # Componentes reutilizáveis
-│   ├── Header.js       # Cabeçalho da aplicação
-│   ├── Footer.js       # Rodapé da aplicação
-│   ├── ExamProtection.js  # Proteção contra cola
-│   └── NavigationButtons.js  # Botões de navegação
-├── pages/              # Páginas da aplicação
-│   ├── Home.js         # Página inicial
-│   ├── About.js        # Contribuintes
-│   ├── Simulados.js    # Lista de simulados
-│   ├── Cursos.js       # Cursos e trilhas
-│   ├── Materials.js   # Materiais de estudo
-│   ├── Register.js     # Cadastro e login
-│   ├── Profile.js      # Perfil do usuário
-│   ├── Ranking.js      # Sistema de ranking
-│   ├── hands-on/       # Tutoriais práticos
-│   │   └── Tutorial.js
-│   └── simulados/      # Páginas dos simulados
+├── components/
+│   ├── Header.js
+│   ├── Footer.js
+│   ├── Reveal.js
+│   ├── ExamProtection.js
+│   └── NavigationButtons.js
+├── data/
+│   ├── cloudPractitionerQuestions.js
+│   ├── cloudPractitionerDomains.js
+│   ├── cloudPractitionerFlashcards.js
+│   ├── developerAssociateQuestions.js
+│   ├── developerAssociateFlashcards.js
+│   ├── solutionsArchitectQuestions.js
+│   ├── solutionsArchitectFlashcards.js
+│   └── tutorialsData.js
+├── pages/
+│   ├── Home.js
+│   ├── About.js
+│   ├── Simulados.js
+│   ├── Flashcards.js
+│   ├── Cursos.js
+│   ├── Materials.js
+│   ├── Register.js
+│   ├── Profile.js
+│   ├── Ranking.js
+│   ├── flashcards/FlashcardSession.js
+│   ├── hands-on/Tutorial.js
+│   └── simulados/
 │       ├── CloudPractitioner.js
+│       ├── CloudPractitionerDomains.js
+│       ├── CloudPractitionerDomainSession.js
 │       ├── SolutionsArchitect.js
 │       └── DeveloperAssociate.js
-├── services/           # Serviços da aplicação
-│   └── userService.js  # Gerenciamento de usuários e resultados
-├── data/               # Dados da aplicação
-│   ├── cloudPractitionerQuestions.js
-│   ├── developerAssociateQuestions.js
-│   ├── solutionsArchitectQuestions.js
-│   └── tutorialsData.js  # Dados dos tutoriais
-├── App.js              # Componente principal
-├── index.js            # Ponto de entrada
-└── index.css           # Estilos globais
+├── services/userService.js
+├── App.js
+├── index.js
+└── index.css
 ```
 
-## 🎯 Funcionalidades dos Simulados
+## Contribuição
 
-- **Navegação entre questões**: Anterior/Próxima
-- **Timer em tempo real**: Contagem regressiva (40 minutos)
-- **Seleção de idioma**: Português/Inglês
-- **Feedback personalizado**: Explicações detalhadas para cada alternativa selecionada
-- **Feedback visual**: Cores para respostas corretas/incorretas
-- **Resultado final**: Percentual de acertos e status
-- **Validação**: Impede avanço sem resposta
-- **Proteção contra cola**: Prevenção de seleção de texto, atalhos e dev tools
-- **Salvamento automático**: Resultados salvos automaticamente no perfil
+1. Faça um fork do repositório.
+2. Crie uma branch: `git checkout -b feature/minha-funcionalidade`.
+3. Implemente a alteração e confira o build.
+4. Crie um commit e envie sua branch.
+5. Abra um pull request descrevendo a alteração e as verificações realizadas.
 
-## 📊 Funcionalidades do Perfil
+## Contribuintes
 
-- **Estatísticas Gerais**: Visão consolidada de todos os simulados
-- **Estatísticas por Certificação**: Desempenho detalhado por tipo de exame
-- **Assuntos para Revisar**: Top 10 assuntos que mais precisam de atenção
-- **Histórico Completo**: Todos os simulados realizados com detalhes
-- **Análise Personalizada**: Recomendações baseadas no desempenho
-- **Questões Erradas**: Revisão detalhada das questões incorretas
-- **Análise por Simulado**: Estatísticas individuais de cada prova
-
-## 🏆 Sistema de Ranking
-
-- **Ranking Geral**: Classificação considerando todos os simulados
-- **Ranking por Certificação**: Filtros por Cloud Practitioner, Developer Associate e Solutions Architect
-- **Posição do Usuário**: Destaque da sua posição no ranking
-- **Métricas**: Visualização de acertos e desempenho
-- **Atualização em Tempo Real**: Rankings atualizados automaticamente
-
-## 🔒 Segurança
-
-- Sanitização de dados
-- Proteção contra XSS
-- HTTPS em produção
-- Validação de formulários
-- Proteção de rotas autenticadas
-
-## 📈 Performance
-
-- Lazy loading de componentes
-- Otimização de imagens
-- Minificação de CSS/JS
-- Cache de recursos estáticos
-- Armazenamento local eficiente
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 👥 Contribuintes
-
-- **Pedro Paulo** - Full Stack Developer
-- **Ivonaldo Micheluti Dias** - Infrastructure & Cloud Expert
-- **Wesley Cavalcante** - Developer
-- **Taynar Simões** - UX/UI Designer
-- **Elizângela Rosa da Silva Costa** - QA & Business Analyst
-- **Jefferson Bezerra** - Technology & Innovation Specialist
+- Sharlles Anderson.
+- Pedro Paulo.
+- Ivonaldo Micheluti Dias.
+- Wesley Cavalcante.
+- Taynar Simões.
+- Elizângela Rosa da Silva Costa.
+- Jefferson Bezerra.
 
 ---
 
-**Guru Certificate** - Desbrave o conhecimento. Transforme o futuro.
+**Guru Certificate** — Desbrave o conhecimento. Transforme o futuro.
