@@ -216,7 +216,6 @@ src/
 
 - Sharlles Anderson.
 - Pedro Paulo.
-- Ivonaldo Micheluti Dias.
 - Wesley Cavalcante.
 - Taynar Simões.
 - Elizângela Rosa da Silva Costa.

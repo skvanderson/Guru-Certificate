@@ -170,34 +170,6 @@ const About = () => {
           <Reveal delay="0.2s">
           <TeamCard>
             <div className="avatar">
-              <img src="/assets/images/Fotos-Perfil/Ivonaldo.png" alt="Ivonaldo Micheluti Dias" />
-            </div>
-            <h3>Ivonaldo Micheluti Dias</h3>
-            <p>
-              Profissional de TI com mais de 10 anos de experiência em infraestrutura e cloud computing.
-              Atua no Portobello Grupo garantindo disponibilidade, segurança e performance de ambientes críticos.
-              Especialista em infraestrutura híbrida, automação, FinOps e monitoramento. Certificado pelas principais provedoras de nuvem (Oracle, AWS e Google) e pela 4Linux, com formações em Linux System Administrator, Network Engineer e Containers. Ampliando especialização em FinOps, DevSecOps e automação de infraestrutura.
-            </p>
-            <a
-              href="https://www.linkedin.com/in/ivonaldo-micheluti-dias-61580470/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: '#0077B5',
-                textDecoration: 'none',
-                fontWeight: '500',
-                marginTop: '1rem',
-                display: 'inline-block'
-              }}
-            >
-              LinkedIn
-            </a>
-          </TeamCard>
-          </Reveal>
-
-          <Reveal delay="0.3s">
-          <TeamCard>
-            <div className="avatar">
               <img src="/assets/images/Fotos-Perfil/Jefferson.png" alt="Jefferson Bezerra" />
             </div>
             <h3>Jefferson Bezerra</h3>
