@@ -1,0 +1,6 @@
+node_modules
+build
+.git
+server/data
+.env*
+coverage

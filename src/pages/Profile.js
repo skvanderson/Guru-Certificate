@@ -361,6 +361,8 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [retry, setRetry] = useState(0);
 
   useEffect(() => {
     const currentUser = getCurrentUser();
@@ -370,11 +372,16 @@ const Profile = () => {
       return;
     }
     
+    let active = true;
     setUser(currentUser);
-    const stats = getUserStatistics(currentUser.id);
-    setStatistics(stats);
-    setLoading(false);
-  }, [navigate]);
+    setLoading(true);
+    setError('');
+    getUserStatistics(currentUser.id)
+      .then(stats => { if (active) setStatistics(stats); })
+      .catch(err => { if (active) setError(err.message); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [navigate, retry]);
 
   const handleLogout = () => {
     logoutUser();
@@ -389,6 +396,10 @@ const Profile = () => {
         </Content>
       </Container>
     );
+  }
+
+  if (error) {
+    return <Container><Content><NavigationButtons /><p role="alert">{error}</p><button onClick={() => setRetry(value => value + 1)}>Tentar novamente</button><button onClick={handleLogout}>Sair e entrar novamente</button></Content></Container>;
   }
 
   if (!user) {

@@ -293,6 +293,7 @@ const SolutionsArchitect = () => {
   const [modalContent, setModalContent] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [results, setResults] = useState(null);
+  const [saveStatus, setSaveStatus] = useState('');
 
 
   const formatTime = (seconds) => {
@@ -398,11 +399,10 @@ const SolutionsArchitect = () => {
     // Salvar resultado se usuário estiver logado
     const currentUser = getCurrentUser();
     if (currentUser) {
-      try {
-        saveExamResult(currentUser.id, 'solutions-architect', result);
-      } catch (error) {
-        console.error('Erro ao salvar resultado:', error);
-      }
+      setSaveStatus('Salvando resultado...');
+      saveExamResult(currentUser.id, 'solutions-architect', result)
+        .then(() => setSaveStatus('Resultado salvo no ranking.'))
+        .catch(error => setSaveStatus(`${error.message} O resultado ficou pendente neste navegador; abra o ranking ou perfil para tentar sincronizar novamente.`));
     }
     
     setIsFinished(true);
@@ -439,6 +439,7 @@ const SolutionsArchitect = () => {
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
                 {results.passed ? '🎉' : '😔'}
               </div>
+              {saveStatus && <p role="status">{saveStatus}</p>}
               <h3 style={{ color: results.passed ? 'var(--aws-green)' : 'var(--aws-red)', marginBottom: '1rem' }}>
                 {results.passed ? 'Parabéns! Você foi aprovado!' : 'Você não foi aprovado desta vez.'}
               </h3>

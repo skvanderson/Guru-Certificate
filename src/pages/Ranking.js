@@ -178,6 +178,17 @@ const EmptyState = styled.div`
   }
 `;
 
+const UserPositionCard = styled.div`
+  animation: ${fadeInUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-8);
+  text-align: center;
+  border: 2px solid var(--aws-orange);
+  box-shadow: var(--shadow-md);
+`;
+
 const getExamTypeName = (type) => {
   const names = {
     'cloud-practitioner': 'Cloud Practitioner',
@@ -191,11 +202,20 @@ const Ranking = () => {
   const [currentUser] = useState(getCurrentUser());
   const [filter, setFilter] = useState(null); // null = todos, 'cloud-practitioner', etc.
   const [ranking, setRanking] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [retry, setRetry] = useState(0);
 
   useEffect(() => {
-    const rankingData = getRanking(filter);
-    setRanking(rankingData);
-  }, [filter]);
+    let active = true;
+    setLoading(true);
+    setError('');
+    getRanking(filter)
+      .then(data => { if (active) setRanking(data); })
+      .catch(err => { if (active) setError(err.message); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [filter, retry]);
 
   const getCurrentUserPosition = () => {
     if (!currentUser) return null;
@@ -246,17 +266,8 @@ const Ranking = () => {
           </Header>
         </Reveal>
 
-        {currentUser && userPosition && (
-          <div style={{
-            animation: `${fadeInUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1)`,
-            background: 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)',
-            padding: 'var(--spacing-6)',
-            borderRadius: 'var(--radius-xl)',
-            marginBottom: 'var(--spacing-8)',
-            textAlign: 'center',
-            border: '2px solid var(--aws-orange)',
-            boxShadow: 'var(--shadow-md)'
-          }}>
+        {!loading && !error && currentUser && userPosition && (
+          <UserPositionCard>
             <h2 style={{ color: 'var(--aws-blue)', margin: '0 0 var(--spacing-2) 0' }}>
               Sua Posição
             </h2>
@@ -267,7 +278,11 @@ const Ranking = () => {
             <p style={{ color: 'var(--aws-gray-600)', margin: 'var(--spacing-2) 0 0 0' }}>
               {userScore}% de aproveitamento
             </p>
-          </div>
+          </UserPositionCard>
+        )}
+
+        {!loading && !error && currentUser && !userPosition && (
+          <p>Compare os resultados dos estudantes abaixo. Conclua um simulado{filter ? ' nesta trilha' : ''} para conquistar sua posição.</p>
         )}
 
         <FilterButtons>
@@ -297,7 +312,12 @@ const Ranking = () => {
           </FilterButton>
         </FilterButtons>
 
-        {ranking.length === 0 ? (
+        {loading ? <p role="status">Carregando ranking...</p> : error ? (
+          <EmptyState role="alert">
+            <p>{error}</p>
+            <button onClick={() => setRetry(value => value + 1)}>Tentar novamente</button>
+          </EmptyState>
+        ) : ranking.length === 0 ? (
           <EmptyState>
             <p>Nenhum resultado ainda. Seja o primeiro a aparecer no ranking!</p>
             <p>Realize um simulado para começar a competir.</p>

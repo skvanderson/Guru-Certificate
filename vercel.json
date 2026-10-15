@@ -11,6 +11,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://guru-certificate-api.robustgnat5.chatgpt.site/api/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

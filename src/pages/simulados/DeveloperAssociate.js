@@ -288,6 +288,7 @@ const DeveloperAssociate = () => {
   const [modalContent, setModalContent] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [results, setResults] = useState(null);
+  const [saveStatus, setSaveStatus] = useState('');
 
   const finishExam = useCallback(() => {
     const correctAnswers = Object.values(answeredQuestions).filter(Boolean).length;
@@ -325,11 +326,10 @@ const DeveloperAssociate = () => {
     // Salvar resultado se usuário estiver logado
     const currentUser = getCurrentUser();
     if (currentUser) {
-      try {
-        saveExamResult(currentUser.id, 'developer-associate', result);
-      } catch (error) {
-        console.error('Erro ao salvar resultado:', error);
-      }
+      setSaveStatus('Salvando resultado...');
+      saveExamResult(currentUser.id, 'developer-associate', result)
+        .then(() => setSaveStatus('Resultado salvo no ranking.'))
+        .catch(error => setSaveStatus(`${error.message} O resultado ficou pendente neste navegador; abra o ranking ou perfil para tentar sincronizar novamente.`));
     }
     
     setIsFinished(true);
@@ -432,6 +432,7 @@ const DeveloperAssociate = () => {
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
                 {results.passed ? '🎉' : '😔'}
               </div>
+              {saveStatus && <p role="status">{saveStatus}</p>}
               <h3 style={{ color: results.passed ? 'var(--aws-green)' : 'var(--aws-red)', marginBottom: '1rem' }}>
                 {results.passed ? 'Parabéns! Você foi aprovado!' : 'Você não foi aprovado desta vez.'}
               </h3>

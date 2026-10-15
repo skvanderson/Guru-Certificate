@@ -7,7 +7,7 @@ Plataforma de preparação para certificações AWS com simulados, flashcards e 
 - Simulados de Cloud Practitioner, Solutions Architect Associate e Developer Associate, com questões e explicações em português e inglês.
 - Prática de Cloud Practitioner organizada por domínio.
 - Flashcards bilíngues para revisão nas três trilhas.
-- Cadastro e login locais, perfil com histórico e estatísticas dos simulados.
+- Cadastro e login no backend, perfil com histórico e estatísticas dos simulados.
 - Ranking público, com filtros por certificação e classificação por desempenho.
 - Catálogo de cursos, trilhas de formação e recursos de treinamento.
 - Projetos hands-on com instruções, exemplos de código e referências.
@@ -61,21 +61,19 @@ Ao concluir, a sessão mostra a quantidade de cartões em cada avaliação e per
 
 ## Usuários, perfil e ranking
 
-O cadastro valida duplicidade de nome de usuário ou e-mail e exige senha com pelo menos seis caracteres. O login usa nome de usuário e senha; a sessão permanece no navegador até o logout ou a remoção dos dados locais.
+O cadastro valida duplicidade de nome de usuário ou e-mail e exige senha com pelo menos seis caracteres. O login usa nome de usuário e senha; a sessão expira em 30 dias ou no logout.
 
 O perfil reúne histórico de simulados, estatísticas gerais e por certificação, questões erradas e assuntos para revisar.
 
 O ranking pode ser consultado sem login. A classificação ocorre **dentro de cada certificação**, pelo maior percentual obtido pelo usuário (`bestPercentage`). Em caso de empate, o total acumulado de acertos (`totalCorrect`) é usado como desempate. A visualização geral reúne as trilhas e preserva a posição dentro de cada uma.
 
-### Persistência local
+### Persistência compartilhada
 
-A implementação atual funciona no navegador, sem backend de autenticação ou banco de dados remoto. Usuários, sessão e resultados são armazenados em `localStorage`, nas chaves:
+A API Node.js armazena contas, sessões e resultados em SQLite. O ranking é público e compartilhado entre todos os usuários que acessam o mesmo servidor, inclusive contas novas sem simulados. Senhas são protegidas com hash e salt. O navegador guarda apenas a sessão e resultados aguardando sincronização.
 
-- `guru_certificate_users`
-- `guru_certificate_current_user`
-- `guru_certificate_results`
+Consulte [BACKEND.md](BACKEND.md) para executar, hospedar, configurar o banco persistente e entender a transição dos dados antigos.
 
-O histórico e o ranking refletem os dados desse navegador e não são sincronizados entre dispositivos. As senhas também são armazenadas localmente em texto simples; a autenticação atual é demonstrativa e precisa de uma implementação de backend adequada para uso com contas reais em produção.
+As antigas contas e resultados locais não são migrados automaticamente. Os próximos resultados de contas cadastradas no backend passam a compor o ranking compartilhado.
 
 ## Cursos e hands-on
 
@@ -105,16 +103,22 @@ Os tutoriais incluem dificuldade, tempo estimado, pré-requisitos, orientações
 - Create React App, com `react-scripts` 5.
 - CSS com variáveis de cores, espaçamento e tipografia.
 - `IntersectionObserver` para animações do componente `Reveal`.
-- `localStorage` para persistência local.
+- Node.js e SQLite para persistência compartilhada; `localStorage` para sessão e envios pendentes.
 
 ## Executar localmente
 
-É necessário ter Node.js e npm instalados, em versões compatíveis com as dependências do projeto.
+É necessário ter Node.js 22.13 ou superior e npm instalados.
 
 ```bash
 git clone https://github.com/skvanderson/Guru-Certificate.git
 cd Guru-Certificate
 npm ci
+npm run server
+```
+
+Em outro terminal, na mesma pasta:
+
+```bash
 npm start
 ```
 
