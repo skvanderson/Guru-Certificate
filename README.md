@@ -17,7 +17,8 @@ Plataforma de preparação para certificações AWS com simulados, flashcards e 
 
 | Trilha | Referência da trilha | Questões na plataforma | Tempo limite |
 | --- | --- | --- | --- |
-| Cloud Practitioner | CLF-C02 | 65 | 90 minutos |
+| Cloud Practitioner — Simulado 1 | CLF-C02 | 65 originais | 90 minutos |
+| Cloud Practitioner — Simulado 2 | CLF-C02 | 69 adicionais | 90 minutos |
 | Solutions Architect Associate | SAA-C03 | 20 | 40 minutos |
 | Developer Associate | DVA-C02 | 20 | 40 minutos |
 
@@ -33,6 +34,10 @@ Os bancos de questões abordam cenários de uso de serviços AWS. Os simulados o
 - Restrições de interação implementadas pelo componente `ExamProtection`.
 
 Os percentuais exibidos são métricas de estudo da plataforma, sem equivalência com a pontuação oficial dos exames AWS.
+
+Os dois simulados de Cloud Practitioner usam bancos separados, sem repetir questões entre eles. Cada tentativa embaralha todo o banco escolhido. O Simulado 2 contém as 69 questões adicionais da PR #2, incluindo questões de múltipla seleção que exigem confirmar a resposta. O banco original de 65 questões permanece preservado.
+
+Cada simulado mantém seu próprio progresso no navegador: questões, respostas, posição e prazo. Ao retornar depois do prazo de 90 minutos, a tentativa é encerrada com as respostas já dadas. Para contas conectadas, os resultados são enviados ao perfil e ao ranking correspondente; reenvios usam o mesmo identificador para evitar duplicação.
 
 ### Cloud Practitioner por domínio
 
@@ -65,7 +70,7 @@ O cadastro valida duplicidade de nome de usuário ou e-mail e exige senha com pe
 
 O perfil reúne histórico de simulados, estatísticas gerais e por certificação, questões erradas e assuntos para revisar.
 
-O ranking pode ser consultado sem login. A classificação ocorre **dentro de cada certificação**, pelo maior percentual obtido pelo usuário (`bestPercentage`). Em caso de empate, o total acumulado de acertos (`totalCorrect`) é usado como desempate. A visualização geral reúne as trilhas e preserva a posição dentro de cada uma.
+O ranking pode ser consultado sem login. Cada usuário aparece uma vez por tipo de simulado, pelo seu maior percentual (`bestPercentage`). Os dois simulados de Cloud Practitioner possuem classificações e filtros separados. A visualização geral ordena todas as trilhas por nota; notas iguais dividem a posição, sem pular a seguinte. O nome e o tipo de simulado definem apenas a ordem de exibição nos empates.
 
 ### Persistência compartilhada
 
@@ -150,6 +155,7 @@ O arquivo `vercel.json` configura o build estático, o redirecionamento das rota
 | `/quem-somos` | Redirecionamento para contribuintes |
 | `/simulados` | Catálogo de simulados |
 | `/simulado/cloud-practitioner` | Simulado completo de Cloud Practitioner |
+| `/simulado/cloud-practitioner-2` | Segundo simulado de Cloud Practitioner, com 69 questões adicionais |
 | `/simulado/cloud-practitioner/dominios` | Catálogo de domínios |
 | `/simulado/cloud-practitioner/dominio/:domainId` | Prática por domínio |
 | `/simulado/solutions-architect` | Simulado de Solutions Architect |
@@ -177,6 +183,8 @@ src/
 │   └── NavigationButtons.js
 ├── data/
 │   ├── cloudPractitionerQuestions.js
+│   ├── cloudPractitionerQuestions2.js
+│   ├── cloudPractitionerExam.js
 │   ├── cloudPractitionerDomains.js
 │   ├── cloudPractitionerFlashcards.js
 │   ├── developerAssociateQuestions.js

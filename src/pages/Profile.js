@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Accordion from '../components/Accordion';
 import NavigationButtons from '../components/NavigationButtons';
-import { getCurrentUser, getUserStatistics, logoutUser } from '../services/userService';
+import { getCurrentUser, getUserStatistics, getWrongCount, logoutUser } from '../services/userService';
 import { cloudPractitionerQuestions } from '../data/cloudPractitionerQuestions';
+import { cloudPractitionerQuestions2 } from '../data/cloudPractitionerQuestions2';
 import { developerAssociateQuestions } from '../data/developerAssociateQuestions';
 import { solutionsArchitectQuestions } from '../data/solutionsArchitectQuestions';
 
@@ -134,13 +136,6 @@ const ExamTypeStatValue = styled.span`
   font-size: var(--font-size-lg);
 `;
 
-const TopicsSection = styled.div`
-  background: var(--aws-white);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-6);
-  box-shadow: var(--shadow-md);
-`;
-
 const TopicsList = styled.div`
   display: flex;
   flex-direction: column;
@@ -182,9 +177,6 @@ const ExamHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-4);
-  padding-bottom: var(--spacing-4);
-  border-bottom: 2px solid var(--aws-gray-200);
   flex-wrap: wrap;
   gap: var(--spacing-4);
 `;
@@ -296,7 +288,8 @@ const EmptyState = styled.div`
 
 const getExamTypeName = (type) => {
   const names = {
-    'cloud-practitioner': 'AWS Cloud Practitioner',
+    'cloud-practitioner': 'AWS Cloud Practitioner — Simulado 1',
+    'cloud-practitioner-2': 'AWS Cloud Practitioner — Simulado 2',
     'developer-associate': 'AWS Developer Associate',
     'solutions-architect': 'AWS Solutions Architect'
   };
@@ -307,6 +300,8 @@ const getQuestionsByType = (type) => {
   switch(type) {
     case 'cloud-practitioner':
       return cloudPractitionerQuestions;
+    case 'cloud-practitioner-2':
+      return cloudPractitionerQuestions2;
     case 'developer-associate':
       return developerAssociateQuestions;
     case 'solutions-architect':
@@ -329,7 +324,7 @@ const formatDate = (dateString) => {
 
 const getPersonalizedAnalysis = (result) => {
   const percentage = result.percentage;
-  const wrongCount = result.total - result.correct;
+  const wrongCount = getWrongCount(result);
   const total = result.total;
   
   let analysis = '';
@@ -359,10 +354,14 @@ const getPersonalizedAnalysis = (result) => {
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  // Só um simulado aberto por vez; null = todos fechados.
+  const [openExamId, setOpenExamId] = useState(null);
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [retry, setRetry] = useState(0);
+  const toggleExam = (id) => setOpenExamId(prev => (prev === id ? null : id));
 
   useEffect(() => {
     const currentUser = getCurrentUser();
@@ -489,11 +488,19 @@ const Profile = () => {
             </ExamTypeSection>
 
             {statistics.topicsToReview.length > 0 && (
-              <TopicsSection>
-                <SectionTitle>Assuntos para Revisar (Geral)</SectionTitle>
-                <p style={{ color: 'var(--aws-gray-600)', marginBottom: 'var(--spacing-4)' }}>
-                  Estes são os assuntos que você mais errou em todos os simulados. Foque neles para melhorar seu desempenho!
-                </p>
+              <Accordion
+                id="topics-to-review"
+                isOpen={topicsOpen}
+                onToggle={() => setTopicsOpen(open => !open)}
+                header={(
+                  <div>
+                    <SectionTitle style={{ margin: 0 }}>Assuntos para Revisar (Geral)</SectionTitle>
+                    <p style={{ color: 'var(--aws-gray-600)', margin: 'var(--spacing-2) 0 0 0' }}>
+                      Estes são os assuntos que você mais errou em todos os simulados. Foque neles para melhorar seu desempenho!
+                    </p>
+                  </div>
+                )}
+              >
                 <TopicsList>
                   {statistics.topicsToReview.map((item, index) => (
                     <TopicItem key={index}>
@@ -502,7 +509,7 @@ const Profile = () => {
                     </TopicItem>
                   ))}
                 </TopicsList>
-              </TopicsSection>
+              </Accordion>
             )}
 
             {statistics.detailedResults && statistics.detailedResults.length > 0 && (
@@ -515,13 +522,19 @@ const Profile = () => {
                 {statistics.detailedResults.map((result, index) => {
                   const questions = getQuestionsByType(result.examType);
                   const analysis = getPersonalizedAnalysis(result);
+                  const isOpen = openExamId === result.id;
                   
                   return (
-                    <ExamDetailsSection key={result.id} style={{ marginBottom: 'var(--spacing-6)' }}>
+                    <Accordion
+                      key={result.id}
+                      id={`exam-${result.id}`}
+                      isOpen={isOpen}
+                      onToggle={() => toggleExam(result.id)}
+                      header={(
                       <ExamHeader>
                         <div>
                           <ExamTitle>
-                            Simulado {index + 1}: {getExamTypeName(result.examType)}
+                            Simulado {statistics.detailedResults.length - index}: {getExamTypeName(result.examType)}
                           </ExamTitle>
                           <ExamDate>{formatDate(result.timestamp)}</ExamDate>
                         </div>
@@ -536,7 +549,8 @@ const Profile = () => {
                           {result.passed ? '✓ Aprovado' : '✗ Não Aprovado'}
                         </div>
                       </ExamHeader>
-                      
+                      )}
+                    >
                       <ExamSummary>
                         <SummaryItem>
                           <SummaryLabel>Acertos</SummaryLabel>
@@ -547,7 +561,7 @@ const Profile = () => {
                         <SummaryItem>
                           <SummaryLabel>Erros</SummaryLabel>
                           <SummaryValue style={{ color: 'var(--aws-red)' }}>
-                            {result.total - result.correct}/{result.total}
+                            {getWrongCount(result)}/{result.total}
                           </SummaryValue>
                         </SummaryItem>
                         <SummaryItem>
@@ -646,7 +660,7 @@ const Profile = () => {
                           </div>
                         </div>
                       )}
-                    </ExamDetailsSection>
+                    </Accordion>
                   );
                 })}
               </ExamDetailsSection>

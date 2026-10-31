@@ -440,7 +440,7 @@ const features = [
   {
     icon: '📝',
     title: 'Simulados',
-    description: '105 questões nível de prova, cobrindo Cloud Practitioner, Solutions Architect e Developer Associate.',
+    description: '174 questões de estudo, com dois simulados de Cloud Practitioner, além de Solutions Architect e Developer Associate.',
     to: '/simulados'
   },
   {

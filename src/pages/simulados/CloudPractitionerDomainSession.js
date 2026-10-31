@@ -278,21 +278,56 @@ const CloudPractitionerDomainSession = () => {
     );
   }
 
+  const getSelectedAnswerIndices = (questionIndex) => {
+    const answer = selectedAnswers[questionIndex];
+    if (Array.isArray(answer)) return answer;
+    return answer === undefined ? [] : [answer];
+  };
+
   const checkAnswer = (questionIndex, selectedAnswer) => {
-    const correctAnswer = questions[questionIndex].alternatives.findIndex(alt => alt.correct);
-    return selectedAnswer === correctAnswer;
+    const correctAnswers = questions[questionIndex].alternatives.reduce(
+      (indices, alternative, index) => alternative.correct ? [...indices, index] : indices,
+      []
+    );
+    const selected = Array.isArray(selectedAnswer) ? selectedAnswer : [selectedAnswer];
+    return selected.length === correctAnswers.length
+      && correctAnswers.every(index => selected.includes(index));
   };
 
   const handleAnswerSelect = (questionIndex, answerIndex) => {
-    if (answeredQuestions[questionIndex] || lockedQuestions[questionIndex]) return;
+    if (lockedQuestions[questionIndex]) return;
+
+    const question = questions[questionIndex];
+    if (question.multiple) {
+      setSelectedAnswers(prev => {
+        const selected = Array.isArray(prev[questionIndex]) ? prev[questionIndex] : [];
+        const next = selected.includes(answerIndex)
+          ? selected.filter(index => index !== answerIndex)
+          : [...selected, answerIndex];
+        return { ...prev, [questionIndex]: next };
+      });
+      return;
+    }
 
     setSelectedAnswers(prev => ({ ...prev, [questionIndex]: answerIndex }));
-    const isCorrect = checkAnswer(questionIndex, answerIndex);
+    const isCorrect = checkAnswer(questionIndex, [answerIndex]);
     setAnsweredQuestions(prev => ({ ...prev, [questionIndex]: isCorrect }));
     setLockedQuestions(prev => ({ ...prev, [questionIndex]: true }));
   };
 
+  const confirmAnswer = () => {
+    const selected = getSelectedAnswerIndices(currentQuestion);
+    if (selected.length === 0 || lockedQuestions[currentQuestion]) return;
+
+    setAnsweredQuestions(prev => ({
+      ...prev,
+      [currentQuestion]: checkAnswer(currentQuestion, selected)
+    }));
+    setLockedQuestions(prev => ({ ...prev, [currentQuestion]: true }));
+  };
+
   const goToNext = () => {
+    if (!lockedQuestions[currentQuestion]) return;
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -340,10 +375,15 @@ const CloudPractitionerDomainSession = () => {
   }
 
   const currentQ = questions[currentQuestion];
-  const isAnswered = selectedAnswers[currentQuestion] !== undefined;
+  const selectedAnswerIndices = getSelectedAnswerIndices(currentQuestion);
+  const hasSelectedAnswers = selectedAnswerIndices.length > 0;
+  const isAnswered = Boolean(lockedQuestions[currentQuestion]);
   const isCorrect = answeredQuestions[currentQuestion];
   const isLocked = lockedQuestions[currentQuestion];
-  const correctAnswerIndex = currentQ.alternatives.findIndex(alt => alt.correct);
+  const correctAnswerIndices = currentQ.alternatives.reduce(
+    (indices, alternative, index) => alternative.correct ? [...indices, index] : indices,
+    []
+  );
 
   return (
     <Container>
@@ -366,26 +406,40 @@ const CloudPractitionerDomainSession = () => {
           <QuestionDescription>
             {currentQ.description[language] || currentQ.description['pt-BR']}
           </QuestionDescription>
+          {currentQ.multiple && (
+            <QuestionDescription>
+              {language === 'pt-BR'
+                ? 'Selecione todas as alternativas corretas e confirme sua resposta.'
+                : 'Select all correct options and confirm your answer.'}
+            </QuestionDescription>
+          )}
 
           <AlternativesList>
             {currentQ.alternatives.map((alt, index) => (
               <AlternativeItem
                 key={index}
                 className={`
-                  ${selectedAnswers[currentQuestion] === index ? 'selected' : ''}
-                  ${isAnswered ? (alt.correct ? 'correct' : (selectedAnswers[currentQuestion] === index ? 'incorrect' : '')) : ''}
+                  ${selectedAnswerIndices.includes(index) ? 'selected' : ''}
+                  ${isAnswered ? (alt.correct ? 'correct' : (selectedAnswerIndices.includes(index) ? 'incorrect' : '')) : ''}
                   ${isLocked ? 'disabled' : ''}
                 `}
-                onClick={() => !isLocked && handleAnswerSelect(currentQuestion, index)}
+                onClick={event => {
+                  if (event.target === event.currentTarget && !isLocked) {
+                    handleAnswerSelect(currentQuestion, index);
+                  }
+                }}
               >
                 <input
-                  type="radio"
+                  id={`domain-question-${currentQuestion}-answer-${index}`}
+                  type={currentQ.multiple ? 'checkbox' : 'radio'}
                   name={`domain-question-${currentQuestion}`}
-                  checked={selectedAnswers[currentQuestion] === index}
+                  checked={selectedAnswerIndices.includes(index)}
                   onChange={() => handleAnswerSelect(currentQuestion, index)}
                   disabled={isLocked}
                 />
-                <label>{alt.title[language] || alt.title['pt-BR']}</label>
+                <label htmlFor={`domain-question-${currentQuestion}-answer-${index}`}>
+                  {alt.title[language] || alt.title['pt-BR']}
+                </label>
               </AlternativeItem>
             ))}
           </AlternativesList>
@@ -396,22 +450,55 @@ const CloudPractitionerDomainSession = () => {
                 {isCorrect ? '✓ Correto!' : '✗ Incorreto'}
               </StatusMessage>
               {(() => {
-                const selectedAlternative = currentQ.alternatives[selectedAnswers[currentQuestion]];
-                const explanation = selectedAlternative?.explanation || currentQ.explanation;
-                if (!explanation) return null;
+                const selectedAlternative = currentQ.alternatives[selectedAnswerIndices[0]];
+                const correctAlternative = currentQ.alternatives[correctAnswerIndices[0]];
+                const getText = text => text?.[language] || text?.['pt-BR'] || '';
+                const explanation = selectedAlternative?.explanation || correctAlternative?.explanation || currentQ.explanation;
+                const relevantIndices = currentQ.multiple
+                  ? Array.from(new Set([...selectedAnswerIndices, ...correctAnswerIndices])).sort((a, b) => a - b)
+                  : selectedAnswerIndices;
+                const relevantAlternatives = relevantIndices.map(index => currentQ.alternatives[index]);
+                if (!currentQ.multiple && !explanation) return null;
 
                 return (
                   <ExplanationBox>
                     <h4>📚 Explicação:</h4>
-                    {!isCorrect && (
-                      <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
-                        {language === 'pt-BR'
-                          ? `A resposta correta é: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
-                          : `The correct answer is: "${currentQ.alternatives[correctAnswerIndex].title[language] || currentQ.alternatives[correctAnswerIndex].title['pt-BR']}"`
-                        }
+                    {currentQ.multiple ? (
+                      <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600' }}>
+                        {language === 'pt-BR' ? 'Respostas corretas: ' : 'Correct answers: '}
+                        {correctAnswerIndices.map(index => (
+                          currentQ.alternatives[index].title[language]
+                            || currentQ.alternatives[index].title['pt-BR']
+                        )).join('; ')}
                       </p>
-                    )}
-                    <p>{explanation[language] || explanation['pt-BR']}</p>
+                    ) : null}
+                    {currentQ.multiple
+                      ? relevantAlternatives.map(alternative => (
+                        <p key={alternative.title['pt-BR']} style={{ marginBottom: 'var(--spacing-2)' }}>
+                          <strong>{alternative.title[language] || alternative.title['pt-BR']}: </strong>
+                          {alternative.explanation[language] || alternative.explanation['pt-BR']}
+                        </p>
+                      ))
+                      : (
+                        <>
+                          {!isCorrect && correctAlternative && (
+                            <p style={{ marginBottom: 'var(--spacing-2)', fontWeight: '600', color: 'var(--aws-red)' }}>
+                              {language === 'pt-BR' ? 'A resposta correta é: ' : 'The correct answer is: '}
+                              {getText(correctAlternative.title)}
+                            </p>
+                          )}
+                          {correctAlternative && <p style={{ marginBottom: 'var(--spacing-3)' }}>{getText(correctAlternative.explanation)}</p>}
+                          {!isCorrect && selectedAlternative && (
+                            <>
+                              <p style={{ marginBottom: 'var(--spacing-2)', fontWeight: '600' }}>
+                                {language === 'pt-BR' ? 'Sua resposta: ' : 'Your answer: '}
+                                {getText(selectedAlternative.title)}
+                              </p>
+                              <p>{getText(selectedAlternative.explanation)}</p>
+                            </>
+                          )}
+                        </>
+                      )}
                   </ExplanationBox>
                 );
               })()}
@@ -420,10 +507,19 @@ const CloudPractitionerDomainSession = () => {
         </QuestionCard>
 
         <div style={{ display: 'flex', gap: 'var(--spacing-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
+          {currentQ.multiple && (
+            <Button
+              className="secondary"
+              onClick={confirmAnswer}
+              disabled={!hasSelectedAnswers || isLocked}
+            >
+              Confirmar resposta
+            </Button>
+          )}
           <Button className="secondary" onClick={goToPrevious} disabled={currentQuestion === 0}>
             ← Anterior
           </Button>
-          <Button className="primary" onClick={goToNext} disabled={selectedAnswers[currentQuestion] === undefined}>
+          <Button className="primary" onClick={goToNext} disabled={!hasSelectedAnswers || !isLocked}>
             {currentQuestion === questions.length - 1 ? 'Finalizar' : 'Próxima →'}
           </Button>
         </div>

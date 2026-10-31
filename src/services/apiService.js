@@ -17,7 +17,7 @@ async function request(endpoint, options = {}) {
       signal: controller.signal
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.message || 'Não foi possível concluir a solicitação');
+    if (!response.ok) throw Object.assign(new Error(data.message || 'Não foi possível concluir a solicitação'), { status: response.status });
     return data;
   } catch (error) {
     if (error.name === 'AbortError' || error instanceof TypeError || error instanceof SyntaxError) {
@@ -45,21 +45,42 @@ export const syncPendingResults = async () => {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   const pending = readLocal(PENDING_KEY, []);
+  const rejected = {};
   for (const result of pending.filter(r => r.userId === currentUser.id)) {
-    await request('/results', { method: 'POST', body: JSON.stringify(result) });
+    try {
+      await request('/results', { method: 'POST', body: JSON.stringify(result) });
+    } catch (error) {
+      // Resultado rejeitado como inválido (ex.: tentativa antiga de 134 questões) nunca será aceito; descartar evita bloquear o perfil.
+      if (error.status !== 400) throw error;
+      rejected[result.id] = error;
+    }
     localStorage.setItem(PENDING_KEY, JSON.stringify(readLocal(PENDING_KEY, []).filter(r => r.id !== result.id)));
   }
+  return rejected;
 };
 
 export const saveExamResult = async (userId, examType, result) => {
   if (getCurrentUser()?.id !== userId) throw new Error('Entre novamente para salvar o resultado');
   const examResult = {
     ...result, userId, examType,
-    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    id: result.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     wrongQuestions: result.wrongQuestions || [], topics: result.topics || []
   };
-  localStorage.setItem(PENDING_KEY, JSON.stringify([...readLocal(PENDING_KEY, []), examResult]));
-  await syncPendingResults();
+  try {
+    const pending = readLocal(PENDING_KEY, []).filter(item => item.id !== examResult.id);
+    localStorage.setItem(PENDING_KEY, JSON.stringify([...pending, examResult]));
+  } catch {
+    // Sem espaço local, ainda é possível salvar diretamente na API.
+    await request('/results', { method: 'POST', body: JSON.stringify(examResult) });
+    return examResult;
+  }
+  try {
+    const rejected = await syncPendingResults();
+    if (rejected[examResult.id]) throw rejected[examResult.id];
+  } catch (error) {
+    error.pending = readLocal(PENDING_KEY, []).some(item => item.id === examResult.id);
+    throw error;
+  }
   return examResult;
 };
 

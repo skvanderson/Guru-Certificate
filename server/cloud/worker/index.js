@@ -1,4 +1,5 @@
-const examTypes = ['cloud-practitioner', 'developer-associate', 'solutions-architect'];
+const examTotals = { 'cloud-practitioner': 65, 'cloud-practitioner-2': 69, 'developer-associate': 20, 'solutions-architect': 20 };
+const examTypes = Object.keys(examTotals);
 const fail = (status, message) => Object.assign(new Error(message), { status });
 const encoder = new TextEncoder();
 const hex = buffer => [...new Uint8Array(buffer)].map(n => n.toString(16).padStart(2, '0')).join('');
@@ -113,8 +114,9 @@ export default {
           SELECT r.user_id AS userId, u.username, r.exam_type AS examType,
             SUM(r.correct) AS totalCorrect, COUNT(*) AS totalExams, MAX(r.percentage) AS bestPercentage
           FROM results r JOIN users u ON u.id = r.user_id GROUP BY r.user_id, r.exam_type
-        ) SELECT *, ROW_NUMBER() OVER (PARTITION BY examType ORDER BY bestPercentage DESC, totalCorrect DESC, userId) AS position
-          FROM scores WHERE (? IS NULL OR examType = ?) ORDER BY examType, position`).bind(examType, examType).all();
+        ) SELECT *, DENSE_RANK() OVER (ORDER BY bestPercentage DESC) AS position
+          FROM scores WHERE (? IS NULL OR examType = ?) ORDER BY bestPercentage DESC, username COLLATE NOCASE,
+            CASE examType WHEN 'cloud-practitioner' THEN 1 WHEN 'cloud-practitioner-2' THEN 2 WHEN 'developer-associate' THEN 3 ELSE 4 END`).bind(examType, examType).all();
         return json(200, ranking.results);
       }
       if (url.pathname === '/api/results') {
@@ -132,7 +134,7 @@ export default {
           if (body.userId && body.userId !== userId) throw fail(403, 'Este resultado pertence a outra conta');
           const { id, examType, correct, total } = body;
           if (typeof id !== 'string' || !/^[\w-]{1,80}$/.test(id) || !examTypes.includes(examType) ||
-            !Number.isInteger(correct) || !Number.isInteger(total) || total !== (examType === 'cloud-practitioner' ? 65 : 20) || correct < 0 || correct > total ||
+            !Number.isInteger(correct) || !Number.isInteger(total) || total !== examTotals[examType] || correct < 0 || correct > total ||
             !Array.isArray(body.wrongQuestions) || !body.wrongQuestions.every(q => typeof q === 'string' || Number.isInteger(q)) ||
             !Array.isArray(body.topics) || !body.topics.every(t => typeof t === 'string' && t.length <= 500)) throw fail(400, 'Resultado inválido');
           const existing = await db.prepare('SELECT user_id FROM results WHERE id = ?').bind(id).first();

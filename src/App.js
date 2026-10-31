@@ -35,7 +35,7 @@ const MainContent = styled.main`
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AppContainer>
         <Header />
         <MainContent>
@@ -49,7 +49,8 @@ function App() {
             <Route path="/hands-on/tutorial/:id" element={<Tutorial />} />
             <Route path="/flashcards" element={<Flashcards />} />
             <Route path="/flashcards/:examType" element={<FlashcardSession />} />
-            <Route path="/simulado/cloud-practitioner" element={<CloudPractitioner />} />
+            <Route path="/simulado/cloud-practitioner" element={<CloudPractitioner key="practitioner-1" />} />
+            <Route path="/simulado/cloud-practitioner-2" element={<CloudPractitioner key="practitioner-2" variant={2} />} />
             <Route path="/simulado/cloud-practitioner/dominios" element={<CloudPractitionerDomains />} />
             <Route path="/simulado/cloud-practitioner/dominio/:domainId" element={<CloudPractitionerDomainSession />} />
             <Route path="/simulado/solutions-architect" element={<SolutionsArchitect />} />

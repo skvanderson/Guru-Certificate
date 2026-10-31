@@ -191,7 +191,8 @@ const UserPositionCard = styled.div`
 
 const getExamTypeName = (type) => {
   const names = {
-    'cloud-practitioner': 'Cloud Practitioner',
+    'cloud-practitioner': 'Cloud Practitioner — Simulado 1',
+    'cloud-practitioner-2': 'Cloud Practitioner — Simulado 2',
     'developer-associate': 'Developer Associate',
     'solutions-architect': 'Solutions Architect'
   };
@@ -296,7 +297,13 @@ const Ranking = () => {
             active={filter === 'cloud-practitioner'}
             onClick={() => setFilter('cloud-practitioner')}
           >
-            Cloud Practitioner
+            Cloud Practitioner 1
+          </FilterButton>
+          <FilterButton
+            active={filter === 'cloud-practitioner-2'}
+            onClick={() => setFilter('cloud-practitioner-2')}
+          >
+            Cloud Practitioner 2
           </FilterButton>
           <FilterButton 
             active={filter === 'developer-associate'}

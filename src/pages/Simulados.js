@@ -196,7 +196,7 @@ const Simulados = () => {
               <div className="badge">
                 <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
               </div>
-              <h3>Cloud Practitioner CLF-C02</h3>
+              <h3>Cloud Practitioner — Simulado 1</h3>
             </CardHeader>
             <CardContent>
               <p>
@@ -225,6 +225,33 @@ const Simulados = () => {
               <Difficulty>Iniciante</Difficulty>
             </CardFooter>
           </SimuladoCard>
+          </Reveal>
+
+          <Reveal delay="0.05s">
+            <SimuladoCard>
+              <CardHeader>
+                <div className="badge">
+                  <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
+                </div>
+                <h3>Cloud Practitioner — Simulado 2</h3>
+              </CardHeader>
+              <CardContent>
+                <p>Continue sua preparação para o CLF-C02 com um segundo conjunto de questões, sem repetir as do Simulado 1.</p>
+                <ul className="features">
+                  <li>69 questões adicionais em ordem aleatória</li>
+                  <li>Tempo limite de 90 minutos</li>
+                  <li>Questões com uma ou várias respostas corretas</li>
+                  <li>Português e inglês, com explicações detalhadas</li>
+                  <li>Progresso, histórico e ranking independentes</li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <ActionButtons>
+                  <StartButton to="/simulado/cloud-practitioner-2">Iniciar Simulado 2</StartButton>
+                </ActionButtons>
+                <Difficulty>Iniciante</Difficulty>
+              </CardFooter>
+            </SimuladoCard>
           </Reveal>
 
           <Reveal delay="0.1s">

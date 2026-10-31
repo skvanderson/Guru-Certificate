@@ -14,6 +14,14 @@ Contas e resultados locais não são enviados para o banco hospedado automaticam
 
 O código hospedado mantém o histórico restrito à sessão e deixa o ranking público. Os resultados pendentes só sincronizam quando a pessoa entra na conta correspondente. As migrações D1 estão em `server/cloud/drizzle` e são aplicadas na publicação. Não crie tabelas durante requisições.
 
+### Publicação dos dois simulados de Cloud Practitioner
+
+O Simulado 1 mantém o tipo `cloud-practitioner` (65 questões) e os resultados existentes. O Simulado 2 usa `cloud-practitioner-2` (69 questões), com histórico e ranking separados. A API valida o total exato de cada tipo; não há alteração de esquema nem necessidade de apagar ou migrar os resultados anteriores.
+
+Publique primeiro a versão atualizada de `server/cloud` na hospedagem da API e depois o frontend na Vercel. O deploy estático da Vercel não publica esse backend. Sem atualizar a API, os resultados do Simulado 2 serão rejeitados como inválidos. A nova ordenação do ranking também depende dessa publicação. Caso o preview da PR indique “Authorization required to deploy”, autorize o deploy no painel da Vercel.
+
+As tentativas ficam em chaves locais independentes e preservam um identificador estável. Se o prazo expirar enquanto a página estiver fechada, ao retornar a tentativa é encerrada com as respostas salvas. Resultados inválidos são descartados da fila; falhas de conexão mantêm os resultados pendentes. Se o armazenamento estiver cheio, o frontend tenta enviar diretamente e só informa pendência quando ela de fato existe.
+
 Para validar o código da API hospedada:
 
 ```powershell

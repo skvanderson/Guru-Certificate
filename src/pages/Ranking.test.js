@@ -9,7 +9,7 @@ jest.mock('../services/userService', () => ({ getCurrentUser: jest.fn(), getRank
 jest.mock('../components/Reveal', () => ({ children }) => <div>{children}</div>);
 
 const entry = { userId: 'student', username: 'Estudante', examType: 'developer-associate', bestPercentage: 90, position: 1 };
-const openRanking = () => render(<MemoryRouter><Ranking /></MemoryRouter>);
+const openRanking = () => render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Ranking /></MemoryRouter>);
 beforeEach(() => { jest.clearAllMocks(); getRanking.mockResolvedValue([entry]); });
 
 test('exibe posição após o simulado sem falhar ao renderizar a animação', async () => {
@@ -25,9 +25,12 @@ test('conta nova sem resultados vê outros estudantes e pode filtrar', async () 
   openRanking();
   expect(await screen.findByText('Estudante')).toBeInTheDocument();
   expect(screen.queryByText('Sua Posição')).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner 1' }));
   expect(await screen.findByText('Estudante')).toBeInTheDocument();
   expect(getRanking).toHaveBeenLastCalledWith('cloud-practitioner');
+  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner 2' }));
+  expect(await screen.findByText('Estudante')).toBeInTheDocument();
+  expect(getRanking).toHaveBeenLastCalledWith('cloud-practitioner-2');
 });
 
 test('visitante consulta o ranking público e pode tentar de novo após falha', async () => {
