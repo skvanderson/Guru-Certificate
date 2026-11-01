@@ -7,11 +7,15 @@ import CloudPractitionerDomainSession from './CloudPractitionerDomainSession';
 import { cloudPractitionerQuestions } from '../../data/cloudPractitionerQuestions';
 import { cloudPractitionerQuestions2 } from '../../data/cloudPractitionerQuestions2';
 import { createCloudPractitionerExam } from '../../data/cloudPractitionerExam';
+import { getCloudPractitionerDomainQuestions } from '../../data/cloudPractitionerPractice';
 import { getCurrentUser, saveExamResult } from '../../services/apiService';
 
 jest.mock('../../components/ExamProtection', () => ({ children }) => children);
 jest.mock('../../data/cloudPractitionerExam', () => ({
   createCloudPractitionerExam: jest.fn()
+}));
+jest.mock('../../data/cloudPractitionerPractice', () => ({
+  getCloudPractitionerDomainQuestions: jest.fn()
 }));
 
 jest.mock('../../services/apiService', () => ({
@@ -91,6 +95,7 @@ beforeEach(() => {
     multipleQuestion
   );
   createCloudPractitionerExam.mockReturnValue([singleQuestion, multipleQuestion]);
+  getCloudPractitionerDomainQuestions.mockReturnValue([singleQuestion, multipleQuestion]);
   getCurrentUser.mockReturnValue({ id: 'student' });
   saveExamResult.mockResolvedValue();
 });

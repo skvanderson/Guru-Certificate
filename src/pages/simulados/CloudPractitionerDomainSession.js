@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../../components/NavigationButtons';
-import { cloudPractitionerQuestions } from '../../data/cloudPractitionerQuestions';
+import { getCloudPractitionerDomainQuestions } from '../../data/cloudPractitionerPractice';
 import { cloudPractitionerDomains } from '../../data/cloudPractitionerDomains';
 
 const Container = styled.div`
@@ -246,7 +246,7 @@ const CloudPractitionerDomainSession = () => {
   const { domainId } = useParams();
   const navigate = useNavigate();
   const domain = cloudPractitionerDomains.find(d => d.slug === domainId);
-  const questions = domain ? cloudPractitionerQuestions.filter(q => q.domain === domainId) : [];
+  const questions = domain ? getCloudPractitionerDomainQuestions(domainId) : [];
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});

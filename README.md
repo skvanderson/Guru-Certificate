@@ -50,7 +50,7 @@ Além do simulado completo, é possível estudar as questões de cada domínio s
 | Tecnologia e Serviços na Nuvem | 34% |
 | Faturamento, Precificação e Suporte | 12% |
 
-A prática utiliza as questões do banco de Cloud Practitioner filtradas pelo domínio, com alternância de idioma, feedback imediato, resumo de acertos e opção de reiniciar. Essas sessões não possuem cronômetro e não são registradas no histórico ou no ranking.
+A prática reúne as 134 questões dos dois simulados de Cloud Practitioner, filtradas pelo domínio: Conceitos de Nuvem (26), Segurança e Conformidade (45), Tecnologia e Serviços na Nuvem (47) e Faturamento, Precificação e Suporte (16). As contagens exibidas e as sessões usam o mesmo banco combinado, com alternância de idioma, feedback imediato, resumo de acertos e opção de reiniciar. Essas sessões não possuem cronômetro e não são registradas no histórico ou no ranking.
 
 ## Flashcards
 

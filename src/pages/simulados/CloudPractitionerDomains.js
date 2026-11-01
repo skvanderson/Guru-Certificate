@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationButtons from '../../components/NavigationButtons';
-import { cloudPractitionerQuestions } from '../../data/cloudPractitionerQuestions';
+import { getCloudPractitionerDomainQuestions, getCloudPractitionerPracticeQuestions } from '../../data/cloudPractitionerPractice';
 import { cloudPractitionerDomains } from '../../data/cloudPractitionerDomains';
 
 const Container = styled.div`
@@ -132,11 +132,12 @@ const CloudPractitionerDomains = () => {
             Escolha um domínio para praticar apenas as questões daquele assunto, sem cronômetro,
             no seu ritmo.
           </p>
+          <p>Pratique as {getCloudPractitionerPracticeQuestions().length} questões dos Simulados 1 e 2, organizadas por domínio.</p>
         </Header>
 
         <DomainsList>
           {cloudPractitionerDomains.map((domain) => {
-            const count = cloudPractitionerQuestions.filter(q => q.domain === domain.slug).length;
+            const count = getCloudPractitionerDomainQuestions(domain.slug).length;
             return (
               <DomainCard key={domain.slug}>
                 <DomainInfo>
