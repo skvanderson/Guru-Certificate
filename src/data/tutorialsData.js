@@ -145,7 +145,7 @@ export const tutorials = [
           },
           {
             type: 'code',
-            value: 'Parabéns! Sua conta AWS foi criada com sucesso! 🎉'
+            value: 'Parabéns! Sua conta AWS foi criada com sucesso! '
           }
         ]
       },
@@ -1331,7 +1331,7 @@ artifacts:
     difficulty: 'Intermediário',
     estimatedTime: '1-2 horas',
     services: ['EC2'],
-    freeTier: '⚠️ CUSTO COM CRÉDITOS: EC2 tem custos que consumirão seus créditos. No novo modelo, instâncias EC2 são cobradas conforme uso (aproximadamente $0.01-0.05/hora para t3.micro). Use seus $100 USD de créditos com moderação. Considere parar instâncias quando não estiver usando. Consulte a documentação oficial para preços atuais.',
+    freeTier: 'CUSTO COM CRÉDITOS: EC2 tem custos que consumirão seus créditos. No novo modelo, instâncias EC2 são cobradas conforme uso (aproximadamente $0.01-0.05/hora para t3.micro). Use seus $100 USD de créditos com moderação. Considere parar instâncias quando não estiver usando. Consulte a documentação oficial para preços atuais.',
     prerequisites: [
       'Conta AWS ativa',
       'Conhecimento básico de Linux',
@@ -1416,7 +1416,7 @@ artifacts:
             type: 'list',
             items: [
               't2.micro ou t3.micro (menor custo, aproximadamente $0.01-0.05/hora)',
-              '⚠️ ATENÇÃO: EC2 tem custos que consumirão seus créditos. Desligue a instância quando não estiver usando.'
+              'ATENÇÃO: EC2 tem custos que consumirão seus créditos. Desligue a instância quando não estiver usando.'
             ]
           },
           'Configure o Key pair:',
@@ -2242,7 +2242,7 @@ curl -X DELETE https://sua-api-url/prod/users/USER_ID`
     difficulty: 'Avançado',
     estimatedTime: '2-3 horas',
     services: ['Redshift'],
-    freeTier: '⚠️ ALTO CUSTO - USE CRÉDITOS COM CUIDADO: Redshift tem custos significativos que consumirão seus créditos rapidamente. No novo modelo, considere Redshift Serverless que cobra por uso (aproximadamente $0.375/RPU-hora). Para este tutorial, monitore cuidadosamente seus gastos. Consulte a documentação oficial para preços atuais.',
+    freeTier: 'ALTO CUSTO - USE CRÉDITOS COM CUIDADO: Redshift tem custos significativos que consumirão seus créditos rapidamente. No novo modelo, considere Redshift Serverless que cobra por uso (aproximadamente $0.375/RPU-hora). Para este tutorial, monitore cuidadosamente seus gastos. Consulte a documentação oficial para preços atuais.',
     prerequisites: [
       'Conta AWS ativa',
       'Conhecimento de SQL',

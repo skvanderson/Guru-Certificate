@@ -1,3 +1,4 @@
+import Icon from '../components/Icon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -575,7 +576,7 @@ const Profile = () => {
                       </ExamSummary>
                       
                       <AnalysisBox>
-                        <AnalysisTitle>📊 Análise Personalizada</AnalysisTitle>
+                        <AnalysisTitle><Icon name="chart" /> Análise Personalizada</AnalysisTitle>
                         <AnalysisText>
                           <strong>{analysis.analysis}</strong>
                         </AnalysisText>
@@ -591,7 +592,7 @@ const Profile = () => {
                             marginBottom: 'var(--spacing-4)',
                             fontSize: 'var(--font-size-lg)'
                           }}>
-                            ❌ Questões Erradas ({result.wrongQuestions.length})
+                            <Icon name="alertCircle" /> Questões Erradas ({result.wrongQuestions.length})
                           </h4>
                           <WrongQuestionsList>
                             {result.wrongQuestions.map((questionId) => {
@@ -618,7 +619,7 @@ const Profile = () => {
                                       color: 'var(--aws-gray-700)',
                                       lineHeight: '1.5'
                                     }}>
-                                      <strong>💡 Explicação:</strong> {question.explanation['pt-BR']}
+                                      <strong><Icon name="bulb" /> Explicação:</strong> {question.explanation['pt-BR']}
                                     </div>
                                   )}
                                 </WrongQuestionItem>
@@ -635,7 +636,7 @@ const Profile = () => {
                             marginBottom: 'var(--spacing-3)',
                             fontSize: 'var(--font-size-base)'
                           }}>
-                            📚 Assuntos que Precisam de Revisão neste Simulado:
+                            <Icon name="book" /> Assuntos que Precisam de Revisão neste Simulado:
                           </h4>
                           <div style={{ 
                             display: 'flex', 

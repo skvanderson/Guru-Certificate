@@ -108,15 +108,20 @@ export default {
         return json(200, { ok: true });
       }
       if (request.method === 'GET' && url.pathname === '/api/ranking') {
-        const examType = url.searchParams.get('examType');
+        const requestedExamType = url.searchParams.get('examType');
+        const examType = requestedExamType === 'cloud-practitioner-2' ? 'cloud-practitioner' : requestedExamType;
         if (examType && !examTypes.includes(examType)) throw fail(400, 'Trilha inválida');
-        const ranking = await db.prepare(`WITH scores AS (
-          SELECT r.user_id AS userId, u.username, r.exam_type AS examType,
-            SUM(r.correct) AS totalCorrect, COUNT(*) AS totalExams, MAX(r.percentage) AS bestPercentage
-          FROM results r JOIN users u ON u.id = r.user_id GROUP BY r.user_id, r.exam_type
+        const ranking = await db.prepare(`WITH attempts AS (
+          SELECT r.*, u.username,
+            CASE WHEN r.exam_type = 'cloud-practitioner-2' THEN 'cloud-practitioner' ELSE r.exam_type END AS certification
+          FROM results r JOIN users u ON u.id = r.user_id
+        ), scores AS (
+          SELECT user_id AS userId, username, certification AS examType,
+            SUM(correct) AS totalCorrect, COUNT(*) AS totalExams, MAX(percentage) AS bestPercentage
+          FROM attempts GROUP BY user_id, certification
         ) SELECT *, DENSE_RANK() OVER (ORDER BY bestPercentage DESC) AS position
           FROM scores WHERE (? IS NULL OR examType = ?) ORDER BY bestPercentage DESC, username COLLATE NOCASE,
-            CASE examType WHEN 'cloud-practitioner' THEN 1 WHEN 'cloud-practitioner-2' THEN 2 WHEN 'developer-associate' THEN 3 ELSE 4 END`).bind(examType, examType).all();
+            CASE examType WHEN 'cloud-practitioner' THEN 1 WHEN 'developer-associate' THEN 2 ELSE 3 END`).bind(examType, examType).all();
         return json(200, ranking.results);
       }
       if (url.pathname === '/api/results') {

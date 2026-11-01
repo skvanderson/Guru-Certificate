@@ -1,3 +1,4 @@
+import Icon from '../components/Icon';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -66,12 +67,13 @@ const TrackCard = styled.div`
     border-color: var(--aws-orange);
 
     .icon {
-      transform: scale(1.15) rotate(-4deg);
+      transform: translateY(-2px);
     }
   }
 `;
 
 const TrackIcon = styled.div`
+  color: var(--aws-blue);
   font-size: 2.5rem;
   margin-bottom: var(--spacing-4);
   display: inline-block;
@@ -124,21 +126,21 @@ const StartButton = styled(Link)`
 const tracks = [
   {
     examType: 'cloud-practitioner',
-    icon: '☁️',
+    icon: 'cloud',
     title: 'Cloud Practitioner',
     description: 'Conceitos fundamentais da nuvem AWS: serviços essenciais, modelo de responsabilidade compartilhada, precificação e suporte.',
     cards: cloudPractitionerFlashcards
   },
   {
     examType: 'developer-associate',
-    icon: '💻',
+    icon: 'code',
     title: 'Developer Associate',
     description: 'Serverless, APIs, bancos de dados, mensageria e CI/CD, termos e conceitos essenciais para quem desenvolve na AWS.',
     cards: developerAssociateFlashcards
   },
   {
     examType: 'solutions-architect',
-    icon: '🏗️',
+    icon: 'layers',
     title: 'Solutions Architect',
     description: 'Arquitetura de alta disponibilidade, redes, recuperação de desastres e segurança para desenhar soluções na AWS.',
     cards: solutionsArchitectFlashcards
@@ -164,7 +166,7 @@ const Flashcards = () => {
           {tracks.map((track, index) => (
             <Reveal key={track.examType} delay={`${index * 0.1}s`}>
               <TrackCard>
-                <TrackIcon className="icon">{track.icon}</TrackIcon>
+                <TrackIcon className="icon"><Icon name={track.icon} /></TrackIcon>
                 <TrackTitle>{track.title}</TrackTitle>
                 <TrackDescription>{track.description}</TrackDescription>
                 <CardCount>{track.cards.length} cartões</CardCount>

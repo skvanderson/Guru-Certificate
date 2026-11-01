@@ -25,12 +25,10 @@ test('conta nova sem resultados vê outros estudantes e pode filtrar', async () 
   openRanking();
   expect(await screen.findByText('Estudante')).toBeInTheDocument();
   expect(screen.queryByText('Sua Posição')).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner 1' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner', exact: true }));
   expect(await screen.findByText('Estudante')).toBeInTheDocument();
   expect(getRanking).toHaveBeenLastCalledWith('cloud-practitioner');
-  fireEvent.click(screen.getByRole('button', { name: 'Cloud Practitioner 2' }));
-  expect(await screen.findByText('Estudante')).toBeInTheDocument();
-  expect(getRanking).toHaveBeenLastCalledWith('cloud-practitioner-2');
+  expect(screen.queryByRole('button', { name: 'Cloud Practitioner 2' })).not.toBeInTheDocument();
 });
 
 test('visitante consulta o ranking público e pode tentar de novo após falha', async () => {
@@ -40,4 +38,15 @@ test('visitante consulta o ranking público e pode tentar de novo após falha', 
   expect(await screen.findByRole('alert')).toHaveTextContent('Servidor indisponível');
   fireEvent.click(screen.getByRole('button', { name: 'Tentar novamente' }));
   expect(await screen.findByText('Estudante')).toBeInTheDocument();
+});
+
+test('exibe uma única classificação Cloud Practitioner, com a nota combinada das provas', async () => {
+  getCurrentUser.mockReturnValue({ id: 'student' });
+  getRanking.mockResolvedValue([{ ...entry, examType: 'cloud-practitioner', bestPercentage: 100, totalExams: 2 }]);
+  openRanking();
+  expect(await screen.findByText('Estudante')).toBeInTheDocument();
+  expect(screen.getAllByText('Estudante')).toHaveLength(1);
+  expect(screen.getByRole('button', { name: 'Cloud Practitioner', exact: true })).toBeInTheDocument();
+  expect(screen.queryByText(/Cloud Practitioner: Simulado/)).not.toBeInTheDocument();
+  expect(screen.getByText('100%')).toBeInTheDocument();
 });

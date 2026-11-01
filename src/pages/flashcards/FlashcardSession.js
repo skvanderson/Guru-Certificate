@@ -1,3 +1,4 @@
+import Icon from '../../components/Icon';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -333,14 +334,14 @@ const FlashcardSession = () => {
         <Content>
           <NavigationButtons backPath="/flashcards" />
           <ResultCard>
-            <h2>🎉 Sessão concluída!</h2>
+            <h2><Icon name="checkCircle" /> Sessão concluída!</h2>
             <p>Você revisou todos os {totalCards} cartões de {examInfo.name}.</p>
             <ResultStats>
-              <span style={{ color: 'var(--aws-green)' }}>😊 {knownCount} já sabia</span>
-              <span style={{ color: 'var(--aws-red)' }}>😕 {reviewCount} para revisar</span>
+              <span style={{ color: 'var(--aws-green)' }}><Icon name="checkCircle" /> {knownCount} já sabia</span>
+              <span style={{ color: 'var(--aws-red)' }}><Icon name="book" /> {reviewCount} para revisar</span>
             </ResultStats>
             <div style={{ display: 'flex', gap: 'var(--spacing-4)', justifyContent: 'center', flexWrap: 'wrap', marginTop: 'var(--spacing-6)' }}>
-              <ActionButton className="secondary" onClick={handleShuffle}>🔀 Embaralhar e Repetir</ActionButton>
+              <ActionButton className="secondary" onClick={handleShuffle}><Icon name="shuffle" /> Embaralhar e Repetir</ActionButton>
               <ActionButton className="primary" onClick={() => navigate('/flashcards')}>Voltar aos Flash Cards</ActionButton>
             </div>
           </ResultCard>
@@ -375,7 +376,7 @@ const FlashcardSession = () => {
                 {currentCard.category?.[language] || currentCard.category?.['pt-BR']}
               </CardFrontTag>
               <CardText>{currentCard.front[language] || currentCard.front['pt-BR']}</CardText>
-              <FlipHint>👆 Toque para virar</FlipHint>
+              <FlipHint><Icon name="pointer" /> Toque para virar</FlipHint>
             </CardFront>
             <CardBack>
               <CategoryTag>
@@ -384,7 +385,7 @@ const FlashcardSession = () => {
               <CardText style={{ fontSize: 'var(--font-size-lg)', fontWeight: 500 }}>
                 {currentCard.back[language] || currentCard.back['pt-BR']}
               </CardText>
-              <FlipHint>👆 Toque para voltar</FlipHint>
+              <FlipHint><Icon name="pointer" /> Toque para voltar</FlipHint>
             </CardBack>
           </CardInner>
         </CardOuter>
@@ -392,10 +393,10 @@ const FlashcardSession = () => {
         {flipped ? (
           <AssessmentButtons>
             <ActionButton className="danger" onClick={() => handleAssessment('review')}>
-              😕 Preciso Revisar
+              <Icon name="book" /> Preciso Revisar
             </ActionButton>
             <ActionButton className="success" onClick={() => handleAssessment('known')}>
-              😊 Já Sabia
+              <Icon name="checkCircle" /> Já Sabia
             </ActionButton>
           </AssessmentButtons>
         ) : (
@@ -404,7 +405,7 @@ const FlashcardSession = () => {
               ← Anterior
             </ActionButton>
             <ActionButton className="secondary" onClick={handleShuffle}>
-              🔀 Embaralhar
+              <Icon name="shuffle" /> Embaralhar
             </ActionButton>
             <ActionButton className="primary" onClick={goToNext}>
               Pular →

@@ -1,3 +1,4 @@
+import Icon from '../../components/Icon';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -430,7 +431,7 @@ const DeveloperAssociate = () => {
             <QuestionTitle>Resultado Final</QuestionTitle>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                {results.passed ? '🎉' : '😔'}
+                <Icon name={results.passed ? 'checkCircle' : 'book'} />
               </div>
               {saveStatus && <p role="status">{saveStatus}</p>}
               <h3 style={{ color: results.passed ? 'var(--aws-green)' : 'var(--aws-red)', marginBottom: '1rem' }}>
@@ -472,7 +473,7 @@ const DeveloperAssociate = () => {
             {currentQuestion + 1} / {developerAssociateQuestions.length}
           </QuestionCounter>
           <Timer>
-            ⏱️ {formatTime(timeLeft)}
+            <Icon name="clock" /> {formatTime(timeLeft)}
           </Timer>
           <LanguageButton onClick={toggleLanguage}>
             {language === 'pt-BR' ? 'EN' : 'PT'}
@@ -536,7 +537,7 @@ const DeveloperAssociate = () => {
                 
                 return (
                   <ExplanationBox>
-                    <h4>📚 Explicação:</h4>
+                    <h4><Icon name="book" /> Explicação:</h4>
                     {!isCorrect && (
                       <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600', color: 'var(--aws-red)' }}>
                         {language === 'pt-BR'

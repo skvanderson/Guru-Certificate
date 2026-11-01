@@ -66,8 +66,17 @@ test('ranking compartilhado, autenticação, filtros e persistência após reini
     assert.equal((await call('/results', { ...exam('bad-total', 60, 'cloud-practitioner-2'), total: 65 }, student.token)).status, 400);
     assert.equal((await call('/results', { ...exam('wrong-bank', 60, 'cloud-practitioner'), total: 69 }, student.token)).status, 400);
     const practitioner2 = (await call('/ranking?examType=cloud-practitioner-2')).data;
-    assert.equal(practitioner2.length, 1);
+    assert.equal(practitioner2.length, 2);
     assert.equal(practitioner2[0].bestPercentage, 100);
+    const combined = practitioner2.find(row => row.userId === student.user.id);
+    assert.equal(combined.examType, 'cloud-practitioner');
+    assert.equal(combined.totalExams, 2);
+    assert.equal(combined.totalCorrect, 119);
+    assert.equal(combined.bestPercentage, 100);
+    assert.deepEqual((await call('/ranking?examType=cloud-practitioner')).data, practitioner2);
+    const overallCombined = (await call('/ranking')).data;
+    assert.equal(overallCombined.filter(row => row.userId === student.user.id && row.examType === 'cloud-practitioner').length, 1);
+    assert.equal(overallCombined.some(row => row.examType === 'cloud-practitioner-2'), false);
     assert.equal((await call('/ranking?examType=cloud-practitioner')).data.length, 2);
     assert.equal((await call('/results', { ...exam('bad', 22) }, student.token)).status, 400);
     assert.equal((await call('/results', { ...exam('wrong-user', 20), userId: student.user.id }, newcomer.token)).status, 403);
@@ -75,7 +84,7 @@ test('ranking compartilhado, autenticação, filtros e persistência após reini
     assert.equal((await call('/login', { username: 'estudante', password: 'errada123' })).status, 401);
     await new Promise(resolve => server.close(resolve));
     await start();
-    assert.equal((await call('/ranking')).data.length, 7);
+    assert.equal((await call('/ranking')).data.length, 6);
     assert.equal((await call('/results', null, student.token)).data.length, 4);
     const login = await call('/login', { username: 'estudante', password: 'senha123' });
     assert.equal(login.status, 200);

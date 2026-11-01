@@ -70,7 +70,7 @@ O cadastro valida duplicidade de nome de usuário ou e-mail e exige senha com pe
 
 O perfil reúne histórico de simulados, estatísticas gerais e por certificação, questões erradas e assuntos para revisar.
 
-O ranking pode ser consultado sem login. Cada usuário aparece uma vez por tipo de simulado, pelo seu maior percentual (`bestPercentage`). Os dois simulados de Cloud Practitioner possuem classificações e filtros separados. A visualização geral ordena todas as trilhas por nota; notas iguais dividem a posição, sem pular a seguinte. O nome e o tipo de simulado definem apenas a ordem de exibição nos empates.
+O ranking pode ser consultado sem login. Cada usuário aparece uma vez por certificação, pelo seu maior percentual (`bestPercentage`). Os Simulados 1 e 2 de Cloud Practitioner compõem uma única classificação e um único filtro: vale a melhor porcentagem entre todas as tentativas dos dois bancos, e os totais de provas e acertos são somados. O histórico preserva qual simulado foi realizado. A visualização geral ordena todas as trilhas por nota; notas iguais dividem a posição, sem pular a seguinte. O nome e a certificação definem apenas a ordem de exibição nos empates.
 
 ### Persistência compartilhada
 

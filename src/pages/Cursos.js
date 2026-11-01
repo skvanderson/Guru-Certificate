@@ -1,3 +1,4 @@
+import Icon from '../components/Icon';
 import React from 'react';
 import styled from 'styled-components';
 import NavigationButtons from '../components/NavigationButtons';
@@ -382,7 +383,7 @@ const Cursos = () => {
           <Reveal delay="0.1s">
             <CursoCard>
               <CursoHeader>
-                <span className="icon">🎓</span>
+                <span className="icon"><Icon name="graduation" /></span>
                 <h2>Escola da Nuvem</h2>
               </CursoHeader>
               <CursoContent>
@@ -414,7 +415,7 @@ const Cursos = () => {
           <Reveal delay="0.2s">
             <CursoCard>
               <CursoHeader>
-                <span className="icon">☁️</span>
+                <span className="icon"><Icon name="cloud" /></span>
                 <h2>Campinho Digital</h2>
               </CursoHeader>
               <CursoContent>
@@ -470,7 +471,7 @@ const Cursos = () => {
 
         <Reveal>
           <AwsPlatformCard>
-            <AwsPlatformIcon>🎯</AwsPlatformIcon>
+            <AwsPlatformIcon><Icon name="target" /></AwsPlatformIcon>
             <AwsPlatformInfo>
               <h3>AWS Skill Builder</h3>
               <p>
@@ -491,7 +492,7 @@ const Cursos = () => {
 
         <Reveal>
           <QuestSubheader>
-            <h3>🎮 AWS Cloud Quest</h3>
+            <h3><Icon name="layers" /> AWS Cloud Quest</h3>
             <p>
               Aprenda na prática em um mundo 3D gamificado, resolvendo desafios reais de cada
               área da AWS. Clique em qualquer curso abaixo para se inscrever diretamente.
@@ -520,7 +521,7 @@ const Cursos = () => {
 
         <Reveal>
           <AwsPlatformCard>
-            <AwsPlatformIcon>🏅</AwsPlatformIcon>
+            <AwsPlatformIcon><Icon name="award" /></AwsPlatformIcon>
             <AwsPlatformInfo>
               <h3>Microcredenciais AWS</h3>
               <p>

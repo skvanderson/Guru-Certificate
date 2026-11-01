@@ -16,7 +16,7 @@ O código hospedado mantém o histórico restrito à sessão e deixa o ranking p
 
 ### Publicação dos dois simulados de Cloud Practitioner
 
-O Simulado 1 mantém o tipo `cloud-practitioner` (65 questões) e os resultados existentes. O Simulado 2 usa `cloud-practitioner-2` (69 questões), com histórico e ranking separados. A API valida o total exato de cada tipo; não há alteração de esquema nem necessidade de apagar ou migrar os resultados anteriores.
+O Simulado 1 mantém o tipo `cloud-practitioner` (65 questões) e os resultados existentes. O Simulado 2 usa `cloud-practitioner-2` (69 questões). O histórico preserva os dois tipos, mas o ranking agrupa ambos como `cloud-practitioner`, por usuário: melhor porcentagem entre os dois, soma de acertos e de tentativas. O filtro legado `cloud-practitioner-2` também retorna essa classificação unificada. A API valida o total exato de cada tipo; não há alteração de esquema nem necessidade de apagar ou migrar os resultados anteriores.
 
 Publique primeiro a versão atualizada de `server/cloud` na hospedagem da API e depois o frontend na Vercel. O deploy estático da Vercel não publica esse backend. Sem atualizar a API, os resultados do Simulado 2 serão rejeitados como inválidos. A nova ordenação do ranking também depende dessa publicação. Caso o preview da PR indique “Authorization required to deploy”, autorize o deploy no painel da Vercel.
 

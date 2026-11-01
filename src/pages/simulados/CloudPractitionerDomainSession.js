@@ -1,3 +1,4 @@
+import Icon from '../../components/Icon';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -462,7 +463,7 @@ const CloudPractitionerDomainSession = () => {
 
                 return (
                   <ExplanationBox>
-                    <h4>📚 Explicação:</h4>
+                    <h4><Icon name="book" /> Explicação:</h4>
                     {currentQ.multiple ? (
                       <p style={{ marginBottom: 'var(--spacing-3)', fontWeight: '600' }}>
                         {language === 'pt-BR' ? 'Respostas corretas: ' : 'Correct answers: '}

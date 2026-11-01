@@ -1,3 +1,4 @@
+import Icon from '../components/Icon';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -320,6 +321,7 @@ const FeatureCard = styled(Link)`
   }
 
   .icon {
+    color: var(--aws-blue);
     font-size: 2.25rem;
     margin-bottom: var(--spacing-4);
   }
@@ -438,25 +440,25 @@ const ClosingButton = styled(Link)`
 
 const features = [
   {
-    icon: '📝',
+    icon: 'clipboard',
     title: 'Simulados',
     description: '174 questões de estudo, com dois simulados de Cloud Practitioner, além de Solutions Architect e Developer Associate.',
     to: '/simulados'
   },
   {
-    icon: '🗂️',
+    icon: 'layers',
     title: 'Flash Cards',
     description: 'Revise os conceitos-chave de cada certificação em formato de cartão, no seu ritmo.',
     to: '/flashcards'
   },
   {
-    icon: '🛠️',
+    icon: 'tools',
     title: 'Hands On',
     description: 'Projetos práticos guiados para colocar a mão na massa em serviços reais da AWS.',
     to: '/materiais'
   },
   {
-    icon: '🏆',
+    icon: 'trophy',
     title: 'Ranking',
     description: 'Acompanhe seu aproveitamento e compare seu progresso com outros estudantes.',
     to: '/ranking'
@@ -543,7 +545,7 @@ const Home = () => {
           {features.map((feature, index) => (
             <Reveal key={feature.title} delay={`${index * 0.1}s`}>
               <FeatureCard to={feature.to}>
-                <div className="icon">{feature.icon}</div>
+                <div className="icon"><Icon name={feature.icon} /></div>
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>
               </FeatureCard>

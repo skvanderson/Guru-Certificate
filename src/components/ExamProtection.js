@@ -1,3 +1,4 @@
+import Icon from './Icon';
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 
@@ -272,7 +273,7 @@ const ExamProtection = ({ children }) => {
     return (
       <ProtectionOverlay>
         <WarningContent>
-          <WarningTitle>⚠️ ATENÇÃO! ⚠️</WarningTitle>
+          <WarningTitle><Icon name="alertCircle" /> ATENÇÃO!</WarningTitle>
           <WarningText>
             TENTATIVA DE VIOLAÇÃO DETECTADA!
           </WarningText>
