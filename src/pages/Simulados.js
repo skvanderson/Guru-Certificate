@@ -228,10 +228,10 @@ const Simulados = () => {
                   </StartButton>
                 </ExamButtons>
                 <StartButton to="/flashcards/cloud-practitioner">
-                  📚 Flash Cards
+                  Flash Cards
                 </StartButton>
                 <StartButton to="/simulado/cloud-practitioner/dominios">
-                  🎯 Praticar por Domínio
+                  Praticar por Domínio
                 </StartButton>
               </ActionButtons>
               <Difficulty>Iniciante</Difficulty>
@@ -265,7 +265,7 @@ const Simulados = () => {
                   Iniciar Simulado
                 </StartButton>
                 <StartButton to="/flashcards/solutions-architect">
-                  📚 Flash Cards
+                  Flash Cards
                 </StartButton>
               </ActionButtons>
               <Difficulty>Intermediário</Difficulty>
@@ -299,7 +299,7 @@ const Simulados = () => {
                   Iniciar Simulado
                 </StartButton>
                 <StartButton to="/flashcards/developer-associate">
-                  📚 Flash Cards
+                  Flash Cards
                 </StartButton>
               </ActionButtons>
               <Difficulty>Intermediário</Difficulty>

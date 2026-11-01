@@ -610,7 +610,7 @@ const CloudPractitioner = ({ variant = 1 }) => {
     <ExamProtection>
       <SimuladoContainer>
         <Content>
-        <h1>Cloud Practitioner — Simulado {variant}</h1>
+        <h1>Cloud Practitioner: Simulado {variant}</h1>
         <Header>
           <QuestionCounter>
             {currentQuestion + 1} / {examQuestions.length}

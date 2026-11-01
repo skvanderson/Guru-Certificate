@@ -525,7 +525,7 @@ const Cursos = () => {
               <h3>Microcredenciais AWS</h3>
               <p>
                 Certificações digitais que comprovam habilidades específicas em serviços e
-                soluções da AWS — um complemento ideal para o seu currículo entre um exame
+                soluções da AWS, um complemento ideal para o seu currículo entre um exame
                 de certificação e outro.
               </p>
             </AwsPlatformInfo>

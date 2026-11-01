@@ -71,7 +71,7 @@ test('o perfil resolve questões erradas do segundo banco e identifica o simulad
     detailedResults: [{ ...makeResult('second', '2026-10-31T12:00:00Z'), examType: 'cloud-practitioner-2', total: 69, correct: 0, percentage: 0, wrongQuestions: [question.id] }]
   });
   render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Profile /></MemoryRouter>);
-  const toggle = await screen.findByRole('button', { name: /Simulado 1: AWS Cloud Practitioner — Simulado 2/ });
+  const toggle = await screen.findByRole('button', { name: /Simulado 1: AWS Cloud Practitioner: Simulado 2/ });
   fireEvent.click(toggle);
   expect(screen.getByText(question.description['pt-BR'])).toBeInTheDocument();
   expect(screen.getByText('Questões Erradas (1)', { exact: false })).toBeInTheDocument();

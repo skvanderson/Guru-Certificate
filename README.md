@@ -1,4 +1,4 @@
-﻿# Guru Certificate — Plataforma de Estudos AWS
+﻿# Guru Certificate: Plataforma de Estudos AWS
 
 Plataforma de preparação para certificações AWS com simulados, flashcards e projetos práticos. Desenvolvida em React, com interface responsiva e identidade visual inspirada na AWS.
 
@@ -17,8 +17,8 @@ Plataforma de preparação para certificações AWS com simulados, flashcards e 
 
 | Trilha | Referência da trilha | Questões na plataforma | Tempo limite |
 | --- | --- | --- | --- |
-| Cloud Practitioner — Simulado 1 | CLF-C02 | 65 originais | 90 minutos |
-| Cloud Practitioner — Simulado 2 | CLF-C02 | 69 adicionais | 90 minutos |
+| Cloud Practitioner: Simulado 1 | CLF-C02 | 65 originais | 90 minutos |
+| Cloud Practitioner: Simulado 2 | CLF-C02 | 69 adicionais | 90 minutos |
 | Solutions Architect Associate | SAA-C03 | 20 | 40 minutos |
 | Developer Associate | DVA-C02 | 20 | 40 minutos |
 
@@ -235,4 +235,4 @@ src/
 
 ---
 
-**Guru Certificate** — Desbrave o conhecimento. Transforme o futuro.
+**Guru Certificate**: Desbrave o conhecimento. Transforme o futuro.

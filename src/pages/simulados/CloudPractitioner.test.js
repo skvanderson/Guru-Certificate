@@ -367,7 +367,7 @@ test('o segundo simulado usa só as 69 adicionais e mantém o progresso do prime
   createCloudPractitionerExam.mockReturnValue(cloudPractitionerQuestions2);
 
   const second = renderFullExam(2);
-  expect(screen.getByRole('heading', { name: 'Cloud Practitioner — Simulado 2' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Cloud Practitioner: Simulado 2' })).toBeInTheDocument();
   expect(screen.getByText('1 / 69')).toBeInTheDocument();
   const secondSaved = JSON.parse(localStorage.getItem('guru_certificate_cloud_exam_in_progress_2'));
   expect(secondSaved.questionIds).toEqual(cloudPractitionerQuestions2.map(question => question.id));

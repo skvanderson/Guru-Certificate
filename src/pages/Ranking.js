@@ -191,8 +191,8 @@ const UserPositionCard = styled.div`
 
 const getExamTypeName = (type) => {
   const names = {
-    'cloud-practitioner': 'Cloud Practitioner — Simulado 1',
-    'cloud-practitioner-2': 'Cloud Practitioner — Simulado 2',
+    'cloud-practitioner': 'Cloud Practitioner: Simulado 1',
+    'cloud-practitioner-2': 'Cloud Practitioner: Simulado 2',
     'developer-associate': 'Developer Associate',
     'solutions-architect': 'Solutions Architect'
   };

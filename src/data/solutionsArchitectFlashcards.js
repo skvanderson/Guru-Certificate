@@ -67,8 +67,8 @@ export const solutionsArchitectFlashcards = [
     category: { 'pt-BR': 'Rede', en: 'Networking' },
     front: { 'pt-BR': 'Cite três políticas de roteamento do Route 53.', en: 'Name three Route 53 routing policies.' },
     back: {
-      'pt-BR': 'Simple (uma resposta fixa), Failover (rota para um recurso secundário se o primário falhar em health check), Latency-based (rota para a região com menor latência) — também existem Weighted, Geolocation e Geoproximity.',
-      en: 'Simple (a single fixed answer), Failover (routes to a secondary resource if the primary fails a health check), Latency-based (routes to the region with lowest latency) — Weighted, Geolocation, and Geoproximity also exist.'
+      'pt-BR': 'Simple (uma resposta fixa), Failover (rota para um recurso secundário se o primário falhar em health check), Latency-based (rota para a região com menor latência), também existem Weighted, Geolocation e Geoproximity.',
+      en: 'Simple (a single fixed answer), Failover (routes to a secondary resource if the primary fails a health check), Latency-based (routes to the region with lowest latency), Weighted, Geolocation, and Geoproximity also exist.'
     }
   },
   {
@@ -76,8 +76,8 @@ export const solutionsArchitectFlashcards = [
     category: { 'pt-BR': 'Recuperação de Desastres', en: 'Disaster Recovery' },
     front: { 'pt-BR': 'Cite as quatro estratégias clássicas de disaster recovery, da mais barata/lenta à mais cara/rápida.', en: 'Name the four classic disaster recovery strategies, from cheapest/slowest to most expensive/fastest.' },
     back: {
-      'pt-BR': 'Backup and Restore, Pilot Light, Warm Standby e Multi-Site Active/Active — o custo e a velocidade de recuperação aumentam nessa ordem.',
-      en: 'Backup and Restore, Pilot Light, Warm Standby, and Multi-Site Active/Active — cost and recovery speed increase in that order.'
+      'pt-BR': 'Backup and Restore, Pilot Light, Warm Standby e Multi-Site Active/Active, o custo e a velocidade de recuperação aumentam nessa ordem.',
+      en: 'Backup and Restore, Pilot Light, Warm Standby, and Multi-Site Active/Active, cost and recovery speed increase in that order.'
     }
   },
   {
@@ -130,8 +130,8 @@ export const solutionsArchitectFlashcards = [
     category: { 'pt-BR': 'Segurança', en: 'Security' },
     front: { 'pt-BR': 'O que é criptografia envelope (envelope encryption) no KMS?', en: 'What is envelope encryption in KMS?' },
     back: {
-      'pt-BR': 'Técnica em que uma chave de dados (data key) criptografa o dado em si, e essa chave de dados é, por sua vez, criptografada por uma chave mestra (KMS key) armazenada com segurança — evitando enviar grandes volumes de dados ao KMS.',
-      en: 'A technique in which a data key encrypts the data itself, and that data key is, in turn, encrypted by a master key (KMS key) stored securely — avoiding sending large volumes of data to KMS.'
+      'pt-BR': 'Técnica em que uma chave de dados (data key) criptografa o dado em si, e essa chave de dados é, por sua vez, criptografada por uma chave mestra (KMS key) armazenada com segurança, evitando enviar grandes volumes de dados ao KMS.',
+      en: 'A technique in which a data key encrypts the data itself, and that data key is, in turn, encrypted by a master key (KMS key) stored securely, avoiding sending large volumes of data to KMS.'
     }
   },
   {
@@ -166,8 +166,8 @@ export const solutionsArchitectFlashcards = [
     category: { 'pt-BR': 'Governança', en: 'Governance' },
     front: { 'pt-BR': 'O que são Service Control Policies (SCPs) no AWS Organizations?', en: 'What are Service Control Policies (SCPs) in AWS Organizations?' },
     back: {
-      'pt-BR': 'Políticas que definem os limites máximos de permissões para contas dentro de uma organização — mesmo que uma permissão IAM permita uma ação, uma SCP pode bloqueá-la para toda a conta ou unidade organizacional.',
-      en: 'Policies that define the maximum permission boundaries for accounts within an organization — even if an IAM permission allows an action, an SCP can block it for the entire account or organizational unit.'
+      'pt-BR': 'Políticas que definem os limites máximos de permissões para contas dentro de uma organização, mesmo que uma permissão IAM permita uma ação, uma SCP pode bloqueá-la para toda a conta ou unidade organizacional.',
+      en: 'Policies that define the maximum permission boundaries for accounts within an organization, even if an IAM permission allows an action, an SCP can block it for the entire account or organizational unit.'
     }
   },
   {
@@ -175,8 +175,8 @@ export const solutionsArchitectFlashcards = [
     category: { 'pt-BR': 'Fundamentos', en: 'Fundamentals' },
     front: { 'pt-BR': 'Por que sustentabilidade foi adicionada como pilar do Well-Architected Framework?', en: 'Why was sustainability added as a pillar of the Well-Architected Framework?' },
     back: {
-      'pt-BR': 'Para orientar arquitetos a minimizar o impacto ambiental das cargas de trabalho na nuvem — otimizando uso de recursos, escolhendo regiões com energia mais limpa e eliminando desperdício de capacidade não utilizada.',
-      en: 'To guide architects in minimizing the environmental impact of cloud workloads — optimizing resource usage, choosing regions with cleaner energy, and eliminating waste from unused capacity.'
+      'pt-BR': 'Para orientar arquitetos a minimizar o impacto ambiental das cargas de trabalho na nuvem, otimizando uso de recursos, escolhendo regiões com energia mais limpa e eliminando desperdício de capacidade não utilizada.',
+      en: 'To guide architects in minimizing the environmental impact of cloud workloads, optimizing resource usage, choosing regions with cleaner energy, and eliminating waste from unused capacity.'
     }
   }
 ];

@@ -13,6 +13,7 @@ test('o catálogo reúne os dois simulados de Practitioner em um único card', (
   expect(screen.getByText('Simulado 1: 65 questões · Simulado 2: 69 questões')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Simulado 1', exact: true })).toHaveAttribute('href', '/simulado/cloud-practitioner');
   expect(screen.getByRole('link', { name: 'Simulado 2', exact: true })).toHaveAttribute('href', '/simulado/cloud-practitioner-2');
-  expect(screen.getAllByRole('link', { name: /Flash Cards/ })[0]).toHaveAttribute('href', '/flashcards/cloud-practitioner');
-  expect(screen.getByRole('link', { name: /Praticar por Domínio/ })).toHaveAttribute('href', '/simulado/cloud-practitioner/dominios');
+  expect(screen.getAllByRole('link', { name: 'Flash Cards', exact: true })).toHaveLength(3);
+  expect(screen.getAllByRole('link', { name: 'Flash Cards', exact: true })[0]).toHaveAttribute('href', '/flashcards/cloud-practitioner');
+  expect(screen.getByRole('link', { name: 'Praticar por Domínio', exact: true })).toHaveAttribute('href', '/simulado/cloud-practitioner/dominios');
 });

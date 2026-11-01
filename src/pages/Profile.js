@@ -288,8 +288,8 @@ const EmptyState = styled.div`
 
 const getExamTypeName = (type) => {
   const names = {
-    'cloud-practitioner': 'AWS Cloud Practitioner — Simulado 1',
-    'cloud-practitioner-2': 'AWS Cloud Practitioner — Simulado 2',
+    'cloud-practitioner': 'AWS Cloud Practitioner: Simulado 1',
+    'cloud-practitioner-2': 'AWS Cloud Practitioner: Simulado 2',
     'developer-associate': 'AWS Developer Associate',
     'solutions-architect': 'AWS Solutions Architect'
   };

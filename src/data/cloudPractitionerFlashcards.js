@@ -157,8 +157,8 @@ export const cloudPractitionerFlashcards = [
     category: { 'pt-BR': 'Suporte e Custos', en: 'Support and Costs' },
     front: { 'pt-BR': 'O que o AWS Trusted Advisor verifica?', en: 'What does AWS Trusted Advisor check?' },
     back: {
-      'pt-BR': 'Analisa a conta em cinco categorias — otimização de custos, desempenho, segurança, tolerância a falhas e limites de serviço — e recomenda boas práticas.',
-      en: 'It analyzes the account across five categories — cost optimization, performance, security, fault tolerance, and service limits — and recommends best practices.'
+      'pt-BR': 'Analisa a conta em cinco categorias, otimização de custos, desempenho, segurança, tolerância a falhas e limites de serviço, e recomenda boas práticas.',
+      en: 'It analyzes the account across five categories, cost optimization, performance, security, fault tolerance, and service limits, and recommends best practices.'
     }
   },
   {
@@ -175,8 +175,8 @@ export const cloudPractitionerFlashcards = [
     category: { 'pt-BR': 'Fundamentos', en: 'Fundamentals' },
     front: { 'pt-BR': 'Qual a diferença entre Capex e Opex no contexto de nuvem?', en: 'What is the difference between Capex and Opex in the cloud context?' },
     back: {
-      'pt-BR': 'Capex (despesa de capital) é o investimento antecipado em infraestrutura própria; Opex (despesa operacional) é pagar pelo uso conforme consome — a nuvem troca Capex por Opex, eliminando investimento inicial pesado.',
-      en: 'Capex (capital expenditure) is upfront investment in owned infrastructure; Opex (operational expenditure) is paying as you consume — the cloud trades Capex for Opex, eliminating heavy upfront investment.'
+      'pt-BR': 'Capex (despesa de capital) é o investimento antecipado em infraestrutura própria; Opex (despesa operacional) é pagar pelo uso conforme consome, a nuvem troca Capex por Opex, eliminando investimento inicial pesado.',
+      en: 'Capex (capital expenditure) is upfront investment in owned infrastructure; Opex (operational expenditure) is paying as you consume, the cloud trades Capex for Opex, eliminating heavy upfront investment.'
     }
   }
 ];

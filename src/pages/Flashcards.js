@@ -133,7 +133,7 @@ const tracks = [
     examType: 'developer-associate',
     icon: '💻',
     title: 'Developer Associate',
-    description: 'Serverless, APIs, bancos de dados, mensageria e CI/CD — termos e conceitos essenciais para quem desenvolve na AWS.',
+    description: 'Serverless, APIs, bancos de dados, mensageria e CI/CD, termos e conceitos essenciais para quem desenvolve na AWS.',
     cards: developerAssociateFlashcards
   },
   {

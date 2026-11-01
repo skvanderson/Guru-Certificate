@@ -466,7 +466,7 @@ const features = [
 const steps = [
   {
     title: 'Escolha uma trilha',
-    text: 'Cloud Practitioner, Solutions Architect ou Developer Associate — comece pela certificação que faz sentido para você.'
+    text: 'Cloud Practitioner, Solutions Architect ou Developer Associate, comece pela certificação que faz sentido para você.'
   },
   {
     title: 'Estude e pratique',
