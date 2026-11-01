@@ -103,6 +103,8 @@ typings/
 *.swp
 *.swo
 
+# Local assistant memory (personal preferences; never commit)
+/.local-memory/
+
 # OS
 Thumbs.db
-

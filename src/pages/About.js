@@ -193,6 +193,34 @@ const About = () => {
             </a>
           </TeamCard>
           </Reveal>
+
+          <Reveal delay="0.3s">
+          <TeamCard>
+            <div className="avatar">
+              <img src="/assets/images/Fotos-Perfil/Hugo.jpg" alt="Hugo Santos" />
+            </div>
+            <h3>Hugo Santos</h3>
+            <p>
+              Desenvolvedor de software com 18 anos de experiência, construída principalmente no ecossistema PHP e Symfony, com APIs REST, integrações, bancos de dados relacionais e NoSQL, mensageria, Docker e nuvem.
+              Hoje é Desenvolvedor PHP Sênior e amplia sua atuação para Java, com Spring Boot, Kafka, PostgreSQL, DDD e arquiteturas orientadas a eventos, aprofundando AWS, Kubernetes e arquitetura de software.
+              Possui as certificações PSM I e Zend Certified Engineer.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/hugodesenvolvedor"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#0077B5',
+                textDecoration: 'none',
+                fontWeight: '500',
+                marginTop: '1rem',
+                display: 'inline-block'
+              }}
+            >
+              LinkedIn
+            </a>
+          </TeamCard>
+          </Reveal>
         </TeamSection>
       </Content>
     </AboutContainer>
