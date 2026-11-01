@@ -144,6 +144,13 @@ const ActionButtons = styled.div`
   gap: var(--spacing-3);
 `;
 
+const ExamButtons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  width: 100%;
+`;
+
 const StartButton = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -196,7 +203,7 @@ const Simulados = () => {
               <div className="badge">
                 <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
               </div>
-              <h3>Cloud Practitioner — Simulado 1</h3>
+              <h3>Cloud Practitioner CLF-C02</h3>
             </CardHeader>
             <CardContent>
               <p>
@@ -204,7 +211,7 @@ const Simulados = () => {
                 que desejam entender os fundamentos da nuvem AWS.
               </p>
               <ul className="features">
-                <li>65 questões baseadas no exame oficial</li>
+                <li>Simulado 1: 65 questões · Simulado 2: 69 questões</li>
                 <li>Tempo limite de 90 minutos</li>
                 <li>Explicações detalhadas das respostas</li>
                 <li>Suporte a português e inglês</li>
@@ -212,9 +219,14 @@ const Simulados = () => {
             </CardContent>
             <CardFooter>
               <ActionButtons>
-                <StartButton to="/simulado/cloud-practitioner">
-                  Iniciar Simulado
-                </StartButton>
+                <ExamButtons>
+                  <StartButton to="/simulado/cloud-practitioner">
+                    Simulado 1
+                  </StartButton>
+                  <StartButton to="/simulado/cloud-practitioner-2">
+                    Simulado 2
+                  </StartButton>
+                </ExamButtons>
                 <StartButton to="/flashcards/cloud-practitioner">
                   📚 Flash Cards
                 </StartButton>
@@ -225,33 +237,6 @@ const Simulados = () => {
               <Difficulty>Iniciante</Difficulty>
             </CardFooter>
           </SimuladoCard>
-          </Reveal>
-
-          <Reveal delay="0.05s">
-            <SimuladoCard>
-              <CardHeader>
-                <div className="badge">
-                  <img src="/assets/images/badges/aws-certified-cloud-practitioner.png" alt="AWS Cloud Practitioner Badge" />
-                </div>
-                <h3>Cloud Practitioner — Simulado 2</h3>
-              </CardHeader>
-              <CardContent>
-                <p>Continue sua preparação para o CLF-C02 com um segundo conjunto de questões, sem repetir as do Simulado 1.</p>
-                <ul className="features">
-                  <li>69 questões adicionais em ordem aleatória</li>
-                  <li>Tempo limite de 90 minutos</li>
-                  <li>Questões com uma ou várias respostas corretas</li>
-                  <li>Português e inglês, com explicações detalhadas</li>
-                  <li>Progresso, histórico e ranking independentes</li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <ActionButtons>
-                  <StartButton to="/simulado/cloud-practitioner-2">Iniciar Simulado 2</StartButton>
-                </ActionButtons>
-                <Difficulty>Iniciante</Difficulty>
-              </CardFooter>
-            </SimuladoCard>
           </Reveal>
 
           <Reveal delay="0.1s">
