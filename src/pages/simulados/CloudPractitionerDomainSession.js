@@ -328,7 +328,10 @@ const CloudPractitionerDomainSession = () => {
   };
 
   const goToNext = () => {
-    if (!lockedQuestions[currentQuestion]) return;
+    if (!lockedQuestions[currentQuestion]) {
+      confirmAnswer();
+      return;
+    }
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -410,8 +413,8 @@ const CloudPractitionerDomainSession = () => {
           {currentQ.multiple && (
             <QuestionDescription>
               {language === 'pt-BR'
-                ? 'Selecione todas as alternativas corretas e confirme sua resposta.'
-                : 'Select all correct options and confirm your answer.'}
+                ? `Selecione ${correctAnswerIndices.length} alternativas e clique em Confirmar resposta para liberar a próxima questão.`
+                : `Select ${correctAnswerIndices.length} options and click Confirm answer to unlock the next question.`}
             </QuestionDescription>
           )}
 
@@ -477,7 +480,7 @@ const CloudPractitionerDomainSession = () => {
                       ? relevantAlternatives.map(alternative => (
                         <p key={alternative.title['pt-BR']} style={{ marginBottom: 'var(--spacing-2)' }}>
                           <strong>{alternative.title[language] || alternative.title['pt-BR']}: </strong>
-                          {alternative.explanation[language] || alternative.explanation['pt-BR']}
+                          {getText(alternative.explanation) || getText(currentQ.explanation)}
                         </p>
                       ))
                       : (
@@ -508,20 +511,13 @@ const CloudPractitionerDomainSession = () => {
         </QuestionCard>
 
         <div style={{ display: 'flex', gap: 'var(--spacing-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {currentQ.multiple && (
-            <Button
-              className="secondary"
-              onClick={confirmAnswer}
-              disabled={!hasSelectedAnswers || isLocked}
-            >
-              Confirmar resposta
-            </Button>
-          )}
           <Button className="secondary" onClick={goToPrevious} disabled={currentQuestion === 0}>
             ← Anterior
           </Button>
-          <Button className="primary" onClick={goToNext} disabled={!hasSelectedAnswers || !isLocked}>
-            {currentQuestion === questions.length - 1 ? 'Finalizar' : 'Próxima →'}
+          <Button className="primary" onClick={goToNext} disabled={!hasSelectedAnswers}>
+            {!isLocked && currentQ.multiple
+              ? (language === 'pt-BR' ? 'Confirmar resposta' : 'Confirm answer')
+              : (currentQuestion === questions.length - 1 ? 'Finalizar' : 'Próxima →')}
           </Button>
         </div>
       </Content>

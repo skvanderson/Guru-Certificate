@@ -12,9 +12,9 @@ import { getCloudPractitionerDomainQuestions, getCloudPractitionerPracticeQuesti
 const routerOptions = { v7_startTransition: true, v7_relativeSplatPath: true };
 const counts = {
   'cloud-concepts': 26,
-  'security-compliance': 45,
-  'cloud-technology-services': 47,
-  'billing-pricing-support': 16
+  'security-compliance': 44,
+  'cloud-technology-services': 46,
+  'billing-pricing-support': 18
 };
 
 test('a prática contém todas as 134 questões dos dois simulados, sem duplicações ou domínios ausentes', () => {
@@ -33,6 +33,55 @@ test('o catálogo mostra as contagens completas e o total dos dois bancos', () =
   Object.values(counts).forEach(count => {
     expect(screen.getByText(`${count} questões disponíveis`)).toBeInTheDocument();
   });
+});
+
+test.each([
+  ['cloud-concepts', [70, 112]],
+  ['security-compliance', [1, 68, 79, 103, 114, 116, 125]],
+  ['cloud-technology-services', [71, 83, 95, 117]],
+  ['billing-pricing-support', [99, 119, 133]]
+])('classifica pelo assunto cobrado no domínio %s', (domainId, ids) => {
+  ids.forEach(id => {
+    const question = getCloudPractitionerPracticeQuestions().find(item => item.id === id);
+    expect(question.domain).toBe(domainId);
+    expect(getCloudPractitionerDomainQuestions(domainId)).toContain(question);
+    cloudPractitionerDomains.filter(domain => domain.slug !== domainId).forEach(domain => {
+      expect(getCloudPractitionerDomainQuestions(domain.slug)).not.toContain(question);
+    });
+  });
+});
+
+test.each(cloudPractitionerDomains.flatMap(domain => [
+  [domain.slug, true], [domain.slug, false]
+]))('conclui todas as questões de %s com respostas corretas=%s sem bloquear o avanço', (domainId, correct) => {
+  render(
+    <MemoryRouter initialEntries={[`/simulado/cloud-practitioner/dominio/${domainId}`]} future={routerOptions}>
+      <Routes>
+        <Route path="/simulado/cloud-practitioner/dominio/:domainId" element={<CloudPractitionerDomainSession />} />
+      </Routes>
+    </MemoryRouter>
+  );
+  const questions = getCloudPractitionerDomainQuestions(domainId);
+  questions.forEach((question, index) => {
+    expect(screen.getByText(`${index + 1} / ${questions.length}`)).toBeInTheDocument();
+    expect(screen.getByText(question.description['pt-BR'])).toBeInTheDocument();
+    const inputs = screen.getAllByRole(question.multiple ? 'checkbox' : 'radio');
+    const selections = correct
+      ? question.alternatives.map((alternative, i) => alternative.correct ? i : -1).filter(i => i >= 0)
+      : [question.alternatives.findIndex(alternative => !alternative.correct)];
+    selections.forEach(i => fireEvent.click(screen.getByLabelText(question.alternatives[i].title['pt-BR'])));
+    if (question.multiple) {
+      const confirm = screen.getByRole('button', { name: 'Confirmar resposta' });
+      expect(confirm).toBeEnabled();
+      fireEvent.click(confirm);
+    }
+    expect(screen.getByText(correct ? '✓ Correto!' : '✗ Incorreto')).toBeInTheDocument();
+    inputs.forEach(input => expect(input).toBeDisabled());
+    const next = screen.getByRole('button', { name: index === questions.length - 1 ? 'Finalizar' : 'Próxima →' });
+    expect(next).toBeEnabled();
+    fireEvent.click(next);
+  });
+  expect(screen.getByText(`Você acertou ${correct ? questions.length : 0} de ${questions.length} questões (${correct ? '100.0' : '0.0'}%)`)).toBeInTheDocument();
 });
 
 test.each(Object.entries(counts))('a sessão %s permite chegar às questões adicionais e usa o total %i', (domainId, count) => {

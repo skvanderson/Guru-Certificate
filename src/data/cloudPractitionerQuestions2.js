@@ -278,7 +278,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 70,
-    "domain": "billing-pricing-support",
+    "domain": "cloud-concepts",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -347,7 +347,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 71,
-    "domain": "cloud-concepts",
+    "domain": "cloud-technology-services",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -567,8 +567,8 @@ export const cloudPractitionerQuestions2 = [
     "id": 74,
     "domain": "security-compliance",
     "title": {
-      "pt-BR": "Rede e infraestrutura global",
-      "en": "Networking and global infrastructure"
+      "pt-BR": "Segurança AWS - Proteção contra DDoS",
+      "en": "AWS Security - DDoS Protection"
     },
     "description": {
       "pt-BR": "Qual serviço ajuda a evitar ataques DDoS na camada de rede?",
@@ -1208,7 +1208,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 83,
-    "domain": "cloud-concepts",
+    "domain": "cloud-technology-services",
     "title": {
       "pt-BR": "AWS Well-Architected e resiliência",
       "en": "Well-Architected and resilience"
@@ -2058,7 +2058,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 95,
-    "domain": "security-compliance",
+    "domain": "cloud-technology-services",
     "title": {
       "pt-BR": "Armazenamento AWS",
       "en": "AWS storage"
@@ -2356,7 +2356,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 99,
-    "domain": "cloud-technology-services",
+    "domain": "billing-pricing-support",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -3253,7 +3253,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 112,
-    "domain": "cloud-technology-services",
+    "domain": "cloud-concepts",
     "title": {
       "pt-BR": "AWS Cloud Adoption Framework",
       "en": "AWS Cloud Adoption Framework"
@@ -3540,7 +3540,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 116,
-    "domain": "cloud-technology-services",
+    "domain": "security-compliance",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -3609,7 +3609,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 117,
-    "domain": "security-compliance",
+    "domain": "cloud-technology-services",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -3747,7 +3747,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 119,
-    "domain": "cloud-technology-services",
+    "domain": "billing-pricing-support",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"
@@ -4724,7 +4724,7 @@ export const cloudPractitionerQuestions2 = [
   },
   {
     "id": 133,
-    "domain": "cloud-technology-services",
+    "domain": "billing-pricing-support",
     "title": {
       "pt-BR": "Serviços e arquitetura AWS",
       "en": "AWS services and architecture"

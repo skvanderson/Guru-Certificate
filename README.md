@@ -50,7 +50,9 @@ Além do simulado completo, é possível estudar as questões de cada domínio s
 | Tecnologia e Serviços na Nuvem | 34% |
 | Faturamento, Precificação e Suporte | 12% |
 
-A prática reúne as 134 questões dos dois simulados de Cloud Practitioner, filtradas pelo domínio: Conceitos de Nuvem (26), Segurança e Conformidade (45), Tecnologia e Serviços na Nuvem (47) e Faturamento, Precificação e Suporte (16). As contagens exibidas e as sessões usam o mesmo banco combinado, com alternância de idioma, feedback imediato, resumo de acertos e opção de reiniciar. Essas sessões não possuem cronômetro e não são registradas no histórico ou no ranking.
+A prática reúne as 134 questões dos dois simulados de Cloud Practitioner, filtradas pelo domínio: Conceitos de Nuvem (26), Segurança e Conformidade (44), Tecnologia e Serviços na Nuvem (46) e Faturamento, Precificação e Suporte (18). As contagens exibidas e as sessões usam o mesmo banco combinado, com alternância de idioma, feedback imediato, resumo de acertos e opção de reiniciar. Essas sessões não possuem cronômetro e não são registradas no histórico ou no ranking.
+
+A classificação considera o assunto principal cobrado pelo enunciado, seguindo os domínios do [guia oficial CLF-C02](https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/). Responsabilidade compartilhada pertence a Segurança; regiões e AZs, a Tecnologia; princípios de Well-Architected e AWS CAF, a Conceitos; faturamento consolidado, Marketplace e AWS Health, a Faturamento e Suporte. Nas questões de múltipla seleção, o botão principal confirma a resposta, mostra a correção e então permite avançar.
 
 ## Flashcards
 

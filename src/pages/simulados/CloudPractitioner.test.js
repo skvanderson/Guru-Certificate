@@ -168,11 +168,11 @@ test('na sessão por domínio, permite múltiplas seleções e confirma a respos
 
   const checkboxes = screen.getAllByRole('checkbox');
   expect(checkboxes).toHaveLength(3);
-  const nextButton = screen.getByRole('button', { name: 'Finalizar' });
-  expect(nextButton).toBeDisabled();
+  const confirmButton = screen.getByRole('button', { name: 'Confirmar resposta' });
+  expect(confirmButton).toBeDisabled();
   fireEvent.click(checkboxes[0]);
   fireEvent.click(checkboxes[2]);
-  expect(nextButton).toBeDisabled();
+  expect(confirmButton).toBeEnabled();
 
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar resposta' }));
   expect(screen.getByText('✓ Correto!')).toBeInTheDocument();
